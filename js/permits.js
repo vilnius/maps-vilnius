@@ -136,6 +136,8 @@ var permitsTheme = function(map) {
 		                outFields: ["*"]
 		            });
 		
+					
+		
 		            renderer = new ClassBreaksRenderer(defaultSym, "clusterCount");
                     
                     // Yellow clusters

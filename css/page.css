@@ -1720,6 +1720,7 @@ pad1y {
     margin-bottom: 5px;
     top: 12px;
     left: 315px;
+    left: 309px;
     border: none !important;
     display: inline-block;
     border-radius: 2px;
@@ -1776,6 +1777,7 @@ pad1y {
 }
 #theme .button.close, #tools .button.close {
     left: 426px;
+    left: 420px;
 }
 #theme .button.close {
     opacity: 1;
@@ -1945,6 +1947,13 @@ p.build-p:first-child {
     background-color: #53565D;
     width: 442px;
     height: 230px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+#theme .sub-theme {
+    width: 49%;
+	text-align: center;
+	display: inline-table;
 }
 #theme.sub-menu p {
     color: #B8BBC3;
@@ -2378,6 +2387,12 @@ p.build-p:first-child {
     font-size: 14px;
     letter-spacing: 0;
     color: #DADCE2;
+}
+.align-left {
+    float: left;
+}
+.align-right {
+    float: right;
 }
 #theme .sub-theme a {
     display: block;

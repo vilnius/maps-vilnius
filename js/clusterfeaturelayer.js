@@ -233,7 +233,20 @@ define([
 
             esriConfig.defaults.geometryService = 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/Geometry/GeometryServer';
         },
-
+		_getUrlQueryName: function (name, url) {
+			if (!url) url = window.location.href;
+			url = url.toLowerCase(); // avoid case sensitiveness  
+			name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();// avoid case sensitiveness for query parameter name
+			var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+				results = regex.exec(url);
+			if (!results) return null;
+			if (!results[2]) return '';
+			return decodeURIComponent(results[2].replace(/\+/g, " "));
+		},
+		
+		currentTheme: function () {
+			return this._getUrlQueryName("theme");
+		},
         _getServiceDetails: function () {
             esriRequest({
                 url: this.url,
@@ -398,7 +411,7 @@ define([
                     this._currentClusterLabel.show();
                 } else {
                     //AG don't hide cluster on cluster click in advertise team
-                    if (CONTROL.currentTheme() !== "ad") {
+                    if (this.currentTheme() !== "ad") {
                         this._currentClusterGraphic.hide();
                         this._currentClusterLabel.hide();                        
                     }
@@ -710,7 +723,7 @@ define([
                     this._map.setExtent(extent.expand(1.5), true);
                 } else {
                     //AG cluster graphic points are in the same point zoom to the max
-                    if (CONTROL.currentTheme() === "ad") {
+                    if (this.currentTheme() === "ad") {
                         this._map.centerAndZoom(e.mapPoint, this._map.getMaxZoom());
                     } else {
                         this._map.centerAndZoom(e.graphic.geometry, this._map.getMaxZoom());
@@ -992,7 +1005,7 @@ define([
             // add single graphics to the cluster layer
             arrayUtils.forEach(singles, function(g) {
                 //AG don't show specific symbol on clustered graphics click event
-                if (CONTROL.currentTheme() !== "ad") {
+                if (this.currentTheme() !== "ad") {
                     g.setSymbol(this._getDefaultSymbol(g));                    
                 } 
                 //g.setSymbol(this._getDefaultSymbol(g));

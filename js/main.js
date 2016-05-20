@@ -8,6 +8,49 @@ var MAPCONFIG = {
     mapSettings: {
 
     },
+	themes: {
+		buildings: {
+			name: "Pastatai ir statyba", //theme name
+			id: "theme-buildings", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
+			imgAlt: "Pastatai ir statyba", // image alt attribute
+			layers: {
+				administravimas: { // layer unique name
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer"
+					,
+					featureLayerUrls: [
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/1"
+					]
+				}
+			}
+		},
+		advertise: {
+			name: "Leidimai", //theme name
+			id: "ad", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/laisvalaikis.png", //image URL
+			imgAlt: "Reklamos vietos" // image alt attribute
+		},
+		legacyMap: {
+			name: "Senoji žemėlapio versija", //theme name
+			id: "legacy", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
+			imgAlt: "Senoji versija", // image alt attribute
+			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
+		},
+		demo: {
+			name: "Demo versija", //theme name
+			id: "demo", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
+			imgAlt: "demo versija", // image alt attribute
+			layers: {
+				demoLayer: { // layer unique name
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Demo/MapServer"
+				}
+			}
+		},
+	},
     mapExtent: {
         "xmin": 555444.210800001,
         "ymin": 6051736.22,
@@ -32,62 +75,15 @@ var MAPCONFIG = {
     }
 };
 
-var CONTROL = {
-	_getUrlQueryName: function (name, url) {
-	    if (!url) url = window.location.href;
-	    url = url.toLowerCase(); // avoid case sensitiveness  
-	    name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();// avoid case sensitiveness for query parameter name
-	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-	        results = regex.exec(url);
-	    if (!results) return null;
-	    if (!results[2]) return '';
-	    return decodeURIComponent(results[2].replace(/\+/g, " "));
-	},
-    currentTheme: function () {
-        return this._getUrlQueryName("theme");
-    },
-    currenthemeLabel: function () {
-        var theme = this.currentTheme();
-        var themeDom = document.getElementById("theme");
-        var themeDomDivs = themeDom.getElementsByTagName("div");
-        for (var i = 0; i < themeDomDivs.length; i++) {
-            if (themeDomDivs[i].id === theme) {
-                themeDomDivs[i].className += " current-theme";   
-            } else {
-                //AG else: remove class from element TODO: check if class exists
-                themeDomDivs[i].className = themeDomDivs[i].className.replace( /(?:^|\s)current-theme(?!\S)/g , '' ); 
-				//AG TEMP default theme #buildings
-				if (!theme) {
-					document.getElementById("theme-buildings").className += " current-theme";
-				}
-            }
-
-        }
-    },
-	//Mouse cursor
-	showCursor: function(layers, arrayUtils) {
-		arrayUtils.forEach(layers, function(a, i) {
-			//console.log(a, i);
-			a.on("mouse-over", function() {
-				map.setMapCursor("pointer");
-			});
-			a.on("mouse-out", function() {
-				map.setMapCursor("default");
-			});
-		});	
-	},
-	//END Mouse cursor
-}
-
 //get unique array values
-Array.prototype.getUnique = function(){
-   var u = {}, a = [];
-   for(var i = 0, l = this.length; i < l; ++i){
-	  if(u.hasOwnProperty(this[i])) {
+Array.prototype.getUnique = function() {
+	var u = {}, a = [];
+	for (var i = 0, l = this.length; i < l; ++i){
+		if(u.hasOwnProperty(this[i])) {
 		 continue;
-	  }
-	  a.push(this[i]);
-	  u[this[i]] = 1;
+	  	}
+	 a.push(this[i]);
+	 u[this[i]] = 1;
    }
    return a;
 }
@@ -190,10 +186,103 @@ require([
     Scalebar,
     LayerInfo
 ) {
+	
+	var CONTROL = {
+		_getUrlQueryName: function (name, url) {
+			if (!url) url = window.location.href;
+			url = url.toLowerCase(); // avoid case sensitiveness  
+			name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();// avoid case sensitiveness for query parameter name
+			var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+				results = regex.exec(url);
+			if (!results) return null;
+			if (!results[2]) return '';
+			return decodeURIComponent(results[2].replace(/\+/g, " "));
+		},
+		currentTheme: function () {
+			return this._getUrlQueryName("theme");
+		},
+		currenthemeLabel: function () {
+			var theme = this.currentTheme();
+			var themeDom = document.getElementById("theme");
+			var themeDomDivs = themeDom.getElementsByTagName("div");
+			for (var i = 0; i < themeDomDivs.length; i++) {
+				if (themeDomDivs[i].id === theme) {
+					themeDomDivs[i].className += " current-theme";   
+				} else {
+					//AG else: remove class from element TODO: check if class exists
+					themeDomDivs[i].className = themeDomDivs[i].className.replace( /(?:^|\s)current-theme(?!\S)/g , '' ); 
+					//AG TEMP default theme #buildings
+					if (!theme) {
+						document.getElementById("theme-buildings").className += " current-theme";
+					}
+				}
+
+			}
+		},
+		//Mouse cursor
+		showCursor: function(layers, arrayUtils) {
+			arrayUtils.forEach(layers, function(a, i) {
+				//console.log(a, i);
+				a.on("mouse-over", function() {
+					map.setMapCursor("pointer");
+				});
+				a.on("mouse-out", function() {
+					map.setMapCursor("default");
+				});
+			});	
+		},
+		//END Mouse cursor
+		createThemeDom: function() {
+			var themesObj = MAPCONFIG.themes;
+			var count = 1;
+			for (var theme in themesObj) {
+				var divTag = aTag = pTag = imgTag = alignClass = urlTag = null;
+				if (themesObj.hasOwnProperty(theme)) {
+					count ++;
+					(count % 2 === 0) ? alignClass = "align-left" : alignClass = "align-right";
+					console.log(theme); //ad float: right or left
+					divTag = domConstruct.create("div", { id: themesObj[theme].id, class: "sub-theme " + alignClass, style: ""}, "theme", "last"); //AG static width in px, because we're using overflow-y: auto in main div
+					urlTag = !themesObj[theme].url ? "./?theme=" + themesObj[theme].id : themesObj[theme].url; //check if theme has url defined
+					aTag = domConstruct.create("a", {href: urlTag}, divTag);
+					imgTag = domConstruct.create("img", {src: themesObj[theme].imgUrl, alt: themesObj[theme].imgAlt, style: "width: 50%"}, aTag);
+					pTag = domConstruct.create("p", {innerHTML: themesObj[theme].name}, divTag);
+				}
+			}
+		},
+		initTheme: function() {
+			var themesObj = MAPCONFIG.themes,
+				currentTheme = this.currentTheme();
+					
+			for (var theme in themesObj) {
+				if (themesObj.hasOwnProperty(theme)) {
+					var themeId = themesObj[theme].id; //get unique theme id
+					if (themeId === currentTheme) {
+						var i = this.setDynamicLayer(themesObj[theme]);
+						return;
+					}
+				}
+			}
+		},
+		setDynamicLayer: function(theme) {
+			var themeLayers = theme.layers
+			for (var layer in themeLayers) {
+				if (themeLayers.hasOwnProperty(layer)) {
+					return themeLayers[layer].dynimacLayerUrls; //return dynamicLayer url of a layer, only 1 url per uniquer Layer
+				}
+			}
+		}, 
+		createDynicLayers: function (){
+			//var i = this.setDynamicLayer(themesObj[theme]);
+		}
+	};
+	
+	CONTROL.initTheme();
+	
+	//create theme menu elements
+	CONTROL.createThemeDom();
 
     //DOM to dijit
     parser.parse();
-    
     
     //AG  current theme
     CONTROL.currenthemeLabel();
@@ -491,55 +580,46 @@ require([
 	    
 	    //create / control inputs and legend of each theme
 	    function showLegendInput(layerName, layerId) {
-	        var items = arrayUtils.map(layerName.layerInfos, function(info, i) {
-	             console.log(info);
+	        var items = arrayUtils.map(layerName.layerInfos, function (info, i) {
+	       		console.log(info);
+	       		//TEMP 
+	       		//Pastatai: input for second Layer
+	       		//Reklama: input for first layer
+	       		if (i === layerId) {
+	       			//Sukuriam inputus, labelius su dojo checkbox
+	       			checkBox = new CheckBox({
+	       				class: "layers-labels",
+	       				checked: info.defaultVisibility ? "checked=checked" : "",
+	       				id: info.id.toString()
+	       					//value: layer.layerInfos[i].toString()
+	       					//value: layer.visibleLayers[i].toString()
+	       			});
+	       		} else {
+	       			if (info.defaultVisibility) {
+	       				visible.push(info.id);
+	       			}
+	       			return;
+	       		}
+	       		//End TEMP
+	       		if (info.defaultVisibility) {
+	       			visible.push(info.id);
+	       		}
+	       		console.log(visible);
+	       		//senas metodas  
+	       		//return "<div class='layers-labels'><input type='checkbox' value='" + (layer.visibleLayers[i]) + "' class='list_item'" + (info.defaultVisibility ? "checked=checked" : "") + "' id='" + info.id + "'' /><label for='" + info.id + "'>" + info.name + "</label></div>";
+	       		//convert to dom
+	       		inputsList = checkBox.domNode;
+	       		//label
+	       		label = domConstruct.toDom("<label for='" + info.id + "'>" + info.name + "</label>");
+	       		inputsList.appendChild(label);
+	       		//workaround, TEMP return string
+	       		tmp = document.createElement("div");
+	       		tmp.appendChild(inputsList);
+	       		//return input via chekcbox widget, will start dojo change event
+	       		return tmp.innerHTML;
+	       		// return "checkBox.domNode";
 	             
-	             //TEMP 
-	             //Pastatai: input for second Layer
-	             //Reklama: input for first layer
-	             if (i === layerId) {
-	             
-	                //Sukuriam inputus, labelius su dojo checkbox
-	                  checkBox = new CheckBox({
-	                  class: "layers-labels",
-	                  checked: info.defaultVisibility ? "checked=checked" : "",
-	                  id:  info.id.toString()
-	                  //value: layer.layerInfos[i].toString()
-	                  //value: layer.visibleLayers[i].toString()
-	                }); 
-	            } else {
-	                if (info.defaultVisibility) {
-	                    visible.push(info.id);
-	                }
-	                return;
-	            }
-	            //End TEMP
-	             
-	            
-	             
-	            if (info.defaultVisibility) {
-	                visible.push(info.id);
-	            }
-	             
-	            console.log(visible);
-	            
-	             
-	             //senas metodas  
-	             //return "<div class='layers-labels'><input type='checkbox' value='" + (layer.visibleLayers[i]) + "' class='list_item'" + (info.defaultVisibility ? "checked=checked" : "") + "' id='" + info.id + "'' /><label for='" + info.id + "'>" + info.name + "</label></div>";
-	             
-	             //convert to dom
-	             inputsList = checkBox.domNode;
-	             //label
-	             label = domConstruct.toDom("<label for='" + info.id + "'>" + info.name + "</label>");
-	             inputsList.appendChild(label);
-	             //workaround, TEMP return string
-	             tmp = document.createElement("div");
-	             tmp.appendChild(inputsList);          
-	             //return input via chekcbox widget, will start dojo change event
-	             return tmp.innerHTML;
-	            // return "checkBox.domNode";
-	             
-	            });
+	        });
 	        
 	        var ll = dom.byId("layer-list");
 	        ll.innerHTML = items.join(' ');

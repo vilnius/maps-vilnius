@@ -989,6 +989,8 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 				//Boolean - Whether to fill the dataset with a colour
 				datasetFill: false,
+				
+				tooltipCornerRadius: 2,
 
 				multiTooltipTemplate: "<%= value %> Eur/m² ", //"<%= datasetLabel %> - <%= value %>",
 
@@ -1219,6 +1221,8 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 					//Boolean - Whether to fill the dataset with a colour
 					datasetFill: false,
+					
+					tooltipCornerRadius: 2,
 
 					multiTooltipTemplate: "<%= value %> Eur/m² ", //"<%= datasetLabel %> - <%= value %>",
 
