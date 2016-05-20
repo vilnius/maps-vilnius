@@ -45,18 +45,6 @@
             <div id="theme" class="sub-menu module animate color-layers">
                 <p>Pasirinkite temą:</p>
                 <a href="#theme" class="button close animate" title="Uždaryti">✕</a>
-                <div id="theme-buildings" class="sub-theme" style="width: 49%; float: left; text-align: center;">
-                    <a href="http://vilniausplanas.lt/maps_vilnius/?theme=theme-buildings"><img style="width: 50%" src="/maps_vilnius/img/statyba.png" alt="Pastatai ir statyba"></a>
-                    <p>Pastatai ir statyba</p>
-                </div>
-                <div id="ad" class="sub-theme" style="width: 49%; float: right; text-align: center;">
-                    <a href="http://vilniausplanas.lt/maps_vilnius/?theme=ad"><img style="width: 50%" src="/maps_vilnius/img/laisvalaikis.png" alt="Reklamos vietos"></a>
-                    <p>Leidimai</p>
-                </div>
-                <div id="legacy" class="sub-theme animate" style="width: 49%; float: left; text-align: center;">
-                    <a href="http://www.vilnius.lt/vmap/t1.php" target="_blank"><img style="width: 50%" src="/maps_vilnius/img/old_version.png" alt="Senoji versija"></a>
-                    <p>Senoji žemėlapio versija</p>
-                </div>
             </div>
             <div id="layers" class="sub-menu module animate color-layers">
                 <p>Temos sluoksniai:</p>
