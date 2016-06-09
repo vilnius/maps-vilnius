@@ -9,6 +9,7 @@ html, body {
   height: 100%;
   width: 100%;
   margin: 0;
+  padding: 0;
   font-size: 14px;
 }
 
@@ -851,6 +852,122 @@ a.email:hover {
   margin: 0 6px;
   width: 160px;
   font-family: 'titillium_vln';
+}
+
+.arcgisSearch .searchGroup .searchInput {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    float: left;
+    display: block;
+    height: 20px;
+    width: 200px;
+    padding: 8px 24px 8px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #4C4C4C;
+    background-color: #fff;
+    border: 1px solid #AFAFAF;
+    border-right: 0;
+    -webkit-border-radius: 2px 0 0 2px;
+    border-radius: 2px 0 0 2px;
+    -webkit-transition: width .175s ease-in;
+    -moz-transition: width .175s ease-in;
+    -ms-transition: width .175s ease-in;
+    -o-transition: width .175s ease-in;
+    transition: width .175s ease-in;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.arcgisSearch .searchBtn.searchSubmit {
+    display: block;
+    float: left;
+    padding: 8px 6px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 20px;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid #AFAFAF;
+	border-left: 1px solid #E6E6E6;
+    -webkit-border-radius: 0 2px 2px 0;
+    border-radius: 0 2px 2px 0;
+    background-color: #fff;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.arcgisSearch .searchMenu {
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    padding: 0;
+    margin: 2px 0 0;
+    font-size: 13px;
+    line-height: 16px;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #AFAFAF;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.arcgisSearch .noValueIcon {
+    font-size: 13px;
+    line-height: 16px;
+    margin: 0 10px 0 0;
+    vertical-align: text-bottom;
+    color: #B9161C;
+}
+
+.esri-icon-search:before {
+	display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\f002";
+}
+
+.arcgisSearch .searchIcon {
+    font-size: 13px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    display: inline-block;
+    color: #717171;
+}
+
+.arcgisSearch .hasValue .searchClear {
+    display: block;
+    overflow: hidden;
+}
+
+.arcgisSearch .searchClose, .arcgisSearch .searchSpinner {
+    line-height: 38px;
+    width: 24px;
+    height: 30px;
 }
 
 .esriPopup .titlePane {
@@ -1709,10 +1826,11 @@ pad1y {
     white-space: nowrap;
     text-overflow: ellipsis;
     color: #fff;
-    color: rgba(255, 255, 255, 0.8);;
+    color: rgba(255, 255, 255, 0.87);;
     line-height: 20px;
     -webkit-appearance: none;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 .button.close {
     position: absolute;
@@ -1891,12 +2009,26 @@ esriMeasurement .dijitContentPane, #layers .inner, #legend .inner {
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
 }
+#legend .inner {
+/*    height: 100%;
+	overflow-y: auto;*/
+}
 #layers.sub-menu, #legend.sub-menu, #tools.sub-menu, #open-data.sub-menu, #build-data.sub-menu, .build-s.sub-menu {
     padding: 0;
 }
 #layers.sub-menu, #legend.sub-menu {
     width: 346px;
     height: 46px;
+}
+#legend.sub-menu {
+	height: auto;
+    overflow: hidden;
+	overflow-y: auto;
+	min-height: 140px;
+	max-height: -moz-calc(100% - 146px);
+    max-height: -webkit-calc(100% - 146px);
+    max-height: -o-calc(100% - 146px);
+    max-height: calc(100% - 146px);
 }
 #tools.sub-menu {
     width: 462px;
@@ -1929,11 +2061,12 @@ p.build-p:first-child {
     margin-bottom: 14px;
     background-color: #fff;
     padding: 20px 20px;
-    font-size: 14px;
+    font-size: 14px;3
     font-weight: normal;
 }
 #legend-list {
     padding: 10px;
+	min-height: 75px;
 }
 #legend-list .esriLegendServiceLabel {
     color: #53565D;
@@ -1947,8 +2080,13 @@ p.build-p:first-child {
     background-color: #53565D;
     width: 442px;
     height: 230px;
+    height: auto;
     overflow: hidden;
     overflow-y: auto;
+	max-height: -moz-calc(100% - 146px);
+    max-height: -webkit-calc(100% - 146px);
+    max-height: -o-calc(100% - 146px);
+    max-height: calc(100% - 146px);
 }
 #theme .sub-theme {
     width: 49%;
@@ -1968,6 +2106,7 @@ p.build-p:first-child {
     line-height: 28px;
 }
 .module-build .inner h4 {
+	margin-top: 26px;
 	font-size: 16px;	
     line-height: 28px;
 	font-weight: normal;
@@ -2102,8 +2241,9 @@ p.build-p:first-child {
     color: #555;
 }
 .module-build .inner p.normalf {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: normal;
+    line-height: 15px;
 }
 .module-build #build-inner-d p {
     font-weight: normal;
@@ -2514,7 +2654,7 @@ theme ad
 .esriPopup.invalid-ad .titlePane {
     background-color: #C1272D;
 }
-.esriPopup.valid-ad .contentPane span, .esriPopup.invalid-ad .contentPane span {
+.esriPopup.valid-ad .contentPane span, .esriPopup.invalid-ad .contentPane span, .esriPopup.default-popup .contentPane span {
 	line-height: 30px;
     font-style: normal;
     font-size: 14px;
@@ -2528,6 +2668,31 @@ theme ad
 .esriPopup.valid-ad .pointer.top {
     background: #2D9469;
 }
+.esriPopup.default-popup .titleButton.close {
+    right: 10px;
+    top: 12px;
+    background-position: 0 0;
+    width: 12px;
+    height: 17px;
+}
+.esriPopup.default-popup .titleButton.next {
+    right: 12px;
+    background-position: -16px 0;
+    width: 9px;
+    height: 17px;
+    top: 38px;
+}
+.esriPopup.default-popup .titleButton.prev {
+    right: 40px;
+    background-position: -29px 0;
+    width: 9px;
+    height: 17px;
+	top: 38px;
+}
+.bord {
+    border-bottom: 1px solid #D8D8D8;
+    padding-bottom: 10px;
+}
 .esriPopup.valid-ad .contentPane, .esriPopup.invalid-ad .contentPane, #ad-popup p {
     font-size: 15px;
     line-height: 19px;
@@ -2537,6 +2702,14 @@ theme ad
 #ad-popup p {
     margin-left: 11px; 
     margin-bottom: 11px;
+}
+#ad-popup .title p {
+    color: #FFF;
+    width: 80%;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: normal;
+    margin-left: 0;
 }
 #ad-popup p span {
     line-height: 16px; 
@@ -2560,6 +2733,7 @@ theme ad
     background-color: #F7F7F7;
 }
 #ad-popup .sizer.content .contentPane {
+	padding: 20px 10px;
     background: -webkit-radial-gradient(left ellipse, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 0 center, -webkit-radial-gradient(right ellipse, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 100% center;
     background: radial-gradient(ellipse at bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 0 bottom, radial-gradient(ellipse at bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 100% bottom;
     background-size: 85% 6px, 90% 20px;

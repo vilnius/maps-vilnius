@@ -69,7 +69,7 @@
                 <p>Atviri duomenys / Open data:</p>
                 <a href="#open-data" class="button close animate" title="Uždaryti">✕</a>
                 <div class="inner">
-                    <p>GIS atvirų duomenų tinklapyje talpinami (su galimybe peržiūrėti ir atsisiųsti) vieši Vilniaus miesto savivaldybės GIS duomenys. Duomenis galite astsisiųsti .csv, .kml, .shp formatais.</p>
+                    <p>GIS atvirų duomenų tinklalapyje skelbiami (su galimybe peržiūrėti ir atsisiųsti) vieši Vilniaus miesto savivaldybės GIS duomenys. Duomenis galite atsisiųsti .csv, .kml, .shp formatais.</p>
                     <p><a href="http://gis.opendata.lt/" target="_blank">www.gis.opendata.lt</a></p></div>
                 <div id="tools-measure"></div>
             </div>            
@@ -164,7 +164,7 @@
                     <div id="vilnius-logo"><img src="/maps_vilnius/img/vilnius_logo_r.png" border="0"></div>
                     <div id="credits">Sukurta <a href="http://www.vilniausplanas.lt/" target="_blank">SĮ Vilniaus planas</a></div>
             
-                    <div class="top-nav maps-nav col app animate col5 modes bottom small pad4x dark fill-denim">
+                    <div id="top-menu" class="top-nav maps-nav col app animate col5 modes bottom small pad4x dark fill-denim">
                       <a id="menu-theme"  href="#theme" class="cell line-right button nav-menu icon big">Temos</a>
                       <a id="menu-layers" href="#layers" class="cell line-right button nav-menu icon big animate"><i class="fa fa-list"></i> Sluoksniai</a>
                       <a id="menu-legend" class="cell pad1y button hide-mobile nav-menu line-right col4 icon paint animate" href="#legend"><i class="fa fa-th-large"></i> Žymėjimas </a>
