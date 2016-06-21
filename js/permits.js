@@ -1,4 +1,4 @@
-var permitsTheme = function(map) {
+var permitsTheme = function (map) {
     var cluster;
     
     require([
@@ -104,7 +104,7 @@ var permitsTheme = function(map) {
                 };
     
 		        selectedSym = new SimpleMarkerSymbol("circle", 24,
-		                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([193, 39, 45, 1]), 3),
+		                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 1]), 3),
 		                        new Color([255, 255, 255, 0]));	
 
 		                        	        
@@ -397,4 +397,4 @@ var permitsTheme = function(map) {
     });
     
     return cluster;
-}
+};

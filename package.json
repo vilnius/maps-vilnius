@@ -1,0 +1,12 @@
+{
+  "name": "MV-MAPS-VILNIUS",
+  "version": "0.0.2",
+  "author": "Andrius G",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-uglify": "^1.0.1"
+  }
+}

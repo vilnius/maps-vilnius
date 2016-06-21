@@ -131,11 +131,15 @@
                     <div id="build-statistics" class="sub-menu module-build animate color-layers build-s">
                         <p class="build-p">Tarifų palyginimas</p>
                         <div id="stats-close"><a href="#build-data" class="button close animate">Atgal </a></div>
-<!--                        <div class="stat-bg"></div>-->
                         <div id="build-inner-stat" class="inner sub-build">
                         </div>
-						
-                    </div>            
+                    </div> 
+                    <div id="build-imp-info" class="sub-menu module-build animate color-layers build-s">
+                        <p class="build-p">Svarbi informacija</p>
+                        <a href="#build-data" class="button close animate">Atgal </a>
+                        <div id="build-inner-imp-i" class="inner sub-build">
+                        </div>
+                    </div>			
                     <!--End Inner building blocks-->
             <!-- End Buildings info -->
                     <div id="ortofoto">

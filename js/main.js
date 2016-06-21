@@ -1,6 +1,6 @@
 /*
-2016-05-05
-MV 0.0.1
+2016-06-21
+MV 0.0.2
 JS
 */
 
@@ -76,7 +76,7 @@ var MAPCONFIG = {
 			imgAlt: "Senoji versija", // image alt attribute
 			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
 		},
-		demo: {			
+		demo: {
 			name: "Demo versija", //theme name
 			id: "demo", //theme id class and theme URL query name
 			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
@@ -100,7 +100,7 @@ var MAPCONFIG = {
 				}
 			}
 		},
-		bpDemo: {			
+		bpDemo: {
 			name: "BP demo", //theme name
 			id: "bp", //theme id class and theme URL query name
 			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
@@ -146,7 +146,7 @@ Array.prototype.getUnique = function () {
 	
 	for (i, l; i < l; i += 1) {
 		if (u.hasOwnProperty(this[i])) {
-			continue;
+			//continue;
 		}
 		a.push(this[i]);
 		u[this[i]] = 1;
@@ -183,9 +183,6 @@ require([
     "dijit/registry",
     "esri/tasks/query",
     "esri/tasks/QueryTask",
-    "esri/symbols/SimpleMarkerSymbol",
-    "esri/renderers/SimpleRenderer",
-    "esri/Color",
     /*END Grid */
     "esri/request",
     "dojo/dom",
@@ -235,9 +232,6 @@ require([
     Query,
     QueryTask,
     //Query,
-    SimpleMarkerSymbol,
-    SimpleRenderer,
-    Color,
     /*END Grid */
     esriRequest,
     dom,
@@ -258,7 +252,7 @@ require([
 	var visible = [];
 	var identifyPerameters;
 	var identifyTask;
-	visibleLayersResult = {};
+	var visibleLayersResult = {};
 	
 	var DEFCONFIG = {
 		extent:  new esri.geometry.Extent(MAPCONFIG.mapExtent),
@@ -333,16 +327,20 @@ require([
 			var themesObj = MAPCONFIG.themes;
 			var count = 1;
 			for (var theme in themesObj) {
-				var divTag = aTag = pTag = imgTag = alignClass = urlTag = null;
 				if (themesObj.hasOwnProperty(theme)) {
-					count ++;
-					(count % 2 === 0) ? alignClass = "align-left" : alignClass = "align-right";
-					console.log(theme); //ad float: right or left
-					divTag = domConstruct.create("div", { id: themesObj[theme].id, class: "sub-theme " + alignClass, style: ""}, "theme", "last"); //AG static width in px, because we're using overflow-y: auto in main div
-					urlTag = !themesObj[theme].url ? "./?theme=" + themesObj[theme].id : themesObj[theme].url; //check if theme has url defined
-					aTag = domConstruct.create("a", {href: urlTag}, divTag);
-					imgTag = domConstruct.create("img", {src: themesObj[theme].imgUrl, alt: themesObj[theme].imgAlt, style: "width: 50%"}, aTag);
-					pTag = domConstruct.create("p", {innerHTML: themesObj[theme].name}, divTag);
+					var divTag, aTag, pTag, imgTag, alignClass, urlTag;
+					divTag = aTag = pTag = imgTag = alignClass = urlTag = null;
+					if (themesObj.hasOwnProperty(theme)) {
+						count ++;
+						var countMod;
+						countMod = count % 2 > 0 ? alignClass = "align-right" : alignClass = "align-left" ;
+						//console.log(theme); //ad float: right or left
+						divTag = domConstruct.create("div", {id: themesObj[theme].id, class: "sub-theme " + alignClass, style: ""}, "theme", "last"); //AG static width in px, because we're using overflow-y: auto in main div
+						urlTag = !themesObj[theme].url ? "./?theme=" + themesObj[theme].id : themesObj[theme].url; //check if theme has url defined
+						aTag = domConstruct.create("a", {href: urlTag}, divTag);
+						imgTag = domConstruct.create("img", {src: themesObj[theme].imgUrl, alt: themesObj[theme].imgAlt}, aTag);
+						pTag = domConstruct.create("p", {innerHTML: themesObj[theme].name}, divTag);
+					}
 				}
 			}
 		},
@@ -351,27 +349,30 @@ require([
 			var themesObj = MAPCONFIG.themes,
 				currentTheme = this.currentTheme(),
 				dynimacThemesLayer;
+			var runShowLegendInput = function () {
+				setTimeout(function () {
+					that.showLegendInput(dynimacThemesLayer); //add layers object							
+				}, 500);
+			};
 			//alert(Object.keys(themesObj).length); //reorder layers, get lenght (with custome layers) TODO: minus custom layers + basemap layers (2 of them)
 			for (var theme in themesObj) {
 				if (themesObj.hasOwnProperty(theme)) {
 					var themeId = themesObj[theme].id; //get unique theme id
-					var themeFunc= themesObj[theme].custom; //get funcionality
+					var themeFunc = themesObj[theme].custom; //get funcionality
 					if (themeId === currentTheme) {
 						if (!themeFunc) { // show ONLY themes width default funcionality
 							var that = this;
 							dynimacThemesLayer = this.createDynicLayers(themesObj[theme], theme); //create dynimac specific themes' layers
-							for (layerAdd in dynimacThemesLayer) { //run through layers and add them to the map with all default functionality								
-								
-								map.addLayer(dynimacThemesLayer[layerAdd]);
-								console.log("DYNAMIC LAyeriai");
-								console.log(dynimacThemesLayer);
-								console.log(Object.getOwnPropertyNames(dynimacThemesLayer[layerAdd]));	
+							for (var layerAdd in dynimacThemesLayer) { //run through layers and add them to the map with all default functionality
+								if (dynimacThemesLayer.hasOwnProperty(layerAdd)) {
+
+									map.addLayer(dynimacThemesLayer[layerAdd]);
+									//console.log("DYNAMIC LAyeriai");
+									//console.log(dynimacThemesLayer);
+									//console.log(Object.getOwnPropertyNames(dynimacThemesLayer[layerAdd]));	
+								}
 							}
-							
-							setTimeout(function(){
-								that.showLegendInput(dynimacThemesLayer);	//add layers object							
-							}, 500);
-							
+							runShowLegendInput();
 						}
 					}
 				}
@@ -405,15 +406,19 @@ require([
 		},
 		setOpacity: function(layers) {
 			for (var layer in layers) {
-				layers[layer].setOpacity(value / 100);
+				if (layers.hasOwnProperty(layer)) {
+					layers[layer].setOpacity(value / 100);
+				}
 			}
 		},
 		createLayerInfosArr: function (dynLayersObject) {
 			var commonLayerInfos = []; 
 			// push Layrinfos arrays of each layer and asign to commonLayerInfos variable
-			for (layer in dynLayersObject) {
-				dynLayersObject[layer].layerInfos.nameGroup = layer// create name for same layerInfos group, will be use fo layer toggling via checkbox
-				commonLayerInfos.push(dynLayersObject[layer].layerInfos);			
+			for (var layer in dynLayersObject) {
+				if (dynLayersObject.hasOwnProperty(layer)) {
+					dynLayersObject[layer].layerInfos.nameGroup = layer; // create name for same layerInfos group, will be use fo layer toggling via checkbox
+					commonLayerInfos.push(dynLayersObject[layer].layerInfos);
+				}
 			}
 			return this.createLayerInfosWithGroupName(commonLayerInfos);
 		},
@@ -452,7 +457,7 @@ require([
 
 	       		if (info.defaultVisibility) {
 	       			visible.push(info.id);
-					console.log(visible);
+					//console.log(visible);
 				}
 				
 	       		//convert to dom
@@ -471,9 +476,11 @@ require([
 	        layerDom.innerHTML = items.join(' ');
 			
 			//set default layers visibility
-			for (var layer in layerName){				
-				layerName[layer].setVisibleLayers(layerName[layer]._defaultVisibleLayers);
-			}					
+			for (var layer in layerName) {
+				if (layerName.hasOwnProperty(layer)) {
+					layerName[layer].setVisibleLayers(layerName[layer]._defaultVisibleLayers);
+				}
+			}				
 			
 			//legend widget
 			var layerInfo = this.setupDefaultLegendLayers(layerName);					
@@ -488,7 +495,7 @@ require([
 			// End legend widget
 			
 			var that = this;
-	        on(layerDom, "click", function(e) {that.updateLayerVisibility(layerName, e, legendDijit, layerInfo)});
+	        on(layerDom, "click", function(e) {that.updateLayerVisibility(layerName, e, legendDijit, layerInfo);});
 			
 			this.initIdentify(layerInfo); // initiate identify visible layers by default
         },
@@ -496,7 +503,12 @@ require([
 		setupDefaultLegendLayers: function(layerName) {
 			var layerInfo = [];
 			for (var layer in layerName) {
-				layerInfo.push({layer: layerName[layer], title: " "}); // TODO
+				if (layerName.hasOwnProperty(layer)) {
+					layerInfo.push({
+						layer: layerName[layer],
+						title: " "
+					}); // TODO
+				}
 			}
 			//AG return reversed Array
 			return layerInfo.reverse(); //TODO  reverse() method is slow, change to custom one
@@ -518,17 +530,19 @@ require([
 						} else {
 							visibleLayers[input.value] = [input.tabIndex]; //AG Important: make sure to set right / will use tabindex visible  layer
 							 //if there aren't any layers visible set the array to be -1
-							visibleLayersResult[input.value] = ["-1"]
+							visibleLayersResult[input.value] = ["-1"];
 						}
-					};
+					}
 				});	
 
 				//if there aren't any layers visible set the array to be -1
 				for (var el in visibleLayers) {
-					if (visibleLayers[el].length === 0) {
-						visibleLayers[el].push(-1);
+					if (visibleLayers.hasOwnProperty(el)) {
+						if (visibleLayers[el].length === 0) {
+							visibleLayers[el].push(-1);
+						}
 					}
-				}				
+				}			
 				if (e) { //TODO remove if clause
 					this.showHideLayers(layerName, this.cloneVisibleLayer(visibleLayers, visibleLayersResult, e), e);
 				}
@@ -538,24 +552,28 @@ require([
 		},
 		cloneVisibleLayer: function (visibleLayers, visibleLayersResult, e) {
 			for (var layer in visibleLayersResult){
-				for (var visibleLayer in visibleLayers){
-					if ((visibleLayers.hasOwnProperty(visibleLayer)) && (layer === visibleLayer)) {
-						if (layer == e.toElement.value) {
-							visibleLayersResult[visibleLayer] = visibleLayers[visibleLayer]; //AG Important: make sure to set right visible  layer
-						}
-					} else { // -1 value must be written in specific order
-						if (layer === e.toElement.value) {
-							visibleLayersResult[visibleLayer] = ["-1"]; // if there aren't any layers visible set the array to be -1
+				if (visibleLayersResult.hasOwnProperty(layer)) {
+					for (var visibleLayer in visibleLayers) {
+						if ((visibleLayers.hasOwnProperty(visibleLayer)) && (layer === visibleLayer)) {
+							if (layer == e.toElement.value) {
+								visibleLayersResult[visibleLayer] = visibleLayers[visibleLayer]; //AG Important: make sure to set right visible  layer
+							}
+						} else { // -1 value must be written in specific order
+							if (layer === e.toElement.value) {
+								visibleLayersResult[visibleLayer] = ["-1"]; // if there aren't any layers visible set the array to be -1
+							}
 						}
 					}
-				}				
+				}
 			}
 			return visibleLayersResult;
 		},
 		showHideLayers: function (layerName, visibleLayers, e) {
 			for (var layer in layerName){
-				if ( layerName[layer].layerInfos.nameGroup === e.toElement.value) {
-					this.getCurrentInput(e, layerName[layer], visibleLayers);
+				if (layerName.hasOwnProperty(layer)) {
+					if (layerName[layer].layerInfos.nameGroup === e.toElement.value) {
+						this.getCurrentInput(e, layerName[layer], visibleLayers);
+					}
 				}
 			} 			
 		},
@@ -599,54 +617,62 @@ require([
 		executeIdentify: function(evt) {
 			if (!toolsMeasure.activeTool){
 				var deferredList = [];
+				var getDeferred = function () {
+					return identifyPerameters[parameter].identifyTask
+						.execute(identifyPerameters[parameter])
+						.addCallback(function (response) {
+							// response is an array of identify result objects
+							// Let's return an array of features.
+							return arrayUtils.map(response, function (result) {
+								defResponse = response;
+								var feature = result.feature,
+									content = " ",
+									layerName = result.layerName,
+									attributes = feature.attributes;
+
+								/*					var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0]));
+													feature.setSymbol(symbol);	
+													map.graphics.add(feature);*/
+
+								//console.log("identifyPerameters");
+								//console.log(feature);
+								//console.log(layerName);
+
+								feature.attributes.layerName = layerName;
+
+
+								for (var resultAtr in attributes) {
+									if (attributes.hasOwnProperty(resultAtr)) {
+										//do not add layername and objectid attributes
+										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName")) {
+											content += "<p class='bord'>" + attributes[resultAtr] + "</br><span>" + resultAtr + "</span>" + "<p>";
+										}
+									}
+								}
+
+								var tempInfo = new InfoTemplate("<p>${layerName}</p>", content);
+								feature.setInfoTemplate(tempInfo);
+								domClass.add("ad-popup", "default-popup");
+								return feature;
+							});
+						});
+				};
 				for (var parameter in identifyPerameters){
-					//if (parameter = "bp"){
-				  identifyPerameters[parameter].geometry = evt.mapPoint;
-				  identifyPerameters[parameter].mapExtent = map.extent;
-				  var deferred = identifyPerameters[parameter].identifyTask
-					.execute( identifyPerameters[parameter])
-					.addCallback(function (response) {									
-						// response is an array of identify result objects
-						// Let's return an array of features.
-						return arrayUtils.map(response, function (result) {
-							defResponse = response;	
-							var feature = result.feature,
-								content = " ",
-								layerName = result.layerName,
-								attributes = feature.attributes;
+					if (identifyPerameters.hasOwnProperty(parameter)) {
+						//if (parameter = "bp"){
+						identifyPerameters[parameter].geometry = evt.mapPoint;
+						identifyPerameters[parameter].mapExtent = map.extent;
+						var deferred = getDeferred();
 
-		/*					var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0]));
-							feature.setSymbol(symbol);	
-							map.graphics.add(feature);*/
-
-							console.log("identifyPerameters");
-							console.log(feature);
-							console.log(layerName);
-
-							feature.attributes.layerName = layerName;
-
-
-							for (var result in attributes) {
-								//do not add layername and objectid attributes
-								if (!(result == "OBJECTID" || result == "layerName")) {
-									content += "<p class='bord'>" + attributes[result] + "</br><span>" + result + "</span>" +  "<p>";
-								}						
-							}
-
-							var tempInfo = new InfoTemplate("<p>${layerName}</p>", content);
-							feature.setInfoTemplate(tempInfo);
-							domClass.add("ad-popup", "default-popup");
-							return feature;
-						});				
-					});	
-
-					deferredList.push(deferred); // create deferred objects llist obj
+						deferredList.push(deferred); // create deferred objects llist obj
+					}
 				}
 					all(deferredList).then(function(result){ //AG run then() method with all/promise widget
 						var resultsMerge = [].concat.apply([], result); // if we have list of results - merger all results
 						if (resultsMerge.length > 0) { // check if we have response by checking resultsMerge array				
 							map.infoWindow.setFeatures([].concat.apply([], deferredList)); //set features with all deferred objects
-							map.infoWindow.show(evt.mapPoint);						
+							map.infoWindow.show(evt.mapPoint);
+							domClass.add("ad-popup", "animate"); //add animation to pup up
 						}
 					});
 			}
@@ -679,8 +705,15 @@ require([
     };
 
     var popupDom = domConstruct.create("div", { id: "ad-popup" });  //DONE
-    var popup = new Popup(popupProperties, popupDom);  //DONE
-
+     popup = new Popup(popupProperties, popupDom);  //DONE
+	
+	var defaultSelect = new SimpleMarkerSymbol("circle", 24,
+									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 0]), 3),
+									new Color([255, 255, 255, 0]));	
+	popup.markerSymbol = defaultSelect;
+	
+	//popup.markerSymbol.setOffset(20, 32);
+	
     map = new Map("map", {  //DONE
         extent: extent,
         logo: false,
@@ -689,6 +722,8 @@ require([
         infoWindow: popup,
         nav: false // hides Pan Arrows
     });
+	
+	//map.infoWindow._highlighted.yoffset = -25;
 	
 	//map.infoWindow.highlight = false;  // do not show default highlight
 	//map.infoWindow.markerSymbol.outline.color;  // do not show default highlight
@@ -700,7 +735,7 @@ require([
         //navToolbar.zoomToFullExtent(); //AG buggy, switching to centerAndZoom
         var location = extent.getCenter();
         map.centerAndZoom(location, 0);
-        console.log("CENTER COORD:" + JSON.stringify(location));
+        //console.log("CENTER COORD:" + JSON.stringify(location));
     });
 	
 	//S center map after resize event
@@ -723,7 +758,7 @@ require([
         scalebarUnit: "metric"
     });
 
-    //esriConfig.defaults.io.proxyUrl = "proxy/proxy.php";
+    esriConfig.defaults.io.proxyUrl = "proxy/proxy.php";
     esriConfig.defaults.io.corsEnabledServers.push("http://zemelapiai.vplanas.lt"); //https://developers.arcgis.com/javascript/jshelp/inside_defaults.html
     
     //Dependencies from Config file
@@ -843,14 +878,16 @@ require([
         var permitsCluster = permitsTheme(map);
         //map.addLayer(permitsCluster);
         map.on("layer-add-result", function(e) {
-           console.log("PERMITS LAYER"); 
-           console.log(e); 
+           //console.log("PERMITS LAYER"); 
+           //console.log(e); 
         });
     }
     //End Add Permits theme
-	else if (CONTROL.currentTheme() === "theme-buildings") {
+	
+	else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) { //if theme building or null or empty
 		buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
 	}
+	//console.log(CONTROL.currentTheme());
 
     map.on("update-start", function () {
           esri.show(loadGif);          
@@ -863,7 +900,7 @@ require([
     //TEMP check url query theme and add/remove layers
     if (CONTROL.currentTheme() === "ad"){
 	     map.addLayers([advertsDynLayer]);
-    } else if (CONTROL.currentTheme() === "theme-buildings"){ 
+    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
     	map.addLayers([layerBuild]);
     }
     
@@ -880,13 +917,15 @@ require([
             onChange: function(value) {
 				if (CONTROL.currentTheme() === "ad"){
 					permitsCluster.setOpacity(value / 100);
-				} else if (CONTROL.currentTheme() === "theme-buildings") {
+				} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) {
                 	featureBuildings.setOpacity(value / 100);
                     layerBuild.setOpacity(value / 100);					
 				} else { //set opacity for every default funcionality dynamic layer
 					for (var layer in initiateDefaultLayer) {
-						initiateDefaultLayer[layer].setOpacity(value / 100);
-					};
+						if (initiateDefaultLayer.hasOwnProperty(layer)) {
+							initiateDefaultLayer[layer].setOpacity(value / 100);
+						}
+					}
 				}
             }
         }, "tools-opacity-widget");
@@ -896,12 +935,14 @@ require([
         //AG initiate layers default opacity 
 		if (initiateDefaultLayer) {
 			for (var layer in initiateDefaultLayer) {
-				initiateDefaultLayer[layer].setOpacity(horizontalSlider.value / 100);
-			};					
+				if (initiateDefaultLayer.hasOwnProperty(layer)) {
+					initiateDefaultLayer[layer].setOpacity(horizontalSlider.value / 100);
+				}
+			}				
 		}
 		if (CONTROL.currentTheme() === "ad"){
 
-		} else if (CONTROL.currentTheme() === "theme-buildings") {
+		} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){
 			//featureBuildings.setOpacity(horizontalSlider.value / 10);
 			layerBuild.setOpacity(horizontalSlider.value / 100);		
 		}
@@ -909,7 +950,7 @@ require([
     }); 
     //End Opacity slider
     
-    var visible = [];
+    //var visible = [];
     
 
     on(map, 'onZoomEnd', function() {
@@ -933,8 +974,8 @@ require([
 		//arcgisGeocoder: false,
 		//geocoders: geocoders,
 		sources: [{
-			locator: new Locator("http://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI_V1/GeocodeServer"),
-			singleLineFieldName: "Single Line Input", //AG name of 'Single Line Address Field:'
+			locator: new Locator("http://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/PAIESKA_COMPOSITE/GeocodeServer"),
+			singleLineFieldName: "SingleLine", //AG name of 'Single Line Address Field:'
 			//outFields: ["*"],
 			enableSuggestions: true, //AG only with 10.3 version
 			name: "Adresų paieška",
@@ -961,6 +1002,7 @@ require([
         }   */   
     }, "search");
     geocoder.startup();
+
 	
     //Geocoder END				
     
@@ -1019,19 +1061,20 @@ require([
     
     //legend
     map.on("layers-add-result", function (evt) {
-		console.log("EVENTAS");
-		console.log(evt);
-	 if ((CONTROL.currentTheme() === "ad") || (CONTROL.currentTheme() === "theme-buildings")){    
+		//console.log("EVENTAS");
+		//console.log(evt);
+	 if ((CONTROL.currentTheme() === "ad") || (CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){    
 	    //create / control inputs and legend of each theme
-	  	function showLegendInput(layerName, layerId) {
+	  	var showLegendInput = function(layerName, layerId) {
 	        var items = arrayUtils.map(layerName.layerInfos, function (info, i) {
-	       		console.log(info);
+				var checkBox;
+	       		//console.log(info);
 	       		//TEMP 
 	       		//Pastatai: input for second Layer
 	       		//Reklama: input for first layer
 	       		if (i === layerId) {
 	       			//Sukuriam inputus, labelius su dojo checkbox
-	       			var checkBox = new CheckBox({
+	       			checkBox = new CheckBox({
 	       				class: "layers-labels",
 	       				checked: info.defaultVisibility ? "checked=checked" : "",
 	       				id: info.id.toString()
@@ -1048,7 +1091,7 @@ require([
 	       		if (info.defaultVisibility) {
 	       			visible.push(info.id);
 	       		}
-	       		console.log(visible);
+	       		//console.log(visible);
 	       		//senas metodas  
 	       		//return "<div class='layers-labels'><input type='checkbox' value='" + (layer.visibleLayers[i]) + "' class='list_item'" + (info.defaultVisibility ? "checked=checked" : "") + "' id='" + info.id + "'' /><label for='" + info.id + "'>" + info.name + "</label></div>";
 	       		//convert to dom
@@ -1075,7 +1118,7 @@ require([
 	          return {layer: layer.layer, title: "Įjungti sluoksniai"};
 	    });
 	          
-	        console.log(evt);
+	        //console.log(evt);
 	        //if (layerInfo.length > 0) {
 	        if (layerInfo.length < 2) { //TEMP do not show legend for base layers
 	            legendDijit = new Legend({
@@ -1086,16 +1129,16 @@ require([
 	        } 
 	        
 	        
-	        console.log("layerInfo matomi sluoksniai: " + layerInfo[0].layer.visibleLayers);
+	        //console.log("layerInfo matomi sluoksniai: " + layerInfo[0].layer.visibleLayers);
 	        //legend visibility toggle
 	        
-	        console.log(layerBuild.visibleLayers);
-        }
+	        //console.log(layerBuild.visibleLayers);
+        };
         
 	    //check url query theme and run create/control inputs and legend of each theme
 	    if (CONTROL.currentTheme() === "ad"){
 		    showLegendInput(advertsDynLayer, 0);
-	    } else if (CONTROL.currentTheme() === "theme-buildings"){ 
+	    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
 	    	showLegendInput(layerBuild, 1); // theme - Pastatai
 	    }
 	 }
@@ -1127,5 +1170,5 @@ require([
     //Mouse cursor
 	var activeLayers = [featureBuildings, advertsFeatureLayer];
 	CONTROL.showCursor(activeLayers, arrayUtils);
-    //END Mouse cursor  
+    //END Mouse cursor  	
 });
