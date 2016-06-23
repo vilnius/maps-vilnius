@@ -525,7 +525,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			dom.byId("build-inner-m-msg").innerHTML = buildMaintenance;
 
 			var buildCompare = "<h3>" + adresas + "</h3>" + "<h4>Dviejų pastatų palyginimas:</h4>" +
-				"<div id='compare-btn-block'><span id='start-compare' class='compare'><p>Norėdami  palyginti du skirtingu pastatus, spūstelkite žemiau esantį mygtuką ir palyginimui žemėlapyje pažymėkite naują pastatą .</p><div id='compare-btn' class='bt animate'><a class='button'><i class='fa fa-angle-left' aria-hidden='true'></i>Pasirinkite sekantį pastatą palyginimui</a></div>" + "<h4 class='border-top'>Skirtingų administratorių vid. tarifų palyginimas:</h4>" + "<div id='selection-list'></div></span><div id='build-inner-stat-table'></div></div><div id='bar-legend'></div><canvas id='myBarChart' width='433' height='833'></canvas>" + "<div id='bar-tips'></div>";
+				"<div id='compare-btn-block'><span id='start-compare' class='compare'><p>Norėdami  palyginti du skirtingu pastatus, spūstelkite žemiau esantį mygtuką ir palyginimui žemėlapyje pažymėkite naują pastatą .</p><div id='compare-btn' class='bt animate'><a class='button'><i class='fa fa-angle-left' aria-hidden='true'></i>Pasirinkite kitą pastatą palyginimui</a></div>" + "<h4 class='border-top'>Sužinokite skirtingų administratorių tarifų vidurkius:</h4>" + "<div id='selection-list'></div></span><div id='build-inner-stat-table'></div></div><div id='bar-legend'></div><canvas id='myBarChart' width='433' height='833'></canvas>" + "<div id='bar-tips'></div>";
 
 			dom.byId("build-inner-stat").innerHTML = buildCompare;
 
@@ -887,7 +887,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 			dom.byId("build-inner-h").innerHTML = buildHelp;
 
-			var buildImpInfo = "<h3>" + adresas + "<br></h3>" + "<p><a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'> Bendrijų steigimas </a></p><p><a href='http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/2015-08-05_Nr_831_Administravimo_nauji_nuostatai.docx' target='_blank'>Administratoriaus teisės ir pareigos</a></p><p><a href='http://www.vilnius.lt/index.php?4278773191' target='_blank'>Administratoriaus keitimas</a></p><p><a href='http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=478769&p_tr2=2' target='_blank'>Valdytojų priežiūros ir kontrolės pavyzdinės taisyklės</a></p><p><a href='http://www.vilnius.lt/vaktai2011/DefaultLite.aspx?Id=3&DocId=30247240' target='_blank'>Vilniaus valdytojų priežiūros ir kontrolės taisyklės </a></p><p><a href='http://www.vtpsi.lt/node/1060' target='_blank'>STR 1.12.08:2010 „Statinių naudojimo priežiūros tvarkos aprašas“</a></p>";
+			var buildImpInfo = "<h3>" + adresas + "<br></h3>" + "<p><a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'> Bendrijų steigimas </a></p><p><a href='http://www.vilnius.lt/index.php?1568645331' target='_blank'>Jungtinės veiklos sutarties sudarymas</a></p><p><a href='http://www.vilnius.lt/index.php?4278773191' target='_blank'>Administratoriaus keitimas</a></p>";
 
 			dom.byId("build-inner-imp-i").innerHTML = buildImpInfo;
 
@@ -1281,5 +1281,39 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				});
 			}, 1000);
 		}
+		
+		//show tooltip for building theme
+		var tooltip;
+		featureBuildings.on("mouse-over", function (e) {
+			require([
+				"dijit/TooltipDialog",
+				"dijit/popup",
+				"dojo/on",
+				"dojo/dom",
+				"dojo/domReady!"
+			], function (TooltipDialog, popup, on, dom) {
+				tooltip = new TooltipDialog({
+					id: 'myTooltipDialog',
+					style: "width: 160px;",
+					content: "<p>Pažymėkite pastatą",
+					onMouseLeave: function () {
+						popup.close(tooltip);
+					}
+				});
+				tooltip.startup();
+				//console.log(e);
+				//console.log(tooltip);
+				featureBuildings.on("mouse-move", function (e) {
+					popup.open({
+						popup: tooltip,
+						x: e.x + 10, //AG add padding for mouse hovering and click events
+						y: e.y + 10
+					});
+				});
+			});
+		});
+		featureBuildings.on("mouse-out", function () {
+			tooltip.destroy();
+		});	
 	});
 };

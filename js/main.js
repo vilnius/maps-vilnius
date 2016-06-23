@@ -316,6 +316,7 @@ require([
 				//console.log(a, i);
 				a.on("mouse-over", function() {
 					map.setMapCursor("pointer");
+				
 				});
 				a.on("mouse-out", function() {
 					map.setMapCursor("default");
@@ -714,11 +715,11 @@ require([
 	
 	//popup.markerSymbol.setOffset(20, 32);
 	
-    map = new Map("map", {  //DONE
+    var map = new Map("map", {  //DONE
         extent: extent,
         logo: false,
         showAttribution: false,
-        zoom: 5,
+        zoom: 0,
         infoWindow: popup,
         nav: false // hides Pan Arrows
     });
@@ -970,7 +971,7 @@ require([
 		name: "Vilniaus adresai"
 	}];
 	
-   geocoder = new Search({
+   var geocoder = new Search({
 		//arcgisGeocoder: false,
 		//geocoders: geocoders,
 		sources: [{
@@ -978,7 +979,7 @@ require([
 			singleLineFieldName: "SingleLine", //AG name of 'Single Line Address Field:'
 			//outFields: ["*"],
 			enableSuggestions: true, //AG only with 10.3 version
-			name: "Adresų paieška",
+			name: "Paieška",
 			enableHighlight: true, //highlight symbol
 			enableLabel: false,
 			//distance: 20, //search distance
@@ -988,7 +989,7 @@ require([
 			  minScale: 300000,
 			  distance: 50000
 			},			
-			placeholder: "Adresų paieška",
+			placeholder: "Paieška",
 			highlightSymbol: new PictureMarkerSymbol("/maps_vilnius/img/map_marker.png", 36, 36).setOffset(0, 12)
 		}],
 	    //enableInfoWindow: false,
