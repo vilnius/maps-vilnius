@@ -536,45 +536,39 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			var totalLastYearCompared; //compared buildgins' consumption
 			var statusCompare = false; // true if using Comparing mode
 			//special tooltips for cursors
-			function compareTooltip() {
-				tip = domConstruct.toDom("<span id='tooltip-span'>Pažymėkite kitą pastatą palyginimui</span>");
-
-				domConstruct.place(tip, "map");
-
-				var tooltip = document.querySelectorAll('#tooltip-span');
-
-				map.on('mouse-move', function (e) {
-					for (var i = tooltip.length; i--;) {
-						tooltip[i].style.display = "block";
-						tooltip[i].style.left = e.pageX + 'px';
-						tooltip[i].style.top = e.pageY + 'px';
-
-					}
-				}, false);
-
-				map.on('mouse-over', function (e) {
-					for (var i = tooltip.length; i--;) {
-						tooltip[i].style.display = "block";
-						tooltip[i].style.left = e.pageX + 'px';
-						tooltip[i].style.top = e.pageY + 'px';
-						//map.setMapCursor("pointer");							
-					}
-				}, false);
-
-				map.on('mouse-drag', function (e) {
-					for (var i = tooltip.length; i--;) {
-						tooltip[i].style.left = e.pageX + 'px';
-						tooltip[i].style.top = e.pageY + 'px';
-						//map.setMapCursor("grabbing");
-						//map.setMapCursor("-webkit-grabbing");
-					}
-				}, false);
-
-				map.on('mouse-out', function (e) {
-					for (var i = tooltip.length; i--;) {
-						tooltip[i].style.display = "none";
-					}
-				}, false);
+			function compareTooltip() {			
+				var tooltip;
+				map.on("mouse-over", function (e) {
+					require([
+						"dijit/TooltipDialog",
+						"dijit/popup",
+						"dojo/on",
+						"dojo/dom",
+						"dojo/domReady!"
+					], function (TooltipDialog, popup, on, dom) {
+						tooltip = new TooltipDialog({
+							id: 'myTooltipDialogCompare',
+							style: "width: 160px;",
+							content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
+							onMouseLeave: function () {
+								popup.close(tooltip);
+							}
+						});
+						tooltip.startup();
+						//console.log(e);
+						//console.log(tooltip);
+						map.on("mouse-move", function (e) {
+							popup.open({
+								popup: tooltip,
+								x: e.x + 10, //AG add padding for mouse hovering and click events
+								y: e.y + 10
+							});
+						});
+					});
+				});
+				map.on("mouse-out", function () {
+					tooltip.destroy();
+				});					
 
 			}
 
@@ -1295,7 +1289,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				tooltip = new TooltipDialog({
 					id: 'myTooltipDialog',
 					style: "width: 160px;",
-					content: "<p>Pažymėkite pastatą",
+					content: "<p>Pažymėkite pastatą</p>",
 					onMouseLeave: function () {
 						popup.close(tooltip);
 					}

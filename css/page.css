@@ -3271,6 +3271,9 @@ THEMES
     font-size: 1em;
     color: #000000;
 }
+.claro #myTooltipDialogCompare .dijitTooltipContainer {
+    padding: 8px 6px;
+}
 .claro .dijitTooltipConnector {
     border: 0;
     z-index: 2;
@@ -3285,6 +3288,9 @@ THEMES
 	letter-spacing: 0;
 	text-align: center;
 	color: #8d8e94;
+}
+.claro #myTooltipDialogCompare .dijitTooltipContainer p {
+	line-height: 20px;
 }
 
 
