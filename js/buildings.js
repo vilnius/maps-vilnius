@@ -537,39 +537,45 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			var statusCompare = false; // true if using Comparing mode
 			//special tooltips for cursors
 			function compareTooltip() {			
-				var tooltip;
-				map.on("mouse-over", function (e) {
-					require([
-						"dijit/TooltipDialog",
-						"dijit/popup",
-						"dojo/on",
-						"dojo/dom",
-						"dojo/domReady!"
-					], function (TooltipDialog, popup, on, dom) {
-						tooltip = new TooltipDialog({
-							id: 'myTooltipDialogCompare',
-							style: "width: 160px;",
-							content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
-							onMouseLeave: function () {
-								popup.close(tooltip);
-							}
-						});
-						tooltip.startup();
-						//console.log(e);
-						//console.log(tooltip);
-						map.on("mouse-move", function (e) {
-							popup.open({
-								popup: tooltip,
-								x: e.x + 10, //AG add padding for mouse hovering and click events
-								y: e.y + 10
-							});
-						});
-					});
-				});
-				map.on("mouse-out", function () {
-					tooltip.destroy();
-				});					
+				var tooltipC;
+				
+					map.on("mouse-over", function (e) {
+						if (statusCompare){ //check status
+							require([
+								"dijit/TooltipDialog",
+								"dijit/popup",
+								"dojo/on",
+								"dojo/dom",
+								"dojo/domReady!"
+							], function (TooltipDialog, popup, on, dom) {
+								tooltipC = new TooltipDialog({
+									id: 'myTooltipDialogCompare',
+									style: "width: 160px;",
+									content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
+									onMouseLeave: function () {
+										popup.close(tooltipC);
+									}
+								});
+								tooltipC.startup();
 
+								map.on("mouse-move", function (e) {
+									if (statusCompare){ check status
+										popup.open({
+											popup: tooltipC,
+											x: e.x + 10, //AG add padding for mouse hovering and click events
+											y: e.y + 10
+										});
+									}
+								});
+							});
+						} 						
+					});
+					map.on("mouse-out", function () {
+						tooltipC.destroy();
+					});	
+					
+				
+  				
 			}
 
 			function compareAdm() {
@@ -593,11 +599,13 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				domClass.add("bar-tips", "hide");
 				domClass.remove("bar-tips", "show");
 
-				compareTooltip();
+				tooltipCompare = compareTooltip(); //asign tooltip to tooltipCompare var
 
 				//get back from comparign block to main block and remove compared layer
 				var statsCloseBtn = dom.byId("stats-close");
 				statsCloseBtn.addEventListener("click", function () {
+					 statusCompare = false; //set compare status mode false
+					
 					//TEMP show bar graphic if exists
 					//if (typeof myBar != "undefined") {
 					domClass.add("myBarChart", "show");
@@ -618,7 +626,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 												dom.byId("compare-btn-block").innerHTML = backCompareDom; */
 
 
-					domConstruct.destroy("tooltip-span"); // AG destroy tooltip
+					//domConstruct.destroy("tooltip-span"); // AG destroy tooltip
 					window.location.hash = '#build-data'; //AG get back
 
 					map.removeLayer(layerBuildignsCompare);
