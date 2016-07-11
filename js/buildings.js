@@ -559,7 +559,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 								tooltipC.startup();
 
 								map.on("mouse-move", function (e) {
-									if (statusCompare){ check status
+									if (statusCompare){ //check status
 										popup.open({
 											popup: tooltipC,
 											x: e.x + 10, //AG add padding for mouse hovering and click events
@@ -604,7 +604,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				//get back from comparign block to main block and remove compared layer
 				var statsCloseBtn = dom.byId("stats-close");
 				statsCloseBtn.addEventListener("click", function () {
-					 statusCompare = false; //set compare status mode false
+					 statusCompare = false; //set compare status mode true
 					
 					//TEMP show bar graphic if exists
 					//if (typeof myBar != "undefined") {
