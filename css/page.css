@@ -2609,13 +2609,24 @@ p.build-p:first-child {
 	line-height: 15px;
 }
 
-.module-build #build-inner-d p {
+.module-build #build-inner-d p, .module-build #build-inner-att p  {
 	font-weight: normal;
 }
 
 #build-help.module-build .inner p {
 	font-size: 15px;
 	font-weight: normal;
+}
+#build-attachments .sub-build .anchor-tag {
+	font-size: 15px;
+    color: #C1272D;
+    border-bottom: 1px solid #C1272D;
+    font-weight: normal;
+    line-height: 1.5;
+}
+#build-attachments .sub-build .anchor-tag:hover {
+    border-bottom: none;
+	cursor: pointer;
 }
 
 .module-build .inner #chart-legend p,
