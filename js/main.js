@@ -32,6 +32,18 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/laisvalaikis.png", //image URL
 			imgAlt: "Reklamos vietos" // image alt attribute
 		},
+		schools: {
+			name: "Švietimas", //theme name
+			id: "schools", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/svietimas.png", //image URL
+			imgAlt: "Švietimas", // image alt attribute
+			layers: {
+				mokyklos: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer"
+				}
+			}
+		},
 		transport: {
 			name: "Transportas", //theme name
 			id: "transport", //theme id class and theme URL query name
@@ -673,7 +685,7 @@ require([
 						if (resultsMerge.length > 0) { // check if we have response by checking resultsMerge array				
 							map.infoWindow.setFeatures([].concat.apply([], deferredList)); //set features with all deferred objects
 							map.infoWindow.show(evt.mapPoint);
-							domClass.add("ad-popup", "animate"); //add animation to pup up
+							//domClass.add("ad-popup", "animate"); //add animation to pup up
 						}
 					});
 			}
@@ -975,9 +987,9 @@ require([
 		//arcgisGeocoder: false,
 		//geocoders: geocoders,
 		sources: [{
-			locator: new Locator("http://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/PAIESKA_COMPOSITE/GeocodeServer"),
-			singleLineFieldName: "SingleLine", //AG name of 'Single Line Address Field:'
-			//outFields: ["*"],
+			locator: new Locator("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/ADRESAI_test_fields/GeocodeServer"),
+			singleLineFieldName: "Single Line Input", //AG name of 'Single Line Address Field:'
+			outFields: ["*"],
 			enableSuggestions: true, //AG only with 10.3 version
 			name: "Paieška",
 			enableHighlight: true, //highlight symbol
@@ -1003,6 +1015,11 @@ require([
         }   */   
     }, "search");
     geocoder.startup();
+	
+	on(geocoder, "select-result", function(e) {
+		console.log("PAIESKOS REZULTATAI:");
+		console.log(e);
+	});
 
 	
     //Geocoder END				

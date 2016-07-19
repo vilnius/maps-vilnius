@@ -15,6 +15,8 @@
 	<link rel="stylesheet" href="/maps_vilnius/css/page.css">
 	<link rel="stylesheet" href="/maps_vilnius/webfont/stylesheet.css">
 	<link rel="stylesheet" href="/maps_vilnius/css/font-awesome.min.css">
+	<script src="/maps_vilnius/js/Blob.js"></script>
+	<script src="/maps_vilnius/js/FileSaver.min.js"></script>
 	<script src="../maps_vilnius/js/Chart.js"></script>
 	<script type="text/javascript">
 		var dojoConfig = {
@@ -120,6 +122,12 @@
 				<p class="build-p">Ataskaitos ir planai:</p>
 				<a href="#build-data" class="button close animate">Atgal </a>
 				<div id="build-inner-d" class="inner sub-build">
+				</div>
+			</div>
+			<div id="build-attachments" class="sub-menu module-build animate color-layers build-s">
+				<p class="build-p">Priežiūros aktai:</p>
+				<a href="#build-data" class="button close animate">Atgal </a>
+				<div id="build-inner-att" class="inner sub-build">
 				</div>
 			</div>
 			<div id="build-help" class="sub-menu module-build animate color-layers build-s">

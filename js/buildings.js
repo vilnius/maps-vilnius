@@ -304,7 +304,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		//NEW 2015 11
 		//QueryTask: namo bendrieji tarifai
 		var buildingAdministrationTask = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/1");
-		buildingAdministration = new Query();
+		var buildingAdministration = new Query();
 		buildingAdministration.outSpatialReference = {
 			wkid: 3346
 		};
@@ -504,7 +504,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				return valdFormString;
 			}
 
-			var buildMsg = "<h3>" + adresas + "</h3>" + "<p>" + ntrunStr + "<br><span>Unikalus numeris</span></p>" + "<p>" + statM + "<br><span>Statybos metai</span></p>" + "<p>" + nrPlane + "<br><span>Korpusas</span></p>" + "<p>" + statPask + "<br><span>Namo paskirtis</span></p>" + "<p class='build-bt build-top'><a href='#build-info' class='animate'>Bendroji informacija</a></p><p class='build-bt'><a href='#build-manage' class='animate'>Valdytojų informacija</a></p><p class='build-bt'><a href='#build-temp' id='build-temp-bt' class='animate'>Šildymo duomenys / Renovacija</a></p><p class='build-bt'><a href='#build-maintenance' class='animate'>Namo priežiūros tarifai</a></p><p class='build-bt'><a href='#build-docs' class='animate'>Ataskaitos ir planai</a></p><p class='build-bt'><a href='#build-statistics' class='animate'>Tarifų palyginimas</a></p><p class='build-bt'><a href='#build-help' class='animate'>Pagalba ir duomenų suvedimas</a></p><p class='build-bt'><a href='#build-imp-info' class='animate'>Svarbi informacija</a></p>";
+			var buildMsg = "<h3>" + adresas + "</h3>" + "<p>" + ntrunStr + "<br><span>Unikalus numeris</span></p>" + "<p>" + statM + "<br><span>Statybos metai</span></p>" + "<p>" + nrPlane + "<br><span>Korpusas</span></p>" + "<p>" + statPask + "<br><span>Namo paskirtis</span></p>" + "<p class='build-bt build-top'><a href='#build-info' class='animate'>Bendroji informacija</a></p><p class='build-bt'><a href='#build-manage' class='animate'>Valdytojų informacija</a></p><p class='build-bt'><a href='#build-temp' id='build-temp-bt' class='animate'>Šildymo duomenys / Renovacija</a></p><p class='build-bt'><a href='#build-maintenance' class='animate'>Namo priežiūros tarifai</a></p><p class='build-bt'><a href='#build-docs' class='animate'>Ataskaitos ir planai</a></p><p class='build-bt'><a href='#build-attachments' class='animate'>Priežiūros aktai</a></p><p class='build-bt'><a href='#build-statistics' class='animate'>Tarifų palyginimas</a></p><p class='build-bt'><a href='#build-help' class='animate'>Pagalba ir duomenų suvedimas</a></p><p class='build-bt'><a href='#build-imp-info' class='animate'>Svarbi informacija</a></p>";
 
 			dom.byId("build-inner").innerHTML = buildMsg;
 
@@ -880,10 +880,66 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					checkUrlDocs(urlStack[docUrlName], docUrlName);
 				}
 			}
+			
+			//Get attachments
+			window.attachmentsObj = {}; //store attachments functions to save files with file.js // TOTO eliminate global object
+			var attachmentsHtml = "";
+			var attachmentTask = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/5");
+			var attachmentQuery = new Query();
+			attachmentQuery.outSpatialReference = {
+				wkid: 3346
+			};
+			//base64 string
+			//attachmentQuery.where = "fld_unikalus_nr1= '" + ntrun + "' OR att_title= '" + "2016-02-29 Žadeikos g. 10.pdf" + "' ";
+			//base64 blob
+			attachmentQuery.where = "fld_unikalus_nr1= '" + ntrun + "' OR fld_unikalus_nr2= '" + ntrun + "' OR fld_unikalus_nr3= '" + ntrun + "'";
+			attachmentQuery.returnGeometry = false;
+			attachmentQuery.outFields = ["*"];	
+			attachmentTask.execute(attachmentQuery, showAttachments);
+		
+			function showAttachments(results) {
+				//get features array
+				var features = results.features,
+					i = 0;
+				if (features.length > 0) {
+					for(i; i < features.length; i +=1) {
+						var name = "";
+						name += i;
+						
+						//Add attachment anchor with  unique onclick function
+						attachmentsHtml += "<p><span class='anchor-tag' href='' onclick='attachmentsObj[" + i + "](" +i+")'>" + features[i].attributes.att_title +  "</span></p>";
+
+						attachmentsObj[name] = function(i) {
+							//base 64 string
+							var blobType = features[i].attributes.att_contentType;
+							var byteCharacters = atob(features[i].attributes.att_encodedContent);
+							var fileName = "Aktas: " + features[i].attributes.att_title;							
+							var byteNumbers = new Array(byteCharacters.length);
+
+							for (var n = 0; n < byteCharacters.length; n++) {
+									byteNumbers[n] = byteCharacters.charCodeAt(n);
+							}
+							var byteArray = new Uint8Array(byteNumbers);
+
+							// construct the blob from from byte array
+							var blob = new Blob([byteArray], {type: blobType});
+
+							saveAs(blob, fileName);										
+						}
+						
+					}
+				}
+				
+				var buildAtt = "<h3>" + adresas + "<br></h3>" + "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml;
+
+				dom.byId("build-inner-att").innerHTML = buildAtt;				
+			}
+			//EDN Get attachments 
 
 			var buildDocs = "<h3>" + adresas + "<br></h3>";
 
 			dom.byId("build-inner-d").innerHTML = buildDocs;
+			
 
 			var buildHelp = "<h3>" + adresas + "<br></h3>" + "<p>Turite pasiūlymų ar pastabų? Matote klaidų?</p> <p>Susisiekite el. paštu: <a href='mailto:pastatai@vilnius.lt'>pastatai@vilnius.lt</a></p><p>Norėdami pateikti duomenys apie konkretų pastatą, kviečiame užpildyti <a href='http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/lentele.xlsx'>duomenų suvedimo lentelę</a> ir persiųsti aukščiau nurodytu el. pašto adresu.</p><p>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'>bendrijų steigimą</a></p>";
 
