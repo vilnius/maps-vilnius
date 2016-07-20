@@ -930,8 +930,11 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					}
 				}
 				
-				var buildAtt = "<h3>" + adresas + "<br></h3>" + "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml;
-
+				//var buildAtt = "<h3>" + adresas + "<br></h3>" + "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml;
+				
+				console.log(typeof(attachmentsHtml));
+				var buildAtt = "<h3>" + adresas + "<br></h3>" + (attachmentsHtml === '' ? "<p>Priežiūros aktų nėra</p>" : "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml);
+				
 				dom.byId("build-inner-att").innerHTML = buildAtt;				
 			}
 			//EDN Get attachments 
