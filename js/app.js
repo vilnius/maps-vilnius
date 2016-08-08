@@ -32,42 +32,6 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/laisvalaikis.png", //image URL
 			imgAlt: "Reklamos vietos" // image alt attribute
 		},
-		transport: {
-			name: "Transportas", //theme name
-			id: "transport", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/transportas.png", //image URL
-			imgAlt: "Transportas", // image alt attribute
-			layers: {
-/*				transportLayer: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://www.sviesoforai.lt/arcgis/rest/services/Vilnius_sde_dynamic/MapServer"
-				},*/
-				dviraciuTrasos: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Aplinkosauga/dviraciai_sisp_dynamic/MapServer"
-				},
-				gatviuTvarkymas: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://195.182.69.66/ArcGIS/rest/services/Interaktyviam_zemelapiui/Grinda_gatviu_tvarkymas2/MapServer"
-				}
-			}
-		},
-		teritory: {
-			name: "Teritorijų planavimas", //theme name
-			id: "teritory-planning", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
-			imgAlt: "Teritorijų planavimas", // image alt attribute
-			layers: {
-				laisviZemesPlotai: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Laisvi_zemes_plotai/MapServer"
-				},
-				suprojektuotiStatiniai: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://195.182.69.66/ArcGIS/rest/services/Projektuojami/proj_stat1/MapServer"
-				}
-			}
-		},
 		legacyMap: {
 			custom: true, // true if theme funcionality is custom  
 			name: "Senoji žemėlapio versija", //theme name
@@ -75,42 +39,6 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
 			imgAlt: "Senoji versija", // image alt attribute
 			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
-		},
-		demo: {
-			name: "Demo versija", //theme name
-			id: "demo", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
-			imgAlt: "demo versija", // image alt attribute
-			layers: {
-				demoLayer: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Demo/MapServer"
-				},
-				badministravimas: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer"
-				},
-/*				tesd: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Vietines_rinkliavos_zonos/MapServer"
-				},*/
-				bp: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
-				}
-			}
-		},
-		bpDemo: {
-			name: "BP demo", //theme name
-			id: "bp", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
-			imgAlt: "bp demo versija", // image alt attribute
-			layers: {
-				bp: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
-				}
-			}
 		}
 	},
     mapExtent: {
@@ -158,7 +86,9 @@ Array.prototype.getUnique = function () {
 window.location.hash = '#';
 
 require([
+	"dojo/i18n!esri/nls/jsapi",
     "esri/map",
+	"esri/dijit/HorizontalSlider",
     "dojo/_base/connect",
     "esri/toolbars/navigation",
     "esri/config",
@@ -201,12 +131,14 @@ require([
     "esri/layers/LayerInfo",
 	"esri/tasks/IdentifyTask",
     "esri/tasks/IdentifyParameters",
+	"dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer",
-    "dijit/layout/ContentPane",
     "dojo/domReady!"
 ], function (
+	bundle,
     Map,
+	HorizontalSlider,
     connect,
     Navigation,
     esriConfig,
@@ -247,12 +179,13 @@ require([
     ClusterFeatureLayer, Graphic, graphicsUtils, domStyle, fx, easing,
     Scalebar,
     LayerInfo,
-	IdentifyTask, IdentifyParameters
+	IdentifyTask, IdentifyParameters, ContentPane
 ) {
 	var visible = [];
 	var identifyPerameters;
 	var identifyTask;
 	var visibleLayersResult = {};
+	var horizontalSlider;
 	
 	var DEFCONFIG = {
 		extent:  new esri.geometry.Extent(MAPCONFIG.mapExtent),
@@ -673,7 +606,7 @@ require([
 						if (resultsMerge.length > 0) { // check if we have response by checking resultsMerge array				
 							map.infoWindow.setFeatures([].concat.apply([], deferredList)); //set features with all deferred objects
 							map.infoWindow.show(evt.mapPoint);
-							domClass.add("ad-popup", "animate"); //add animation to pup up
+							//domClass.add("ad-popup", "animate"); //add animation to pup up
 						}
 					});
 			}
@@ -695,18 +628,25 @@ require([
     
     //AG  current theme
     CONTROL.currenthemeLabel();
+	
+	//console.dir(bundle)
+	//Change locale strings
+	bundle.widgets.popup.NLS_zoomTo = "Priartinti";
+	bundle.widgets.popup.NLS_pagingInfo = "<span class='index-total'>(${index} iš ${total})</span>";
     
     var loadGif = dom.byId("loading-gif"); 
     
     var extent = new esri.geometry.Extent(MAPCONFIG.mapExtent); //DONE
 
     var popupProperties = {  //DONE
-        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol		
+        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol	
+		//outerText: "Priartinti",  //xhange default outerText;
         titleInBody: false // showing title outside
     };
 
     var popupDom = domConstruct.create("div", { id: "ad-popup" });  //DONE
-     popup = new Popup(popupProperties, popupDom);  //DONE
+    popup = new Popup(popupProperties, popupDom);  //DONE
+
 	
 	var defaultSelect = new SimpleMarkerSymbol("circle", 24,
 									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 0]), 3),
@@ -715,11 +655,11 @@ require([
 	
 	//popup.markerSymbol.setOffset(20, 32);
 	
-    var map = new Map("map", {  //DONE
+   var map = new Map("map", {  //DONE
         extent: extent,
         logo: false,
         showAttribution: false,
-        zoom: 0,
+        zoom: 1,
         infoWindow: popup,
         nav: false // hides Pan Arrows
     });
@@ -873,97 +813,6 @@ require([
         }
     });
     // End Ortofoto toggle
-    
-    // Add Permits theme	            
-    if (CONTROL.currentTheme("theme") === "ad"){           
-        var permitsCluster = permitsTheme(map);
-        //map.addLayer(permitsCluster);
-        map.on("layer-add-result", function(e) {
-           //console.log("PERMITS LAYER"); 
-           //console.log(e); 
-        });
-    }
-    //End Add Permits theme
-	
-	else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) { //if theme building or null or empty
-		buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
-	}
-	//console.log(CONTROL.currentTheme());
-
-    map.on("update-start", function () {
-          esri.show(loadGif);          
-    });
-
-    map.on("update-end", function () {
-        esri.hide(loadGif);
-    });
- 
-    //TEMP check url query theme and add/remove layers
-    if (CONTROL.currentTheme() === "ad"){
-	     map.addLayers([advertsDynLayer]);
-    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
-    	map.addLayers([layerBuild]);
-    }
-    
-    //Opacity slider
-    require(["esri/dijit/HorizontalSlider"], function(HorizontalSlider ) {
-        var horizontalSlider = new HorizontalSlider({
-            labels: ["0 %", "100 %"],
-            value: 90,
-            minimum: 0,
-            maximum: 100,
-            intermediateChanges: true,
-            discreteValues: 100,
-            showButtons: false,
-            onChange: function(value) {
-				if (CONTROL.currentTheme() === "ad"){
-					permitsCluster.setOpacity(value / 100);
-				} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) {
-                	featureBuildings.setOpacity(value / 100);
-                    layerBuild.setOpacity(value / 100);					
-				} else { //set opacity for every default funcionality dynamic layer
-					for (var layer in initiateDefaultLayer) {
-						if (initiateDefaultLayer.hasOwnProperty(layer)) {
-							initiateDefaultLayer[layer].setOpacity(value / 100);
-						}
-					}
-				}
-            }
-        }, "tools-opacity-widget");
-        horizontalSlider.startup();
-		
-        
-        //AG initiate layers default opacity 
-		if (initiateDefaultLayer) {
-			for (var layer in initiateDefaultLayer) {
-				if (initiateDefaultLayer.hasOwnProperty(layer)) {
-					initiateDefaultLayer[layer].setOpacity(horizontalSlider.value / 100);
-				}
-			}				
-		}
-		if (CONTROL.currentTheme() === "ad"){
-
-		} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){
-			//featureBuildings.setOpacity(horizontalSlider.value / 10);
-			layerBuild.setOpacity(horizontalSlider.value / 100);		
-		}
-
-    }); 
-    //End Opacity slider
-    
-    //var visible = [];
-    
-
-    on(map, 'onZoomEnd', function() {
-        maxOffset = calcOffset();
-        layer.setMaxAllowableOffset(maxOffset);
-    });
-
-    function calcOffset() {
-        return (map.extent.getWidth() / map.width);
-    }
-
-    map.infoWindow.resize(350, 400);
 
     //Search START
 	var geocoders = [{
@@ -977,7 +826,7 @@ require([
 		sources: [{
 			locator: new Locator("http://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/PAIESKA_COMPOSITE/GeocodeServer"),
 			singleLineFieldName: "SingleLine", //AG name of 'Single Line Address Field:'
-			//outFields: ["*"],
+			outFields: ["*"],
 			enableSuggestions: true, //AG only with 10.3 version
 			name: "Paieška",
 			enableHighlight: true, //highlight symbol
@@ -1003,9 +852,118 @@ require([
         }   */   
     }, "search");
     geocoder.startup();
-
 	
-    //Geocoder END				
+	//console.log(geocoder);
+	
+	on(geocoder, 'select-result', function () {
+		setTimeout(function() {
+			popup.hide(); //let's hide popup after 4 seconds
+		}, 4000);
+	});
+    //Geocoder END
+	
+    //Opacity slider
+	horizontalSlider = new HorizontalSlider({
+		labels: ["0 %", "100 %"],
+		value: 90,
+		minimum: 0,
+		maximum: 100,
+		intermediateChanges: true,
+		discreteValues: 100,
+		showButtons: false,
+		onChange: function (value) {
+			if (CONTROL.currentTheme() === "ad") {
+				permitsCluster.setOpacity(value / 100);
+			} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) {
+				featureBuildings.setOpacity(value / 100);
+				layerBuild.setOpacity(value / 100);
+			} else { //set opacity for every default funcionality dynamic layer
+				for (var layer in initiateDefaultLayer) {
+					if (initiateDefaultLayer.hasOwnProperty(layer)) {
+						initiateDefaultLayer[layer].setOpacity(value / 100);
+					}
+				}
+			}
+		}
+	}, "tools-opacity-widget");
+	horizontalSlider.startup();
+
+	//AG initiate layers default opacity 
+	if (initiateDefaultLayer) {
+		for (var layer in initiateDefaultLayer) {
+			if (initiateDefaultLayer.hasOwnProperty(layer)) {
+				initiateDefaultLayer[layer].setOpacity(horizontalSlider.value / 100);
+			}
+		}
+	}
+	if (CONTROL.currentTheme() === "ad") {
+
+	} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) {
+		//featureBuildings.setOpacity(horizontalSlider.value / 10);
+		layerBuild.setOpacity(horizontalSlider.value / 100);
+	}
+    //End Opacity slider	
+	
+	//console.log(CONTROL.currentTheme("theme"));
+	
+    // Add custom themes	
+	switch (CONTROL.currentTheme("theme")) {
+		case "ad": //add permits theme
+			var permitsCluster = permitsTheme(map);
+			map.on("layer-add-result", function(e) {
+			});
+			break; //add buildings theme
+		case "theme-buildings" || "": //if theme building or null or empty
+			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
+			break;
+		case null: //if theme building or null or empty
+			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
+			break;
+		case "schools": //add schools theme
+			
+			var mainDijit = registry.byId("mainWindow");
+			
+			var rContent = new ContentPane({
+				region: "right",
+				style: "width: 346px; padding: 0",
+				class: "schools",
+				content: "<p class='build-p'>Mokyklų paieška pagal adresą:</p><div id='search-schools'></div><div id='schools-data'></div><div id='schools-info'></div>"
+			}).placeAt("mainWindow").startup();
+			
+			domClass.add(document.body, "schools-theme");
+			schoolsTheme(map, MAPCONFIG, toolsMeasure, CONTROL.showCursor, horizontalSlider);
+			break;
+	}
+	// End add custom themes	
+	
+    map.on("update-start", function () {
+          esri.show(loadGif);          
+    });
+
+    map.on("update-end", function () {
+        esri.hide(loadGif);
+    });
+ 
+    //TEMP check url query theme and add/remove layers
+    if (CONTROL.currentTheme() === "ad"){
+	     map.addLayers([advertsDynLayer]);
+    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
+    	map.addLayers([layerBuild]);
+    }
+    
+    //var visible = [];
+    
+
+    on(map, 'onZoomEnd', function() {
+        maxOffset = calcOffset();
+        layer.setMaxAllowableOffset(maxOffset);
+    });
+
+    function calcOffset() {
+        return (map.extent.getWidth() / map.width);
+    }
+
+    map.infoWindow.resize(350, 400);			
     
     function updateLayerVisibility() {
             var inputs = dojoQuery(".dijitCheckBoxInput");
@@ -1183,9 +1141,6 @@ require([
         "dojo/promise/all", "dojo/Deferred",
         "esri/tasks/query",
         "esri/tasks/QueryTask",
-        "esri/symbols/SimpleMarkerSymbol",
-        "esri/renderers/SimpleRenderer",
-        "esri/Color",
         "esri/request",
         "dojo/dom",
         "dojo/dom-construct",
@@ -1203,9 +1158,6 @@ require([
         all, Deferred,
         Query,
         QueryTask,
-        SimpleMarkerSymbol,
-        SimpleRenderer,
-        Color,
         /*END Grid */
         esriRequest,
         dom,
@@ -1261,13 +1213,14 @@ require([
                     //alert(a);
                     var adMsgComplete = "";
                     var linksLength = a.length;
+					var adMsg;
                     if (linksLength > 1 ) {
                         for (var i = 0; i < linksLength; i++){
-                            var adMsg = "<p></i><a href='" + a[i].url + "' target='blank'>" + a[i].icon + "</a></p>";  
+                            adMsg = "<p></i><a href='" + a[i].url + "' target='blank'>" + a[i].icon + "</a></p>";  
                             adMsgComplete += adMsg;
                         }
                     } else if (a[0] === "Dokumentų nėra") { //AG TEMP
-                        var adMsg = "<p><i class='fa fa-exclamation'></i><span>" +  a[0] + "</span></p>";
+                        adMsg = "<p><i class='fa fa-exclamation'></i><span>" +  a[0] + "</span></p>";
                         adMsgComplete += adMsg;
                     }
                     
@@ -1275,7 +1228,7 @@ require([
                     dom.byId("ad-attachment").innerHTML = adMsgComplete;
                     //map.infoWindow.setContent(adMsg);
                     return a;
-                };
+                }
     
 		        selectedSym = new SimpleMarkerSymbol("circle", 24,
 		                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 1]), 3),
@@ -1303,7 +1256,7 @@ require([
 		                //"singleSymbol": defaultSym,
 		                "singleTemplate": adClusterTemplate,
 		                "useDefaultSymbol": false, //AG false - we're using custom clusterFeaturelayer.js 
-                        "maxSingles": 12000,
+                        "maxSingles": 2000,
 		                "zoomOnClick": true,
 		                "showSingles": true,
 		                //"objectIdField": "GALIOJA",
@@ -1342,7 +1295,7 @@ require([
 					
 					//AG add padding for cluster point click event // BUG FIX FOR CHROME
 					on(clusterLayer, "click", function(e) {
-						console.log(e);
+						//console.log(e);
 						clusterLayer.geometry = e.mapPoint;
 						//add padding to point feature and get featureset attributes 
 						pxWidth = map.extent.getWidth() / map.width;
@@ -1356,8 +1309,8 @@ require([
 						});
 						// use the extent for the query geometry
 						clusterLayer.geometry = qGeom;
-						console.log("clusterLayer.geometry: ");
-						console.log(clusterLayer.geometry);						
+						//console.log("clusterLayer.geometry: ");
+						//console.log(clusterLayer.geometry);						
 						//alert("asdsa");
 					});
 
@@ -1384,8 +1337,8 @@ require([
                         process.then(function(a){
                                              
 							//alert(results);
-							console.log("REDAS");
-							console.log(a);
+							//console.log("REDAS");
+							//console.log(a);
                     	});
                     }
                     }, 50);
@@ -1412,54 +1365,64 @@ require([
                 }
     
                 var timer;
-                function queryURLresults(results) {
-	            timer = setTimeout(function() {
-                    
-                    urLinksArray.length = 0; //AG reset urLinksArray
-                    
-                    window.clearTimeout(timer);
-                    
-                    console.log("REZULATATAI");
-                    console.log(results);
-                    console.log("END REZULATATAI");           
-                    var urlBase = "http://www.vilnius.lt/isorei/isorinereklama/files/";
-                    var resultsFeaturesA = results.features;
-                    //AG check if results has features
-                    if (resultsFeaturesA.length != 0) {
-                        for (var i = 0; i < resultsFeaturesA.length; i++){
-                            var urlDocStyle = results.features[i].attributes.CONTENTTYPE; 
 
-                            var urlId = parseInt(results.features[i].attributes.VLN_REKLAMOS_ID, 10);
-                            var urlEnd = results.features[i].attributes.TITLE;
-                            var urLinks = urlBase + urlId + "_" + urlEnd;
-                            
-                            var urlObj = {url: urLinks, icon: docStyle(urlDocStyle)};
-                            
-                            urLinksArray.push(urlObj);
-                            
-                            
-                            runURL = function (url) {
-                                urlLinksStr.call(null, urLinksArray);
-                            };
-                            setTimeout(function() {
-                               runURL(urLinksArray);
-                            }, 500);                        
-                        }
-                    } else {
-                        urLinksArray = ["Dokumentų nėra"];
-                        
-                        runURL = function (url) {
-                            urlLinksStr.call(null, urLinksArray);
-                        };
-                        setTimeout(function() {
-                            runURL(urLinksArray);
-                        }, 50);                         
-                    }
-                                        
-                    return urLinksArray;
-                }, 1000);
+                function queryURLresults(results) {
+                	timer = setTimeout(function () {
+
+                		urLinksArray.length = 0; //AG reset urLinksArray
+
+                		window.clearTimeout(timer);
+
+                		//console.log("REZULATATAI");
+                		// console.log(results);
+                		// console.log("END REZULATATAI");           
+                		var urlBase = "http://www.vilnius.lt/isorei/isorinereklama/files/";
+                		var resultsFeaturesA = results.features;
+                		//AG check if results has features
+						
+						var runUrl;
+						
+                		if (resultsFeaturesA.length !== 0) {
+							
+							var runUrlInner = function () {
+								runURL = function (url) {
+									urlLinksStr.call(null, urLinksArray);
+								};
+								setTimeout(function () {
+									runURL(urLinksArray);
+								}, 500);
+							};
+							
+                			for (var i = 0; i < resultsFeaturesA.length; i++) {
+                				var urlDocStyle = results.features[i].attributes.CONTENTTYPE;
+
+                				var urlId = parseInt(results.features[i].attributes.VLN_REKLAMOS_ID, 10);
+                				var urlEnd = results.features[i].attributes.TITLE;
+                				var urLinks = urlBase + urlId + "_" + urlEnd;
+
+                				var urlObj = {
+                					url: urLinks,
+                					icon: docStyle(urlDocStyle)
+                				};
+
+                				urLinksArray.push(urlObj);
+
+                				runUrlInner();
+							}
+                		} else {
+                			urLinksArray = ["Dokumentų nėra"];
+
+                			runURL = function (url) {
+                				urlLinksStr.call(null, urLinksArray);
+                			};
+                			setTimeout(function () {
+                				runURL(urLinksArray);
+                			}, 50);
+                		}
+
+                		return urLinksArray;
+                	}, 1000);
                 }
-    
                 function docStyle (string) {
                     var iconStr = "";
                     var stringParts = string.split("/");
@@ -1489,6 +1452,7 @@ require([
     
                 function popupState(selected) {
 	                var promise = new Deferred();
+					var hasClass;
                     
                     //AG get different symbols with newlys created VALID ID = GALIOJA on popup selection change
                     //var graphic = popup.getSelectedFeature();
@@ -1500,24 +1464,24 @@ require([
                     process.then(function(queryObject){
                         setTimeout(function() {
                         queryObject.task.execute(queryObject.query, queryURLresults);         
-                        console.log("DEFAS");
-                        console.log(queryObject);
+                        //console.log("DEFAS");
+                       //console.log(queryObject);
                         promise.resolve(queryObject);
                         }, 100);
                     });
                         if ((galiojaKEY === 1) || (galiojaKEY === 3)) {
                             map.infoWindow.setTitle("Galiojantis reklamos registro leidimas " );   //BUG FIX for showing titles               
                             adClusterTemplate.setTitle("Galiojantis reklamos registro leidimas ");   //BUG FIX for showing titles               
-                            domClass.contains("ad-popup", "invalid-ad") ? domClass.remove("ad-popup", "invalid-ad") : domClass.add("ad-popup", "valid-ad");
+                            hasClass = domClass.contains("ad-popup", "invalid-ad") ? domClass.remove("ad-popup", "invalid-ad") : domClass.add("ad-popup", "valid-ad");
                             domClass.add("ad-popup", "valid-ad");  
                         } else if (galiojaKEY === 2) {
                             map.infoWindow.setTitle("Negaliojantis reklamos registro leidimas "); //BUG FIX for showing titles
                             adClusterTemplate.setTitle("Negaliojantis reklamos registro leidimas "); //BUG FIX for showing titles
-                            domClass.contains("ad-popup", "valid-ad") ? domClass.remove("ad-popup", "valid-ad") : domClass.add("ad-popup", "invalid-ad"); 
+                            hasClass = domClass.contains("ad-popup", "valid-ad") ? domClass.remove("ad-popup", "valid-ad") : domClass.add("ad-popup", "invalid-ad"); 
                             domClass.add("ad-popup", "invalid-ad");  
                         }             
-                    console.log("features set");
-                    console.log(selected);
+                   // console.log("features set");
+                   // console.log(selected);
                     } 
  
                     return promise.promise;                   
@@ -1565,8 +1529,10 @@ require([
                        duration: 150,
 		              easing: easing.quadIn}).play();
         }
-    
-        return cluster = clusterLayer;
+		
+    	cluster = clusterLayer;
+		
+        return cluster;
         
     });
     
@@ -1574,6 +1540,9 @@ require([
 };;var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuildingsUrl, showCursor) {
 
 	require([
+		"dijit/TooltipDialog",
+		"dijit/popup",
+		"dojo/mouse",
 		"dojo/_base/connect",
 		"esri/toolbars/navigation",
 		"esri/config",
@@ -1623,6 +1592,8 @@ require([
 		"dijit/layout/ContentPane",
 		"dojo/domReady!"
 	], function (
+		TooltipDialog, dijitPopup,
+		mouse,
 		connect,
 		Navigation,
 		esriConfig,
@@ -1877,7 +1848,7 @@ require([
 		//NEW 2015 11
 		//QueryTask: namo bendrieji tarifai
 		var buildingAdministrationTask = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/1");
-		buildingAdministration = new Query();
+		var buildingAdministration = new Query();
 		buildingAdministration.outSpatialReference = {
 			wkid: 3346
 		};
@@ -2077,7 +2048,7 @@ require([
 				return valdFormString;
 			}
 
-			var buildMsg = "<h3>" + adresas + "</h3>" + "<p>" + ntrunStr + "<br><span>Unikalus numeris</span></p>" + "<p>" + statM + "<br><span>Statybos metai</span></p>" + "<p>" + nrPlane + "<br><span>Korpusas</span></p>" + "<p>" + statPask + "<br><span>Namo paskirtis</span></p>" + "<p class='build-bt build-top'><a href='#build-info' class='animate'>Bendroji informacija</a></p><p class='build-bt'><a href='#build-manage' class='animate'>Valdytojų informacija</a></p><p class='build-bt'><a href='#build-temp' id='build-temp-bt' class='animate'>Šildymo duomenys / Renovacija</a></p><p class='build-bt'><a href='#build-maintenance' class='animate'>Namo priežiūros tarifai</a></p><p class='build-bt'><a href='#build-docs' class='animate'>Ataskaitos ir planai</a></p><p class='build-bt'><a href='#build-statistics' class='animate'>Tarifų palyginimas</a></p><p class='build-bt'><a href='#build-help' class='animate'>Pagalba ir duomenų suvedimas</a></p><p class='build-bt'><a href='#build-imp-info' class='animate'>Svarbi informacija</a></p>";
+			var buildMsg = "<h3>" + adresas + "</h3>" + "<p>" + ntrunStr + "<br><span>Unikalus numeris</span></p>" + "<p>" + statM + "<br><span>Statybos metai</span></p>" + "<p>" + nrPlane + "<br><span>Korpusas</span></p>" + "<p>" + statPask + "<br><span>Namo paskirtis</span></p>" + "<p class='build-bt build-top'><a href='#build-info' class='animate'>Bendroji informacija</a></p><p class='build-bt'><a href='#build-manage' class='animate'>Valdytojų informacija</a></p><p class='build-bt'><a href='#build-temp' id='build-temp-bt' class='animate'>Šildymo duomenys / Renovacija</a></p><p class='build-bt'><a href='#build-maintenance' class='animate'>Namo priežiūros tarifai</a></p><p class='build-bt'><a href='#build-docs' class='animate'>Ataskaitos ir planai</a></p><p class='build-bt'><a href='#build-attachments' class='animate'>Priežiūros aktai</a></p><p class='build-bt'><a href='#build-statistics' class='animate'>Tarifų palyginimas</a></p><p class='build-bt'><a href='#build-help' class='animate'>Pagalba ir duomenų suvedimas</a></p><p class='build-bt'><a href='#build-imp-info' class='animate'>Svarbi informacija</a></p>";
 
 			dom.byId("build-inner").innerHTML = buildMsg;
 
@@ -2110,39 +2081,41 @@ require([
 			var statusCompare = false; // true if using Comparing mode
 			//special tooltips for cursors
 			function compareTooltip() {			
-				var tooltip;
-				map.on("mouse-over", function (e) {
-					require([
-						"dijit/TooltipDialog",
-						"dijit/popup",
-						"dojo/on",
-						"dojo/dom",
-						"dojo/domReady!"
-					], function (TooltipDialog, popup, on, dom) {
-						tooltip = new TooltipDialog({
-							id: 'myTooltipDialogCompare',
-							style: "width: 160px;",
-							content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
-							onMouseLeave: function () {
-								popup.close(tooltip);
-							}
-						});
-						tooltip.startup();
-						//console.log(e);
-						//console.log(tooltip);
-						map.on("mouse-move", function (e) {
-							popup.open({
-								popup: tooltip,
-								x: e.x + 10, //AG add padding for mouse hovering and click events
-								y: e.y + 10
-							});
-						});
-					});
-				});
-				map.on("mouse-out", function () {
-					tooltip.destroy();
-				});					
+				var tooltipC;
 
+					on(map, "mouse-move", function (evt) {
+						if (statusCompare) { //check status
+							//destroy widget on every move
+							if (typeof (tooltipC) != "undefined") {
+								tooltipC.destroy();
+							}
+
+							tooltipC = new TooltipDialog({
+								id: 'myTooltipDialogCompare',
+								style: "width: 160px;",
+								content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
+								onMouseEnter: function () {
+									dijitPopup.close(tooltipC);
+								}
+							});
+
+							tooltipC.startup();
+							dijitPopup.open({
+								popup: tooltipC,
+
+								x: evt.pageX + 2, //AG add padding for mouse hovering and click events
+								y: evt.pageY + 2
+							});
+						}
+					});
+					on(map, "mouse-out", function () {
+						if (typeof (tooltipC) != "undefined") {
+							tooltipC.destroy();
+						}
+					});			
+					
+				
+  				
 			}
 
 			function compareAdm() {
@@ -2166,11 +2139,13 @@ require([
 				domClass.add("bar-tips", "hide");
 				domClass.remove("bar-tips", "show");
 
-				compareTooltip();
+				tooltipCompare = compareTooltip(); //asign tooltip to tooltipCompare var
 
 				//get back from comparign block to main block and remove compared layer
 				var statsCloseBtn = dom.byId("stats-close");
 				statsCloseBtn.addEventListener("click", function () {
+					 statusCompare = false; //set compare status mode true
+					
 					//TEMP show bar graphic if exists
 					//if (typeof myBar != "undefined") {
 					domClass.add("myBarChart", "show");
@@ -2191,7 +2166,7 @@ require([
 												dom.byId("compare-btn-block").innerHTML = backCompareDom; */
 
 
-					domConstruct.destroy("tooltip-span"); // AG destroy tooltip
+					//domConstruct.destroy("tooltip-span"); // AG destroy tooltip
 					window.location.hash = '#build-data'; //AG get back
 
 					map.removeLayer(layerBuildignsCompare);
@@ -2236,6 +2211,9 @@ require([
 				showCursor([layerBuildignsCompare], arrayUtils);
 
 				function runQueryCompare(e) {
+					//console.log("POINT");
+					//console.log(e);
+					
 					window.location.hash = '#close'; //remove panel
 
 					var zoomLevel = map.getMaxZoom() - 1;
@@ -2445,10 +2423,69 @@ require([
 					checkUrlDocs(urlStack[docUrlName], docUrlName);
 				}
 			}
+			
+			//Get attachments
+			window.attachmentsObj = {}; //store attachments functions to save files with file.js // TOTO eliminate global object
+			var attachmentsHtml = "";
+			var attachmentTask = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/5");
+			var attachmentQuery = new Query();
+			attachmentQuery.outSpatialReference = {
+				wkid: 3346
+			};
+			//base64 string
+			//attachmentQuery.where = "fld_unikalus_nr1= '" + ntrun + "' OR att_title= '" + "2016-02-29 Žadeikos g. 10.pdf" + "' ";
+			//base64 blob
+			attachmentQuery.where = "fld_unikalus_nr1= '" + ntrun + "' OR fld_unikalus_nr2= '" + ntrun + "' OR fld_unikalus_nr3= '" + ntrun + "'";
+			attachmentQuery.returnGeometry = false;
+			attachmentQuery.outFields = ["*"];	
+			attachmentTask.execute(attachmentQuery, showAttachments);
+		
+			function showAttachments(results) {
+				//get features array
+				var features = results.features,
+					i = 0;
+				if (features.length > 0) {
+					for(i; i < features.length; i +=1) {
+						var name = "";
+						name += i;
+						
+						//Add attachment anchor with  unique onclick function
+						attachmentsHtml += "<p><span class='anchor-tag' href='' onclick='attachmentsObj[" + i + "](" +i+")'>" + features[i].attributes.att_title +  "</span></p>";
+
+						attachmentsObj[name] = function(i) {
+							//base 64 string
+							var blobType = features[i].attributes.att_contentType;
+							var byteCharacters = atob(features[i].attributes.att_encodedContent);
+							var fileName = "Aktas: " + features[i].attributes.att_title;							
+							var byteNumbers = new Array(byteCharacters.length);
+
+							for (var n = 0; n < byteCharacters.length; n++) {
+									byteNumbers[n] = byteCharacters.charCodeAt(n);
+							}
+							var byteArray = new Uint8Array(byteNumbers);
+
+							// construct the blob from from byte array
+							var blob = new Blob([byteArray], {type: blobType});
+
+							saveAs(blob, fileName);										
+						}
+						
+					}
+				}
+				
+				//var buildAtt = "<h3>" + adresas + "<br></h3>" + "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml;
+				
+				//console.log(typeof(attachmentsHtml));
+				var buildAtt = "<h3>" + adresas + "<br></h3>" + (attachmentsHtml === '' ? "<p>Priežiūros aktų nėra</p>" : "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml);
+				
+				dom.byId("build-inner-att").innerHTML = buildAtt;				
+			}
+			//EDN Get attachments 
 
 			var buildDocs = "<h3>" + adresas + "<br></h3>";
 
 			dom.byId("build-inner-d").innerHTML = buildDocs;
+			
 
 			var buildHelp = "<h3>" + adresas + "<br></h3>" + "<p>Turite pasiūlymų ar pastabų? Matote klaidų?</p> <p>Susisiekite el. paštu: <a href='mailto:pastatai@vilnius.lt'>pastatai@vilnius.lt</a></p><p>Norėdami pateikti duomenys apie konkretų pastatą, kviečiame užpildyti <a href='http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/lentele.xlsx'>duomenų suvedimo lentelę</a> ir persiųsti aukščiau nurodytu el. pašto adresu.</p><p>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'>bendrijų steigimą</a></p>";
 
@@ -2850,36 +2887,35 @@ require([
 		}
 		
 		//show tooltip for building theme
-		var tooltip;
-		featureBuildings.on("mouse-over", function (e) {
-			require([
-				"dijit/TooltipDialog",
-				"dijit/popup",
-				"dojo/on",
-				"dojo/dom",
-				"dojo/domReady!"
-			], function (TooltipDialog, popup, on, dom) {
-				tooltip = new TooltipDialog({
-					id: 'myTooltipDialog',
-					style: "width: 160px;",
-					content: "<p>Pažymėkite pastatą</p>",
-					onMouseLeave: function () {
-						popup.close(tooltip);
-					}
-				});
-				tooltip.startup();
-				//console.log(e);
-				//console.log(tooltip);
-				featureBuildings.on("mouse-move", function (e) {
-					popup.open({
-						popup: tooltip,
-						x: e.x + 10, //AG add padding for mouse hovering and click events
-						y: e.y + 10
-					});
-				});
+		var tooltip;	
+		
+		on(featureBuildings, "mouse-move", function (evt) {
+			//destroy widget on every move
+			if (typeof(tooltip) != "undefined") {
+				tooltip.destroy();
+			}
+			
+			tooltip = new TooltipDialog({
+				id: 'myTooltipDialog',
+				style: "width: 160px;",
+				content: "<p>Pažymėkite pastatą</p>",
+				onMouseEnter: function () {
+						dijitPopup.close(tooltip);
+				}
 			});
+
+				tooltip.startup();
+				dijitPopup.open({
+					popup: tooltip,
+					/*padding: {
+						x: 10, 
+						y: 10
+					},*/
+					x: evt.pageX + 2, //AG add padding for mouse hovering and click events
+					y: evt.pageY + 2
+				});
 		});
-		featureBuildings.on("mouse-out", function () {
+		on(featureBuildings, "mouse-out", function () {
 			tooltip.destroy();
 		});	
 	});
