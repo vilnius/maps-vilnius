@@ -33,6 +33,7 @@ var MAPCONFIG = {
 			imgAlt: "Reklamos vietos" // image alt attribute
 		},
 		schools: {
+			custom: true,
 			name: "Švietimas", //theme name
 			id: "schools", //theme id class and theme URL query name
 			imgUrl: "/maps_vilnius/img/svietimas.png", //image URL
@@ -170,7 +171,9 @@ Array.prototype.getUnique = function () {
 window.location.hash = '#';
 
 require([
+	"dojo/i18n!esri/nls/jsapi",
     "esri/map",
+	"esri/dijit/HorizontalSlider",
     "dojo/_base/connect",
     "esri/toolbars/navigation",
     "esri/config",
@@ -213,12 +216,14 @@ require([
     "esri/layers/LayerInfo",
 	"esri/tasks/IdentifyTask",
     "esri/tasks/IdentifyParameters",
+	"dijit/layout/ContentPane",
     "dijit/layout/TabContainer",
     "dijit/layout/BorderContainer",
-    "dijit/layout/ContentPane",
     "dojo/domReady!"
 ], function (
+	bundle,
     Map,
+	HorizontalSlider,
     connect,
     Navigation,
     esriConfig,
@@ -259,12 +264,13 @@ require([
     ClusterFeatureLayer, Graphic, graphicsUtils, domStyle, fx, easing,
     Scalebar,
     LayerInfo,
-	IdentifyTask, IdentifyParameters
+	IdentifyTask, IdentifyParameters, ContentPane
 ) {
 	var visible = [];
 	var identifyPerameters;
 	var identifyTask;
 	var visibleLayersResult = {};
+	var horizontalSlider;
 	
 	var DEFCONFIG = {
 		extent:  new esri.geometry.Extent(MAPCONFIG.mapExtent),
@@ -707,18 +713,25 @@ require([
     
     //AG  current theme
     CONTROL.currenthemeLabel();
+	
+	//console.dir(bundle)
+	//Change locale strings
+	bundle.widgets.popup.NLS_zoomTo = "Priartinti";
+	bundle.widgets.popup.NLS_pagingInfo = "<span class='index-total'>(${index} iš ${total})</span>";
     
     var loadGif = dom.byId("loading-gif"); 
     
     var extent = new esri.geometry.Extent(MAPCONFIG.mapExtent); //DONE
 
     var popupProperties = {  //DONE
-        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol		
+        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol	
+		//outerText: "Priartinti",  //xhange default outerText;
         titleInBody: false // showing title outside
     };
 
     var popupDom = domConstruct.create("div", { id: "ad-popup" });  //DONE
-     popup = new Popup(popupProperties, popupDom);  //DONE
+    popup = new Popup(popupProperties, popupDom);  //DONE
+
 	
 	var defaultSelect = new SimpleMarkerSymbol("circle", 24,
 									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 0]), 3),
@@ -727,11 +740,11 @@ require([
 	
 	//popup.markerSymbol.setOffset(20, 32);
 	
-    var map = new Map("map", {  //DONE
+   var map = new Map("map", {  //DONE
         extent: extent,
         logo: false,
         showAttribution: false,
-        zoom: 0,
+        zoom: 1,
         infoWindow: popup,
         nav: false // hides Pan Arrows
     });
@@ -885,97 +898,6 @@ require([
         }
     });
     // End Ortofoto toggle
-    
-    // Add Permits theme	            
-    if (CONTROL.currentTheme("theme") === "ad"){           
-        var permitsCluster = permitsTheme(map);
-        //map.addLayer(permitsCluster);
-        map.on("layer-add-result", function(e) {
-           //console.log("PERMITS LAYER"); 
-           //console.log(e); 
-        });
-    }
-    //End Add Permits theme
-	
-	else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) { //if theme building or null or empty
-		buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
-	}
-	//console.log(CONTROL.currentTheme());
-
-    map.on("update-start", function () {
-          esri.show(loadGif);          
-    });
-
-    map.on("update-end", function () {
-        esri.hide(loadGif);
-    });
- 
-    //TEMP check url query theme and add/remove layers
-    if (CONTROL.currentTheme() === "ad"){
-	     map.addLayers([advertsDynLayer]);
-    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
-    	map.addLayers([layerBuild]);
-    }
-    
-    //Opacity slider
-    require(["esri/dijit/HorizontalSlider"], function(HorizontalSlider ) {
-        var horizontalSlider = new HorizontalSlider({
-            labels: ["0 %", "100 %"],
-            value: 90,
-            minimum: 0,
-            maximum: 100,
-            intermediateChanges: true,
-            discreteValues: 100,
-            showButtons: false,
-            onChange: function(value) {
-				if (CONTROL.currentTheme() === "ad"){
-					permitsCluster.setOpacity(value / 100);
-				} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) {
-                	featureBuildings.setOpacity(value / 100);
-                    layerBuild.setOpacity(value / 100);					
-				} else { //set opacity for every default funcionality dynamic layer
-					for (var layer in initiateDefaultLayer) {
-						if (initiateDefaultLayer.hasOwnProperty(layer)) {
-							initiateDefaultLayer[layer].setOpacity(value / 100);
-						}
-					}
-				}
-            }
-        }, "tools-opacity-widget");
-        horizontalSlider.startup();
-		
-        
-        //AG initiate layers default opacity 
-		if (initiateDefaultLayer) {
-			for (var layer in initiateDefaultLayer) {
-				if (initiateDefaultLayer.hasOwnProperty(layer)) {
-					initiateDefaultLayer[layer].setOpacity(horizontalSlider.value / 100);
-				}
-			}				
-		}
-		if (CONTROL.currentTheme() === "ad"){
-
-		} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){
-			//featureBuildings.setOpacity(horizontalSlider.value / 10);
-			layerBuild.setOpacity(horizontalSlider.value / 100);		
-		}
-
-    }); 
-    //End Opacity slider
-    
-    //var visible = [];
-    
-
-    on(map, 'onZoomEnd', function() {
-        maxOffset = calcOffset();
-        layer.setMaxAllowableOffset(maxOffset);
-    });
-
-    function calcOffset() {
-        return (map.extent.getWidth() / map.width);
-    }
-
-    map.infoWindow.resize(350, 400);
 
     //Search START
 	var geocoders = [{
@@ -987,8 +909,8 @@ require([
 		//arcgisGeocoder: false,
 		//geocoders: geocoders,
 		sources: [{
-			locator: new Locator("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/ADRESAI_test_fields/GeocodeServer"),
-			singleLineFieldName: "Single Line Input", //AG name of 'Single Line Address Field:'
+			locator: new Locator("http://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/PAIESKA_COMPOSITE/GeocodeServer"),
+			singleLineFieldName: "SingleLine", //AG name of 'Single Line Address Field:'
 			outFields: ["*"],
 			enableSuggestions: true, //AG only with 10.3 version
 			name: "Paieška",
@@ -1016,13 +938,117 @@ require([
     }, "search");
     geocoder.startup();
 	
-	on(geocoder, "select-result", function(e) {
-		console.log("PAIESKOS REZULTATAI:");
-		console.log(e);
-	});
-
+	//console.log(geocoder);
 	
-    //Geocoder END				
+	on(geocoder, 'select-result', function () {
+		setTimeout(function() {
+			popup.hide(); //let's hide popup after 4 seconds
+		}, 4000);
+	});
+    //Geocoder END
+	
+    //Opacity slider
+	horizontalSlider = new HorizontalSlider({
+		labels: ["0 %", "100 %"],
+		value: 90,
+		minimum: 0,
+		maximum: 100,
+		intermediateChanges: true,
+		discreteValues: 100,
+		showButtons: false,
+		onChange: function (value) {
+			if (CONTROL.currentTheme() === "ad") {
+				permitsCluster.setOpacity(value / 100);
+			} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) {
+				featureBuildings.setOpacity(value / 100);
+				layerBuild.setOpacity(value / 100);
+			} else { //set opacity for every default funcionality dynamic layer
+				for (var layer in initiateDefaultLayer) {
+					if (initiateDefaultLayer.hasOwnProperty(layer)) {
+						initiateDefaultLayer[layer].setOpacity(value / 100);
+					}
+				}
+			}
+		}
+	}, "tools-opacity-widget");
+	horizontalSlider.startup();
+
+	//AG initiate layers default opacity 
+	if (initiateDefaultLayer) {
+		for (var layer in initiateDefaultLayer) {
+			if (initiateDefaultLayer.hasOwnProperty(layer)) {
+				initiateDefaultLayer[layer].setOpacity(horizontalSlider.value / 100);
+			}
+		}
+	}
+	if (CONTROL.currentTheme() === "ad") {
+
+	} else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")) {
+		//featureBuildings.setOpacity(horizontalSlider.value / 10);
+		layerBuild.setOpacity(horizontalSlider.value / 100);
+	}
+    //End Opacity slider	
+	
+	//console.log(CONTROL.currentTheme("theme"));
+	
+    // Add custom themes	
+	switch (CONTROL.currentTheme("theme")) {
+		case "ad": //add permits theme
+			var permitsCluster = permitsTheme(map);
+			map.on("layer-add-result", function(e) {
+			});
+			break; //add buildings theme
+		case "theme-buildings" || "": //if theme building or null or empty
+			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
+			break;
+		case null: //if theme building or null or empty
+			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
+			break;
+		case "schools": //add schools theme
+			
+			var mainDijit = registry.byId("mainWindow");
+			
+			var rContent = new ContentPane({
+				region: "right",
+				style: "width: 346px; padding: 0",
+				class: "schools",
+				content: "<p class='build-p'>Mokyklų paieška pagal adresą:</p><div id='search-schools'></div><div id='schools-data'></div><div id='schools-info'></div>"
+			}).placeAt("mainWindow").startup();
+			
+			domClass.add(document.body, "schools-theme");
+			schoolsTheme(map, MAPCONFIG, toolsMeasure, CONTROL.showCursor, horizontalSlider);
+			break;
+	}
+	// End add custom themes	
+	
+    map.on("update-start", function () {
+          esri.show(loadGif);          
+    });
+
+    map.on("update-end", function () {
+        esri.hide(loadGif);
+    });
+ 
+    //TEMP check url query theme and add/remove layers
+    if (CONTROL.currentTheme() === "ad"){
+	     map.addLayers([advertsDynLayer]);
+    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
+    	map.addLayers([layerBuild]);
+    }
+    
+    //var visible = [];
+    
+
+    on(map, 'onZoomEnd', function() {
+        maxOffset = calcOffset();
+        layer.setMaxAllowableOffset(maxOffset);
+    });
+
+    function calcOffset() {
+        return (map.extent.getWidth() / map.width);
+    }
+
+    map.infoWindow.resize(350, 400);			
     
     function updateLayerVisibility() {
             var inputs = dojoQuery(".dijitCheckBoxInput");

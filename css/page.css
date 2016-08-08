@@ -28,6 +28,10 @@ body {
 	background-color: #fff;
 	overflow: hidden;
 	font-family: 'titillium_vln', Helvetica, san-serif;
+	
+	/* TEMP 2016 , set min width for mobile*/
+    min-width: 1028px;
+    overflow-x: auto;
 }
 
 a {
@@ -670,7 +674,9 @@ a.email:hover {
 .agsjsTOCIcon svg {
 	height: 30px;
 }
-svg g { cursor: pointer; }
+svg g { 
+/*	cursor: pointer;*/
+}
 
 #logo {
 	/*		margin-bottom: 16px;*/
@@ -3141,7 +3147,7 @@ theme ad
 	background: #2D9469;
 }
 
-.esriPopup.default-popup .titleButton.close {
+.esriPopup.default-popup .titleButton.close, .esriPopup .titleButton.close {
 	right: 10px;
 	top: 12px;
 	background-position: 0 0;
@@ -3149,20 +3155,36 @@ theme ad
 	height: 17px;
 }
 
-.esriPopup.default-popup .titleButton.next {
+.esriPopup.default-popup .titleButton.next, .esriPopup .titleButton.next {
+	left: auto;
 	right: 12px;
 	background-position: -16px 0;
 	width: 9px;
 	height: 17px;
 	top: 38px;
+	position: absolute;
 }
-
-.esriPopup.default-popup .titleButton.prev {
+.esriPopup .titleButton.next {
+	background-position: -16px 0;
+	width: 9px;
+	height: 25px;
+	top: 12px;
+	right: 32px;
+}
+.esriPopup.default-popup .titleButton.prev, .esriPopup .titleButton.prev {
+	position: absolute;
+	left: auto;
 	right: 40px;
 	background-position: -29px 0;
 	width: 9px;
 	height: 17px;
 	top: 38px;
+}
+.esriPopup .titleButton.prev {
+	left: 284px;
+	background-position: -29px 0;
+	width: 9px;
+	top: 12px;
 }
 
 .bord {
@@ -3179,14 +3201,24 @@ theme ad
 	color: #555;
 }
 
-#ad-popup p {
+#ad-popup p, #ad-popup .title {
 	margin-left: 11px;
-	margin-bottom: 11px;
+	margin-bottom: 4px;
 }
 
-#ad-popup .title p {
+#ad-popup .title p, #ad-popup .title {
 	color: #FFF;
 	width: 80%;
+	width: 265px;
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: normal;
+	margin-left: 0;
+}
+.default-popup .title p, .default-popup .title {
+	color: #FFF;
+	width: 80%;
+	width: 294px;
 	font-size: 14px;
 	line-height: 18px;
 	font-weight: normal;
@@ -3195,6 +3227,16 @@ theme ad
 
 #ad-popup p span {
 	line-height: 16px;
+}
+.index-total {
+    padding: 4px 8px;
+    background-color: #a80b0d;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+   	-moz-border-radius: 14px;
+    top: 4px;
+    position: relative;
+    line-height: 1.8;
 }
 
 #ad-popup ul {
@@ -3289,7 +3331,7 @@ THEMES
     border: 0;
     z-index: 2;
     background-image: url("../img/tooltip.png"); 
-/*    background-image: none; */
+    background-image: none; 
     background-repeat: no-repeat;
     width: 16px;
     height: 14px;
@@ -3306,7 +3348,15 @@ THEMES
 
 
 /*SELECTION OPTINIONS*/
-
+.schools-theme #search {
+	display: none !important;
+}
+.schools-theme .esriSimpleSliderTL {
+    top: 20px;
+}
+.schools-theme #extent {
+    top: 120px;
+}
 .claro #compare-btn-block .dijitSelect {
 	margin: 10px 20px;
 }
@@ -3318,4 +3368,206 @@ THEMES
 
 .claro .dijitSelect .dijitArrowButton {
 	padding: 8px;
+}
+
+/*SCHOOLS THEME*/
+.schools {
+	overflow-y: auto!important;
+	overflow-x: hidden !important;
+}
+.arcgisSearch .noResultsHeader, .arcgisSearch .noResultsText, .arcgisSearch .noValueText {
+    color: #4C4C4C;
+}
+.dijitContentPane.schools {
+    border: none;
+	background: rgb(233, 233, 233);
+	top: 0 !important;
+}
+.schools p.build-p:first-child {
+    background: rgb(230, 28, 36);
+    color: #fff;
+    font-size: 15px;
+	line-height: 34px;
+}
+.schools p {
+    padding: 6px 20px;
+	font-size: 15px;
+	line-height: 1.6;
+    letter-spacing: -0.4px;	
+}
+#search-schools {
+	padding: 20px;
+}
+#search-schools .searchGroup .searchInput {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    float: left;
+    display: block;
+    height: 20px;
+    width: 284px;
+    padding: 8px 24px 8px 12px;
+    padding: 12px;
+    font-size: 14px;
+    font-size: 16px;
+    line-height: 20px;
+    color: #4C4C4C;
+    background-color: #fff;
+    border: none;
+    border-right: 0;
+    -webkit-border-radius: 2px 0 0 2px;
+    border-radius: 2px 0 0 2px;
+    -webkit-transition: width .175s ease-in;
+    -moz-transition: width .175s ease-in;
+    -ms-transition: width .175s ease-in;
+    -o-transition: width .175s ease-in;
+    transition: width .175s ease-in;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#search-schools .searchButtonText {
+    clip: rect(0 0 0 0);
+    overflow: auto;
+    position: relative;
+}
+#search-schools .searchGroup, #search-schools .searchIcon {
+    color: #fff;
+}
+#search-schools .searchBtn.searchSubmit {
+    display: block;
+    float: left;
+    padding: 8px 6px;
+    padding: 12px;
+    margin: 0;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 20px;
+    height: 20px;
+    width: 284px;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: none;
+    -webkit-border-radius: 0 2px 2px 0;
+    border-radius: 0 2px 2px 0;
+    background-color: #fff;
+	background-color: #53565d;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#schools-data {
+	height: 120px;
+	height: auto;
+}
+.schools-theme .arcgisSearch .searchMenu {
+    top: 50%;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+.school-no,
+.school-str {
+	font-size: 15px;
+    line-height: 19px;
+    font-weight: bold;
+    color: #555;	
+}
+.schools p.school-count span.school-no {
+	font-size: 30px;
+	position: relative;
+	top: 3px;
+	font-weight: bold;
+	color: #53565D;
+}
+.school-str {
+	padding: 0;
+	border-bottom: 1px solid #555;	
+}
+#schools-info {
+	padding-bottom: 20px;
+/*	height: calc(100% - 328px);*/
+	height: auto;
+}
+#schools-info p {
+	font-size: 15px;
+    line-height: 19px;
+    font-weight: bold;
+    color: #555;
+}
+#schools-info p.school-type {
+	text-transform: lowercase;
+}
+#schools-info h3 {
+	font-size: 17px;
+    line-height: 2.6;
+    font-weight: normal;
+    border-bottom: 1px solid #d0d0d0;
+	margin-bottom: 8px;
+}
+#schools-info p span {
+    font-size: 14px;
+    line-height: 18px;
+    text-transform: lowercase;
+    color: #7D7D7D;
+    font-weight: normal;
+}
+.esri-icon-close:before {
+    content: "\e600";
+	color: #53565d;
+}
+.arcgisSearch .searchClear {
+    display: none;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 2;
+    height: 30px;
+    width: 24px;
+    text-align: center;
+    background-color: #fff;
+    cursor: pointer;
+}
+.arcgisSearch .hasValue .searchClear {
+    display: block;
+}
+.schools p.address {
+    background-color: #fff;
+    border-bottom: 1px solid #E9E9E9;
+    line-height: 28px;
+	font-size: 1.17em;
+	padding: 10px 20px;
+    color: #53565D;
+	font-weight: bold;
+}
+.schools p.school-count {
+    padding-top: 13px;
+    background-color: #fff;
+	color: #53565D;
+	font-weight: bold;
+}
+.schools p.school-count span, .schools p.address span {
+    text-transform: lowercase;
+	font-weight: normal;
+	color: #96989E;
+	font-size: 15px;
+}
+.claro .dijitPopup .dijitTooltipContainer p {
+    line-height: 1.6;
+	padding-top: 6px;
+	padding-bottom: 6px;
 }

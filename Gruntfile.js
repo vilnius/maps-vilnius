@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     jshint: {
-      all: ['js/main.js', 'js/building.js']
+      all: ['js/main.js', 'js/building.js', 'js/permits.js', 'js/schools.js']
     },
     concat: {
 		options: {

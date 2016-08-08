@@ -9,9 +9,6 @@ var permitsTheme = function (map) {
         "dojo/promise/all", "dojo/Deferred",
         "esri/tasks/query",
         "esri/tasks/QueryTask",
-        "esri/symbols/SimpleMarkerSymbol",
-        "esri/renderers/SimpleRenderer",
-        "esri/Color",
         "esri/request",
         "dojo/dom",
         "dojo/dom-construct",
@@ -29,9 +26,6 @@ var permitsTheme = function (map) {
         all, Deferred,
         Query,
         QueryTask,
-        SimpleMarkerSymbol,
-        SimpleRenderer,
-        Color,
         /*END Grid */
         esriRequest,
         dom,
@@ -87,13 +81,14 @@ var permitsTheme = function (map) {
                     //alert(a);
                     var adMsgComplete = "";
                     var linksLength = a.length;
+					var adMsg;
                     if (linksLength > 1 ) {
                         for (var i = 0; i < linksLength; i++){
-                            var adMsg = "<p></i><a href='" + a[i].url + "' target='blank'>" + a[i].icon + "</a></p>";  
+                            adMsg = "<p></i><a href='" + a[i].url + "' target='blank'>" + a[i].icon + "</a></p>";  
                             adMsgComplete += adMsg;
                         }
                     } else if (a[0] === "Dokumentų nėra") { //AG TEMP
-                        var adMsg = "<p><i class='fa fa-exclamation'></i><span>" +  a[0] + "</span></p>";
+                        adMsg = "<p><i class='fa fa-exclamation'></i><span>" +  a[0] + "</span></p>";
                         adMsgComplete += adMsg;
                     }
                     
@@ -101,7 +96,7 @@ var permitsTheme = function (map) {
                     dom.byId("ad-attachment").innerHTML = adMsgComplete;
                     //map.infoWindow.setContent(adMsg);
                     return a;
-                };
+                }
     
 		        selectedSym = new SimpleMarkerSymbol("circle", 24,
 		                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 1]), 3),
@@ -129,7 +124,7 @@ var permitsTheme = function (map) {
 		                //"singleSymbol": defaultSym,
 		                "singleTemplate": adClusterTemplate,
 		                "useDefaultSymbol": false, //AG false - we're using custom clusterFeaturelayer.js 
-                        "maxSingles": 12000,
+                        "maxSingles": 2000,
 		                "zoomOnClick": true,
 		                "showSingles": true,
 		                //"objectIdField": "GALIOJA",
@@ -168,7 +163,7 @@ var permitsTheme = function (map) {
 					
 					//AG add padding for cluster point click event // BUG FIX FOR CHROME
 					on(clusterLayer, "click", function(e) {
-						console.log(e);
+						//console.log(e);
 						clusterLayer.geometry = e.mapPoint;
 						//add padding to point feature and get featureset attributes 
 						pxWidth = map.extent.getWidth() / map.width;
@@ -182,8 +177,8 @@ var permitsTheme = function (map) {
 						});
 						// use the extent for the query geometry
 						clusterLayer.geometry = qGeom;
-						console.log("clusterLayer.geometry: ");
-						console.log(clusterLayer.geometry);						
+						//console.log("clusterLayer.geometry: ");
+						//console.log(clusterLayer.geometry);						
 						//alert("asdsa");
 					});
 
@@ -210,8 +205,8 @@ var permitsTheme = function (map) {
                         process.then(function(a){
                                              
 							//alert(results);
-							console.log("REDAS");
-							console.log(a);
+							//console.log("REDAS");
+							//console.log(a);
                     	});
                     }
                     }, 50);
@@ -238,54 +233,64 @@ var permitsTheme = function (map) {
                 }
     
                 var timer;
-                function queryURLresults(results) {
-	            timer = setTimeout(function() {
-                    
-                    urLinksArray.length = 0; //AG reset urLinksArray
-                    
-                    window.clearTimeout(timer);
-                    
-                    console.log("REZULATATAI");
-                    console.log(results);
-                    console.log("END REZULATATAI");           
-                    var urlBase = "http://www.vilnius.lt/isorei/isorinereklama/files/";
-                    var resultsFeaturesA = results.features;
-                    //AG check if results has features
-                    if (resultsFeaturesA.length != 0) {
-                        for (var i = 0; i < resultsFeaturesA.length; i++){
-                            var urlDocStyle = results.features[i].attributes.CONTENTTYPE; 
 
-                            var urlId = parseInt(results.features[i].attributes.VLN_REKLAMOS_ID, 10);
-                            var urlEnd = results.features[i].attributes.TITLE;
-                            var urLinks = urlBase + urlId + "_" + urlEnd;
-                            
-                            var urlObj = {url: urLinks, icon: docStyle(urlDocStyle)};
-                            
-                            urLinksArray.push(urlObj);
-                            
-                            
-                            runURL = function (url) {
-                                urlLinksStr.call(null, urLinksArray);
-                            };
-                            setTimeout(function() {
-                               runURL(urLinksArray);
-                            }, 500);                        
-                        }
-                    } else {
-                        urLinksArray = ["Dokumentų nėra"];
-                        
-                        runURL = function (url) {
-                            urlLinksStr.call(null, urLinksArray);
-                        };
-                        setTimeout(function() {
-                            runURL(urLinksArray);
-                        }, 50);                         
-                    }
-                                        
-                    return urLinksArray;
-                }, 1000);
+                function queryURLresults(results) {
+                	timer = setTimeout(function () {
+
+                		urLinksArray.length = 0; //AG reset urLinksArray
+
+                		window.clearTimeout(timer);
+
+                		//console.log("REZULATATAI");
+                		// console.log(results);
+                		// console.log("END REZULATATAI");           
+                		var urlBase = "http://www.vilnius.lt/isorei/isorinereklama/files/";
+                		var resultsFeaturesA = results.features;
+                		//AG check if results has features
+						
+						var runUrl;
+						
+                		if (resultsFeaturesA.length !== 0) {
+							
+							var runUrlInner = function () {
+								runURL = function (url) {
+									urlLinksStr.call(null, urLinksArray);
+								};
+								setTimeout(function () {
+									runURL(urLinksArray);
+								}, 500);
+							};
+							
+                			for (var i = 0; i < resultsFeaturesA.length; i++) {
+                				var urlDocStyle = results.features[i].attributes.CONTENTTYPE;
+
+                				var urlId = parseInt(results.features[i].attributes.VLN_REKLAMOS_ID, 10);
+                				var urlEnd = results.features[i].attributes.TITLE;
+                				var urLinks = urlBase + urlId + "_" + urlEnd;
+
+                				var urlObj = {
+                					url: urLinks,
+                					icon: docStyle(urlDocStyle)
+                				};
+
+                				urLinksArray.push(urlObj);
+
+                				runUrlInner();
+							}
+                		} else {
+                			urLinksArray = ["Dokumentų nėra"];
+
+                			runURL = function (url) {
+                				urlLinksStr.call(null, urLinksArray);
+                			};
+                			setTimeout(function () {
+                				runURL(urLinksArray);
+                			}, 50);
+                		}
+
+                		return urLinksArray;
+                	}, 1000);
                 }
-    
                 function docStyle (string) {
                     var iconStr = "";
                     var stringParts = string.split("/");
@@ -315,6 +320,7 @@ var permitsTheme = function (map) {
     
                 function popupState(selected) {
 	                var promise = new Deferred();
+					var hasClass;
                     
                     //AG get different symbols with newlys created VALID ID = GALIOJA on popup selection change
                     //var graphic = popup.getSelectedFeature();
@@ -326,24 +332,24 @@ var permitsTheme = function (map) {
                     process.then(function(queryObject){
                         setTimeout(function() {
                         queryObject.task.execute(queryObject.query, queryURLresults);         
-                        console.log("DEFAS");
-                        console.log(queryObject);
+                        //console.log("DEFAS");
+                       //console.log(queryObject);
                         promise.resolve(queryObject);
                         }, 100);
                     });
                         if ((galiojaKEY === 1) || (galiojaKEY === 3)) {
                             map.infoWindow.setTitle("Galiojantis reklamos registro leidimas " );   //BUG FIX for showing titles               
                             adClusterTemplate.setTitle("Galiojantis reklamos registro leidimas ");   //BUG FIX for showing titles               
-                            domClass.contains("ad-popup", "invalid-ad") ? domClass.remove("ad-popup", "invalid-ad") : domClass.add("ad-popup", "valid-ad");
+                            hasClass = domClass.contains("ad-popup", "invalid-ad") ? domClass.remove("ad-popup", "invalid-ad") : domClass.add("ad-popup", "valid-ad");
                             domClass.add("ad-popup", "valid-ad");  
                         } else if (galiojaKEY === 2) {
                             map.infoWindow.setTitle("Negaliojantis reklamos registro leidimas "); //BUG FIX for showing titles
                             adClusterTemplate.setTitle("Negaliojantis reklamos registro leidimas "); //BUG FIX for showing titles
-                            domClass.contains("ad-popup", "valid-ad") ? domClass.remove("ad-popup", "valid-ad") : domClass.add("ad-popup", "invalid-ad"); 
+                            hasClass = domClass.contains("ad-popup", "valid-ad") ? domClass.remove("ad-popup", "valid-ad") : domClass.add("ad-popup", "invalid-ad"); 
                             domClass.add("ad-popup", "invalid-ad");  
                         }             
-                    console.log("features set");
-                    console.log(selected);
+                   // console.log("features set");
+                   // console.log(selected);
                     } 
  
                     return promise.promise;                   
@@ -391,8 +397,10 @@ var permitsTheme = function (map) {
                        duration: 150,
 		              easing: easing.quadIn}).play();
         }
-    
-        return cluster = clusterLayer;
+		
+    	cluster = clusterLayer;
+		
+        return cluster;
         
     });
     

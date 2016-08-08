@@ -1,6 +1,9 @@
 var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuildingsUrl, showCursor) {
 
 	require([
+		"dijit/TooltipDialog",
+		"dijit/popup",
+		"dojo/mouse",
 		"dojo/_base/connect",
 		"esri/toolbars/navigation",
 		"esri/config",
@@ -50,6 +53,8 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		"dijit/layout/ContentPane",
 		"dojo/domReady!"
 	], function (
+		TooltipDialog, dijitPopup,
+		mouse,
 		connect,
 		Navigation,
 		esriConfig,
@@ -538,41 +543,37 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			//special tooltips for cursors
 			function compareTooltip() {			
 				var tooltipC;
-				
-					map.on("mouse-over", function (e) {
-						if (statusCompare){ //check status
-							require([
-								"dijit/TooltipDialog",
-								"dijit/popup",
-								"dojo/on",
-								"dojo/dom",
-								"dojo/domReady!"
-							], function (TooltipDialog, popup, on, dom) {
-								tooltipC = new TooltipDialog({
-									id: 'myTooltipDialogCompare',
-									style: "width: 160px;",
-									content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
-									onMouseLeave: function () {
-										popup.close(tooltipC);
-									}
-								});
-								tooltipC.startup();
 
-								map.on("mouse-move", function (e) {
-									if (statusCompare){ //check status
-										popup.open({
-											popup: tooltipC,
-											x: e.x + 10, //AG add padding for mouse hovering and click events
-											y: e.y + 10
-										});
-									}
-								});
+					on(map, "mouse-move", function (evt) {
+						if (statusCompare) { //check status
+							//destroy widget on every move
+							if (typeof (tooltipC) != "undefined") {
+								tooltipC.destroy();
+							}
+
+							tooltipC = new TooltipDialog({
+								id: 'myTooltipDialogCompare',
+								style: "width: 160px;",
+								content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
+								onMouseEnter: function () {
+									dijitPopup.close(tooltipC);
+								}
 							});
-						} 						
+
+							tooltipC.startup();
+							dijitPopup.open({
+								popup: tooltipC,
+
+								x: evt.pageX + 2, //AG add padding for mouse hovering and click events
+								y: evt.pageY + 2
+							});
+						}
 					});
-					map.on("mouse-out", function () {
-						tooltipC.destroy();
-					});	
+					on(map, "mouse-out", function () {
+						if (typeof (tooltipC) != "undefined") {
+							tooltipC.destroy();
+						}
+					});			
 					
 				
   				
@@ -671,6 +672,9 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				showCursor([layerBuildignsCompare], arrayUtils);
 
 				function runQueryCompare(e) {
+					//console.log("POINT");
+					//console.log(e);
+					
 					window.location.hash = '#close'; //remove panel
 
 					var zoomLevel = map.getMaxZoom() - 1;
@@ -932,7 +936,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				
 				//var buildAtt = "<h3>" + adresas + "<br></h3>" + "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml;
 				
-				console.log(typeof(attachmentsHtml));
+				//console.log(typeof(attachmentsHtml));
 				var buildAtt = "<h3>" + adresas + "<br></h3>" + (attachmentsHtml === '' ? "<p>Priežiūros aktų nėra</p>" : "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml);
 				
 				dom.byId("build-inner-att").innerHTML = buildAtt;				
@@ -1344,36 +1348,35 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		}
 		
 		//show tooltip for building theme
-		var tooltip;
-		featureBuildings.on("mouse-over", function (e) {
-			require([
-				"dijit/TooltipDialog",
-				"dijit/popup",
-				"dojo/on",
-				"dojo/dom",
-				"dojo/domReady!"
-			], function (TooltipDialog, popup, on, dom) {
-				tooltip = new TooltipDialog({
-					id: 'myTooltipDialog',
-					style: "width: 160px;",
-					content: "<p>Pažymėkite pastatą</p>",
-					onMouseLeave: function () {
-						popup.close(tooltip);
-					}
-				});
-				tooltip.startup();
-				//console.log(e);
-				//console.log(tooltip);
-				featureBuildings.on("mouse-move", function (e) {
-					popup.open({
-						popup: tooltip,
-						x: e.x + 10, //AG add padding for mouse hovering and click events
-						y: e.y + 10
-					});
-				});
+		var tooltip;	
+		
+		on(featureBuildings, "mouse-move", function (evt) {
+			//destroy widget on every move
+			if (typeof(tooltip) != "undefined") {
+				tooltip.destroy();
+			}
+			
+			tooltip = new TooltipDialog({
+				id: 'myTooltipDialog',
+				style: "width: 160px;",
+				content: "<p>Pažymėkite pastatą</p>",
+				onMouseEnter: function () {
+						dijitPopup.close(tooltip);
+				}
 			});
+
+				tooltip.startup();
+				dijitPopup.open({
+					popup: tooltip,
+					/*padding: {
+						x: 10, 
+						y: 10
+					},*/
+					x: evt.pageX + 2, //AG add padding for mouse hovering and click events
+					y: evt.pageY + 2
+				});
 		});
-		featureBuildings.on("mouse-out", function () {
+		on(featureBuildings, "mouse-out", function () {
 			tooltip.destroy();
 		});	
 	});

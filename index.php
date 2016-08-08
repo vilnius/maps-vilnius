@@ -4,17 +4,23 @@
 <head>
 	<title>Vilniaus m. interaktyvūs žemėlapiai</title>
 	<meta charset="utf-8">
-	<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+	<!--<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">-->
+	<meta name="viewport" content="width=1028, initial-scale=1">
 	<!--2014: Render IE-version as IE9-->
 	<meta http-equiv='X-UA-Compatible' content='IE=EmulateIE9'>
 	<meta name="robots" content="noindex,nofollow">
 	<link rel="shortcut icon" type="image/ico" href="/maps_vilnius/img/favicon.ico">
 	<link rel="stylesheet" href="http://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,600italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+	<link rel="stylesheet" href="http://js.arcgis.com/3.17/esri/css/esri.css">
 	<link rel="stylesheet" href="/maps_vilnius/css/page.css">
 	<link rel="stylesheet" href="/maps_vilnius/webfont/stylesheet.css">
 	<link rel="stylesheet" href="/maps_vilnius/css/font-awesome.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/plugins/CSSPlugin.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/easing/EasePack.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenLite.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TimelineMax.min.js"></script>
+	
 	<script src="/maps_vilnius/js/Blob.js"></script>
 	<script src="/maps_vilnius/js/FileSaver.min.js"></script>
 	<script src="../maps_vilnius/js/Chart.js"></script>
@@ -29,9 +35,10 @@
 			}]
 		};
 	</script>
-	<script src="http://js.arcgis.com/3.14/"></script>
+	<script src="https://js.arcgis.com/3.17/"></script>
 	<script src="/maps_vilnius/js/permits.js"></script>
 	<script src="/maps_vilnius/js/buildings.js"></script>
+	<script src="/maps_vilnius/js/schools.js"></script>
 	<script src="/maps_vilnius/js/main.js"></script>
 </head>
 
