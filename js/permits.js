@@ -321,6 +321,13 @@ var permitsTheme = function (map) {
                 function popupState(selected) {
 	                var promise = new Deferred();
 					var hasClass;
+					
+					//remove classes if exists 
+					if (domClass.contains("ad-popup", "invalid-ad")) {
+						domClass.remove("ad-popup", "invalid-ad");
+					} else if (domClass.contains("ad-popup", "valid-ad")) {
+						domClass.remove("ad-popup", "valid-ad");
+					}
                     
                     //AG get different symbols with newlys created VALID ID = GALIOJA on popup selection change
                     //var graphic = popup.getSelectedFeature();
