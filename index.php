@@ -165,7 +165,7 @@
 			</div>
 			<div id="search"></div>
 			<div id="extent">
-				<div data-dojo-type="dijit/form/Button" id="zoomfullext"><i class="xt fa-expand"></i></div>
+				<div data-dojo-type="dijit/form/Button" id="zoomfullext"><i class="fa-arrows-alt xt"></i></div>
 			</div>
 			<div id="printwindow">
 				<div data-dojo-type="dijit/layout/TabContainer" style="width: 100%;" doLayout="false">
