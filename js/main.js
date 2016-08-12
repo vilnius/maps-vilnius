@@ -32,6 +32,26 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/laisvalaikis.png", //image URL
 			imgAlt: "Reklamos vietos" // image alt attribute
 		},
+		teritory: {
+			name: "Teritorijų planavimas", //theme name
+			id: "teritory-planning", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
+			imgAlt: "Teritorijų planavimas", // image alt attribute
+			layers: {
+				bpPasiulymai: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+				}
+			}
+		},		
+		legacyMap: {
+			custom: true, // true if theme funcionality is custom  
+			name: "Senoji žemėlapio versija", //theme name
+			id: "legacy", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
+			imgAlt: "Senoji versija", // image alt attribute
+			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
+		},		
 		schools: {
 			custom: true,
 			name: "Švietimas", //theme name
@@ -64,30 +84,6 @@ var MAPCONFIG = {
 						"http://195.182.69.66/ArcGIS/rest/services/Interaktyviam_zemelapiui/Grinda_gatviu_tvarkymas2/MapServer"
 				}
 			}
-		},
-		teritory: {
-			name: "Teritorijų planavimas", //theme name
-			id: "teritory-planning", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
-			imgAlt: "Teritorijų planavimas", // image alt attribute
-			layers: {
-				laisviZemesPlotai: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Laisvi_zemes_plotai/MapServer"
-				},
-				suprojektuotiStatiniai: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://195.182.69.66/ArcGIS/rest/services/Projektuojami/proj_stat1/MapServer"
-				}
-			}
-		},
-		legacyMap: {
-			custom: true, // true if theme funcionality is custom  
-			name: "Senoji žemėlapio versija", //theme name
-			id: "legacy", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
-			imgAlt: "Senoji versija", // image alt attribute
-			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
 		},
 		demo: {
 			name: "Demo versija", //theme name

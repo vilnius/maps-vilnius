@@ -563,9 +563,8 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 							tooltipC.startup();
 							dijitPopup.open({
 								popup: tooltipC,
-
-								x: evt.pageX + 2, //AG add padding for mouse hovering and click events
-								y: evt.pageY + 2
+								x: evt.pageX + 10, //AG add padding for mouse hovering and click events
+								y: evt.pageY + 10
 							});
 						}
 					});
@@ -1368,12 +1367,12 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				tooltip.startup();
 				dijitPopup.open({
 					popup: tooltip,
-					/*padding: {
+					padding: {
 						x: 10, 
 						y: 10
-					},*/
-					x: evt.pageX + 2, //AG add padding for mouse hovering and click events
-					y: evt.pageY + 2
+					},
+					x: evt.pageX, //AG add padding for mouse hovering and click events
+					y: evt.pageY
 				});
 		});
 		on(featureBuildings, "mouse-out", function () {
