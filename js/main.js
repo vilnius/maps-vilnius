@@ -660,7 +660,15 @@ require([
 									if (attributes.hasOwnProperty(resultAtr)) {
 										//do not add layername and objectid attributes
 										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName")) {
-											content += "<p class='bord'>" + attributes[resultAtr] + "</br><span>" + resultAtr + "</span>" + "<p>";
+											//AG check date string
+											if (Date.parse(attributes[resultAtr])) {
+												var attributeDate = attributes[resultAtr];
+												var reg = /(\d+)[.](\d+)[.](\d+)\s.*/; //regex: match number with . char, clear everything else
+												content += "<p class='bord'>" + attributes[resultAtr].replace(reg, '$1-$2-$3') + "</br><span>" + resultAtr + "</span>" + "<p>";
+											} else {
+												var attributeResult = attributes[resultAtr] === ("Null" || null) ? "-" : attributes[resultAtr];
+												content += "<p class='bord'>" + attributeResult + "</br><span>" + resultAtr + "</span>" + "<p>";
+											}
 										}
 									}
 								}
