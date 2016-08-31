@@ -32,6 +32,18 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/laisvalaikis.png", //image URL
 			imgAlt: "Reklamos vietos" // image alt attribute
 		},
+		teritory: {
+			name: "Teritorijų planavimas", //theme name
+			id: "teritory-planning", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
+			imgAlt: "Teritorijų planavimas", // image alt attribute
+			layers: {
+				bpPasiulymai: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+				}
+			}
+		},		
 		legacyMap: {
 			custom: true, // true if theme funcionality is custom  
 			name: "Senoji žemėlapio versija", //theme name
@@ -39,6 +51,75 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
 			imgAlt: "Senoji versija", // image alt attribute
 			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
+		},		
+		schools: {
+			custom: true,
+			name: "Švietimas", //theme name
+			id: "schools", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/svietimas.png", //image URL
+			imgAlt: "Švietimas", // image alt attribute
+			layers: {
+				mokyklos: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer"
+				}
+			}
+		},
+		transport: {
+			name: "Transportas", //theme name
+			id: "transport", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/transportas.png", //image URL
+			imgAlt: "Transportas", // image alt attribute
+			layers: {
+/*				transportLayer: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://www.sviesoforai.lt/arcgis/rest/services/Vilnius_sde_dynamic/MapServer"
+				},*/
+				dviraciuTrasos: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Aplinkosauga/dviraciai_sisp_dynamic/MapServer"
+				},
+				gatviuTvarkymas: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://195.182.69.66/ArcGIS/rest/services/Interaktyviam_zemelapiui/Grinda_gatviu_tvarkymas2/MapServer"
+				}
+			}
+		},
+		demo: {
+			name: "Demo versija", //theme name
+			id: "demo", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
+			imgAlt: "demo versija", // image alt attribute
+			layers: {
+				demoLayer: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Demo/MapServer"
+				},
+				badministravimas: { // layer unique name
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer"
+				},
+/*				tesd: { // layer unique name
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Vietines_rinkliavos_zonos/MapServer"
+				},*/
+				bp: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
+				}
+			}
+		},
+		bpDemo: {
+			name: "BP demo", //theme name
+			id: "bp", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
+			imgAlt: "bp demo versija", // image alt attribute
+			layers: {
+				bp: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
+				}
+			}
 		}
 	},
     mapExtent: {
@@ -914,9 +995,11 @@ require([
 			});
 			break; //add buildings theme
 		case "theme-buildings" || "": //if theme building or null or empty
+			domClass.add(document.body, "building-theme");
 			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
 			break;
 		case null: //if theme building or null or empty
+			domClass.add(document.body, "building-theme");	
 			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
 			break;
 		case "schools": //add schools theme
@@ -1594,6 +1677,8 @@ require([
 		"dijit/registry",
 		"esri/dijit/Scalebar",
 		"esri/layers/LayerInfo",
+		"js/photoswipe.min.js", 
+        "js/photoswipe-ui-default.min.js",
 		"dijit/layout/TabContainer",
 		"dijit/layout/BorderContainer",
 		"dijit/layout/ContentPane",
@@ -1642,8 +1727,82 @@ require([
 		ClusterFeatureLayer, Graphic, graphicsUtils, domStyle, fx, easing,
 		registry,
 		Scalebar,
-		LayerInfo
+		LayerInfo,
+		PhotoSwipe, PhotoSwipeUI_Default
 	) {
+		//Photoswipe
+		var pswpElement = document.querySelectorAll('.pswp')[0];
+		var galleryHelp = document.getElementById("building-help");
+
+		galleryHelp.addEventListener("click", function() {
+		
+			// build items array
+			var items = [
+			    {
+			        src: '/maps_vilnius/img/help_1.png',
+			        title: '1. Adresų paieškos lauko arba navigacijos meniu (jei ieškote tiesiogiai žemėlapyje) pagalba priartinkite žemėlapio vaizdą kol matysite pastatų kontūrus',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_2.png',
+			        title: '2. Pažymėkite konkretų pastatą, dešinėje atsidarusiame lange rasite visą turimą pastato informaciją bei paryškintas potemes',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_3.png',
+			        title: '3. Norėdami palyginti pastatų tarifus, pasirinkite "Tarifų palyginimas" potemę',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_4.png',
+			        title: '4. Norėdami palyginti dviejų pastatų tarifus, spūstelkite mygtuką "Pasirinkite pastatą palyginimui" ',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_5.png',
+			        title: '5. Pelės pagalba pažymėkite naują pastatą palyginimui',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_6.png',
+			        title: '6. Pažymėjus pastatą palyginimui, dešinėje atsidarusiame lange rasite dviejų pastatų turimų tarifų lentelę. Norėdami nutraukti palyginimą spūtelkite mygtuką "Atgal"',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_7.png',
+			        title: '7. Norėdami palyginti visų administratorių pastatų tarifų vidurkius, spūstelkite opciją "Pasirinkite palyginamąjį vidutinį tarifą" bei pažymėkite konkretų tarifą ',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_8.png',
+			        title: '8. Pažymėjus konkretų tarifą grafike matysite administratorių vidutinius vidurkius. PASTABA: bendrijų ir JVS duomenis nėra tikslūs',
+			        w: 1408,
+			        h: 828
+			    }
+			];
+			
+			// define options (if needed)
+			var options = {
+				showAnimationDuration: 200,
+				errorMsg: '<div class="pswp__error-msg"><a href="%url%" target="_blank">Įvyko klaida.</a> Atsiprašome galerija nepasiekiama.</div>',
+			    // optionName: 'option value'
+			    // for example:
+			    index: 0 // start at first slide
+			};
+			
+			// Initializes and opens PhotoSwipe
+			var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+			gallery.init();
+		});
+		//End Photoswipe
+		
 		// Full  administrators comparison
 		var administratorGraph = {
 			bendrijosColor: "rgba(115, 178, 255, 1)",
@@ -2109,9 +2268,8 @@ require([
 							tooltipC.startup();
 							dijitPopup.open({
 								popup: tooltipC,
-
-								x: evt.pageX + 2, //AG add padding for mouse hovering and click events
-								y: evt.pageY + 2
+								x: evt.pageX + 10, //AG add padding for mouse hovering and click events
+								y: evt.pageY + 10
 							});
 						}
 					});
@@ -2914,12 +3072,12 @@ require([
 				tooltip.startup();
 				dijitPopup.open({
 					popup: tooltip,
-					/*padding: {
+					padding: {
 						x: 10, 
 						y: 10
-					},*/
-					x: evt.pageX + 2, //AG add padding for mouse hovering and click events
-					y: evt.pageY + 2
+					},
+					x: evt.pageX, //AG add padding for mouse hovering and click events
+					y: evt.pageY
 				});
 		});
 		on(featureBuildings, "mouse-out", function () {

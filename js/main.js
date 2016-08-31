@@ -995,9 +995,11 @@ require([
 			});
 			break; //add buildings theme
 		case "theme-buildings" || "": //if theme building or null or empty
+			domClass.add(document.body, "building-theme");
 			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
 			break;
 		case null: //if theme building or null or empty
+			domClass.add(document.body, "building-theme");	
 			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
 			break;
 		case "schools": //add schools theme

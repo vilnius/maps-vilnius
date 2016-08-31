@@ -48,6 +48,8 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		"dijit/registry",
 		"esri/dijit/Scalebar",
 		"esri/layers/LayerInfo",
+		"js/photoswipe.min.js", 
+        "js/photoswipe-ui-default.min.js",
 		"dijit/layout/TabContainer",
 		"dijit/layout/BorderContainer",
 		"dijit/layout/ContentPane",
@@ -96,8 +98,82 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		ClusterFeatureLayer, Graphic, graphicsUtils, domStyle, fx, easing,
 		registry,
 		Scalebar,
-		LayerInfo
+		LayerInfo,
+		PhotoSwipe, PhotoSwipeUI_Default
 	) {
+		//Photoswipe
+		var pswpElement = document.querySelectorAll('.pswp')[0];
+		var galleryHelp = document.getElementById("building-help");
+
+		galleryHelp.addEventListener("click", function() {
+		
+			// build items array
+			var items = [
+			    {
+			        src: '/maps_vilnius/img/help_1.png',
+			        title: '1. Adresų paieškos lauko arba navigacijos meniu (jei ieškote tiesiogiai žemėlapyje) pagalba priartinkite žemėlapio vaizdą kol matysite pastatų kontūrus',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_2.png',
+			        title: '2. Pažymėkite konkretų pastatą, dešinėje atsidarusiame lange rasite visą turimą pastato informaciją bei paryškintas potemes',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_3.png',
+			        title: '3. Norėdami palyginti pastatų tarifus, pasirinkite "Tarifų palyginimas" potemę',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_4.png',
+			        title: '4. Norėdami palyginti dviejų pastatų tarifus, spūstelkite mygtuką "Pasirinkite pastatą palyginimui" ',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_5.png',
+			        title: '5. Pelės pagalba pažymėkite naują pastatą palyginimui',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_6.png',
+			        title: '6. Pažymėjus pastatą palyginimui, dešinėje atsidarusiame lange rasite dviejų pastatų turimų tarifų lentelę. Norėdami nutraukti palyginimą spūtelkite mygtuką "Atgal"',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_7.png',
+			        title: '7. Norėdami palyginti visų administratorių pastatų tarifų vidurkius, spūstelkite opciją "Pasirinkite palyginamąjį vidutinį tarifą" bei pažymėkite konkretų tarifą ',
+			        w: 1408,
+			        h: 828
+			    },
+			    {
+			        src: '/maps_vilnius/img/help_8.png',
+			        title: '8. Pažymėjus konkretų tarifą grafike matysite administratorių vidutinius vidurkius. PASTABA: bendrijų ir JVS duomenis nėra tikslūs',
+			        w: 1408,
+			        h: 828
+			    }
+			];
+			
+			// define options (if needed)
+			var options = {
+				showAnimationDuration: 200,
+				errorMsg: '<div class="pswp__error-msg"><a href="%url%" target="_blank">Įvyko klaida.</a> Atsiprašome galerija nepasiekiama.</div>',
+			    // optionName: 'option value'
+			    // for example:
+			    index: 0 // start at first slide
+			};
+			
+			// Initializes and opens PhotoSwipe
+			var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+			gallery.init();
+		});
+		//End Photoswipe
+		
 		// Full  administrators comparison
 		var administratorGraph = {
 			bendrijosColor: "rgba(115, 178, 255, 1)",
