@@ -4,14 +4,14 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     jshint: {
-      all: ['js/main.js', 'js/building.js', 'js/permits.js', 'js/schools.js']
+      all: ['js/configuration.js', 'js/main.js', 'js/building.js', 'js/permits.js', 'js/schools.js']
     },
     concat: {
 		options: {
 		  separator: ';',
 		},
 		dist: {
-		  src: ['js/main.js', 'js/permits.js', 'js/buildings.js'], //, 'js/clusterfeaturelayer.js', 'js/Chart.js'
+		  src: ['js/configuration.js', 'js/main.js', 'js/permits.js', 'js/buildings.js'], //, 'js/clusterfeaturelayer.js', 'js/Chart.js'
 		  dest: 'js/app.js',
 		}
     },

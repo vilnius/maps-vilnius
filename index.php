@@ -42,6 +42,7 @@
 	<script src="/maps_vilnius/js/permits.js"></script>
 	<script src="/maps_vilnius/js/buildings.js"></script>
 	<script src="/maps_vilnius/js/schools.js"></script>
+	<script src="/maps_vilnius/js/configuration.js"></script>
 	<script src="/maps_vilnius/js/main.js"></script>
 </head>
 

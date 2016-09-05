@@ -1,9 +1,3 @@
-/*
-2016-06-21
-MV 0.0.2
-JS
-*/
-
 var MAPCONFIG = {
     mapSettings: {
 
@@ -35,7 +29,7 @@ var MAPCONFIG = {
 		teritory: {
 			name: "Teritorijų planavimas", //theme name
 			id: "teritory-planning", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
+			imgUrl: "/maps_vilnius/img/teritorijos.png", //image URL
 			imgAlt: "Teritorijų planavimas", // image alt attribute
 			layers: {
 				bpPasiulymai: { // layer unique name // 
@@ -144,7 +138,11 @@ var MAPCONFIG = {
         dynamicLayerAdverts: "http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer",
         featureLayerAdverts: "http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/0"
     }
-};
+};;/*
+2016-06-21
+MV 0.0.2
+JS
+*/
 
 //get unique array values
 Array.prototype.getUnique = function () {
@@ -377,16 +375,18 @@ require([
 					if (themeId === currentTheme) {
 						if (!themeFunc) { // show ONLY themes width default funcionality
 							var that = this;
+							var dynamicLayersArray = [];
 							dynimacThemesLayer = this.createDynicLayers(themesObj[theme], theme); //create dynimac specific themes' layers
 							for (var layerAdd in dynimacThemesLayer) { //run through layers and add them to the map with all default functionality
 								if (dynimacThemesLayer.hasOwnProperty(layerAdd)) {
-
-									map.addLayer(dynimacThemesLayer[layerAdd]);
+									dynamicLayersArray.push(dynimacThemesLayer[layerAdd]); //push layers to array 
 									//console.log("DYNAMIC LAyeriai");
 									//console.log(dynimacThemesLayer);
 									//console.log(Object.getOwnPropertyNames(dynimacThemesLayer[layerAdd]));	
 								}
 							}
+							dynamicLayersArray = dynamicLayersArray.reverse(); //reverse array for correct map visibility (according to legend tab) // TODO change , reverser method is slow
+							this.addDynamicLayers(dynamicLayersArray);
 							runShowLegendInput();
 						}
 					}
@@ -397,6 +397,13 @@ require([
 			
 			//set Opacity slider for each dynamic layer							
 			return dynimacThemesLayer;			
+		},
+		//for correct map layers visibility add  reversed dynamic theme layers to map
+		//we're using reversed array
+		addDynamicLayers: function(reversedLayersArr) {
+			for (var i = 0; i < reversedLayersArr.length ; i++) {
+				map.addLayer(reversedLayersArr[i]);
+			}
 		},
 		reorderLayers: function(){
 			arrayUtils.forEach(map.layerIds, function(anchor, i) {
@@ -526,7 +533,7 @@ require([
 				}
 			}
 			//AG return reversed Array
-			return layerInfo.reverse(); //TODO  reverse() method is slow, change to custom one
+			return layerInfo; //
 		},
 		//control layers visibility with inputs
 		updateLayerVisibility: function (layerName, e, legendDijit, layerInfo) {
@@ -660,7 +667,15 @@ require([
 									if (attributes.hasOwnProperty(resultAtr)) {
 										//do not add layername and objectid attributes
 										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName")) {
-											content += "<p class='bord'>" + attributes[resultAtr] + "</br><span>" + resultAtr + "</span>" + "<p>";
+											//AG check date string
+											if (Date.parse(attributes[resultAtr])) {
+												var attributeDate = attributes[resultAtr];
+												var reg = /(\d+)[.](\d+)[.](\d+)\s.*/; //regex: match number with . char, clear everything else
+												content += "<p class='bord'>" + attributes[resultAtr].replace(reg, '$1-$2-$3') + "</br><span>" + resultAtr + "</span>" + "<p>";
+											} else {
+												var attributeResult = attributes[resultAtr] === ("Null" || null) ? "-" : attributes[resultAtr];
+												content += "<p class='bord'>" + attributeResult + "</br><span>" + resultAtr + "</span>" + "<p>";
+											}
 										}
 									}
 								}
