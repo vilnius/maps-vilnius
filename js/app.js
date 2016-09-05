@@ -505,22 +505,29 @@ require([
 			}				
 			
 			//legend widget
-			var layerInfo = this.setupDefaultLegendLayers(layerName);					
+			var layerInfo = this.setupDefaultLegendLayers(layerName);			
 	          
-	        if (layerInfo.length > 0) {
-	          var legendDijit = new Legend({
-	                map: map,
-	                layerInfos: layerInfo
-	            }, "legend-list");
-	            legendDijit.startup();
-	        }
+	        this.initLegend(layerInfo, layerDom, layerName);
 			// End legend widget
-			
-			var that = this;
-	        on(layerDom, "click", function(e) {that.updateLayerVisibility(layerName, e, legendDijit, layerInfo);});
+
 			
 			this.initIdentify(layerInfo); // initiate identify visible layers by default
         },
+		//initiate legend with correct order
+		initLegend: function (layerInfo, layerDom, layerName) {
+			var reversed = layerInfo.reverse();
+			//legend widget		          
+	        if (reversed.length > 0) {
+	          var legendDijit = new Legend({
+	                map: map,
+	                layerInfos: reversed
+	            }, "legend-list");
+	            legendDijit.startup();
+	        }
+			
+		var that = this;
+	    on(layerDom, "click", function(e) {that.updateLayerVisibility(layerName, e, legendDijit, layerInfo);});			
+		},
 		//set default legend
 		setupDefaultLegendLayers: function(layerName) {
 			var layerInfo = [];
@@ -605,7 +612,9 @@ require([
 			}		
 		},
 		//initiate Idendentify taskss parameters for visible dynamic layers
-		initIdentify: function(layerInfo) {					
+		initIdentify: function(layerInfo) {
+			//layers in reverse order to indetify depending on inputs and legend order
+			var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
 			identifyPerameters = this.getParameters(layerInfo);			
 			map.on("click", this.executeIdentify); //TODO remove global map
 		},
