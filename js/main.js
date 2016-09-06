@@ -437,7 +437,7 @@ require([
 				}
 				// if layer is switched off, refresh legend and show only visible layers
 				legendDijit.refresh(layerInfo); //show refreshed legend only from current Theme  
-				this.initIdentify(layerInfo); // initiate identify visible layers by new visibility
+				this.updatedIdentify(layerInfo); // initiate identify visible layers by new visibility after update
 		},
 		cloneVisibleLayer: function (visibleLayers, visibleLayersResult, e) {
 			for (var layer in visibleLayersResult){
@@ -474,9 +474,15 @@ require([
 		//initiate Idendentify taskss parameters for visible dynamic layers
 		initIdentify: function(layerInfo) {
 			//layers in reverse order to indetify depending on inputs and legend order
-			var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
+			//var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
 			identifyPerameters = this.getParameters(layerInfo);			
 			map.on("click", this.executeIdentify); //TODO remove global map
+		},
+		//identify after checkbox update
+		updatedIdentify: function(layerInfo) {
+			//layers in reverse order to indetify depending on inputs and legend order
+			//var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
+			identifyPerameters = this.getParameters(layerInfo);			
 		},
 		getParameters: function(layerInfo) {
 			var parametersList = {}; // create Parameters list obj
@@ -542,7 +548,12 @@ require([
 												var reg = /(\d+)[.](\d+)[.](\d+)\s.*/; //regex: match number with . char, clear everything else
 												content += "<p class='bord'>" + attributes[resultAtr].replace(reg, '$1-$2-$3') + "</br><span>" + resultAtr + "</span>" + "<p>";
 											} else {
-												var attributeResult = attributes[resultAtr] === ("Null" || null) ? "-" : attributes[resultAtr];
+												var attributeResult = attributes[resultAtr];
+												if (attributeResult == null) { //attributes[resultAtr] == null  equals to (attributes[resultAtr]  === undefined || attributes[resultAtr]  === null)
+													attributeResult = "-";
+												} else if ((attributeResult === " ") || (attributeResult === "Null")) {
+													attributeResult = "-";
+												}
 												content += "<p class='bord'>" + attributeResult + "</br><span>" + resultAtr + "</span>" + "<p>";
 											}
 										}
@@ -566,7 +577,8 @@ require([
 						deferredList.push(deferred); // create deferred objects llist obj
 					}
 				}
-					all(deferredList).then(function(result){ //AG run then() method with all/promise widget
+					//reverse deferredList to identify correctly
+					all(deferredList.reverse()).then(function(result){ //AG run then() method with all/promise widget
 						var resultsMerge = [].concat.apply([], result); // if we have list of results - merger all results
 						if (resultsMerge.length > 0) { // check if we have response by checking resultsMerge array				
 							map.infoWindow.setFeatures([].concat.apply([], deferredList)); //set features with all deferred objects
