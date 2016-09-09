@@ -57,11 +57,9 @@ require([
     "dojo/dom",
     "dojo/dom-construct",
     "dojo/dom-class",
-    //TOC START
     "esri/renderers/ClassBreaksRenderer", "esri/symbols/PictureMarkerSymbol",
     //Measure
     "esri/dijit/Measurement", "esri/units",
-    //TOC END
     "esri/dijit/Search", "esri/tasks/locator", 
     "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleMarkerSymbol",  "esri/renderers/SimpleRenderer", "esri/symbols/SimpleLineSymbol", "esri/Color", "esri/geometry/Extent",
     //cluster
@@ -110,7 +108,6 @@ require([
     domClass,
     //SimpleFillSymbol, 
     ClassBreaksRenderer, PictureMarkerSymbol,
-    //TOC,
     //Measure
     Measurement, Units,
     Search, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleRenderer, SimpleLineSymbol, Color, Extent, 
@@ -127,14 +124,15 @@ require([
 	var horizontalSlider;
 	
 	var DEFCONFIG = {
-		extent:  new esri.geometry.Extent(MAPCONFIG.mapExtent),
+		extent: new esri.geometry.Extent(MAPCONFIG.mapExtent),
 		//TODO not implemented yet: integrate
-		popupProperties: { 
-        	fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol	
-        	titleInBody: false // showing title outside
-    	},
-		popupDom: domConstruct.create("div", { id: "ad-popup" }),
-		popup: function() {
+		popupProperties: {
+			titleInBody: false // showing title outside
+		},
+		popupDom: domConstruct.create("div", {
+			id: "ad-popup"
+		}),
+		popup: function () {
 			var that = this;
 			return new Popup(that.popupProperties, that.popupDom);
 		}
@@ -247,6 +245,7 @@ require([
 							}
 							dynamicLayersArray = dynamicLayersArray.reverse(); //reverse array for correct map visibility (according to legend tab) // TODO change , reverser method is slow
 							this.addDynamicLayers(dynamicLayersArray);
+							
 							runShowLegendInput();
 						}
 					}
@@ -278,10 +277,9 @@ require([
 			var dynamicLayers = {};
 			var themeLayers = theme.layers;
 			for (var layer in themeLayers) {			
-				if (typeof layer !== 'undefined') {				
+				if (typeof layer !== 'undefined') {			
 					dynamicLayers["dyn" + themeName + layer] = new ArcGISDynamicMapServiceLayer( themeLayers[layer].dynimacLayerUrls, {id: "dyn" + "-" + themeName + "-" + layer}); //create unique property (ArcGISDynamicMapServiceLayer) dynamcLayers property, then add to map layer
 					dynamicLayers["dyn" + themeName + layer].configLayerName = layer; // property for infowindow infotemplate 
-			
 				}
 			}
 			return dynamicLayers;
@@ -527,22 +525,13 @@ require([
 									layerName = result.layerName,
 									attributes = feature.attributes;
 
-								/*					var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0]));
-													feature.setSymbol(symbol);	
-													map.graphics.add(feature);*/
-
-								//console.log("identifyPerameters");
-								//console.log(feature);
-								//console.log(layerName);
-
 								feature.attributes.layerName = layerName;
-
 
 								for (var resultAtr in attributes) {
 									if (attributes.hasOwnProperty(resultAtr)) {
-										//do not add layername and objectid attributes
-										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName")) {
-											//AG check date string
+										//console.log(resultAtr);									
+										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName" || resultAtr == "SHAPE" || resultAtr == "SHAPE.area" || resultAtr == "SHAPE.len" || resultAtr == "SHAPE.fid")) { //add layers attributes that you do not want to show
+											//AG check for date string
 											if (Date.parse(attributes[resultAtr])) {
 												var attributeDate = attributes[resultAtr];
 												var reg = /(\d+)[.](\d+)[.](\d+)\s.*/; //regex: match number with . char, clear everything else
@@ -568,10 +557,23 @@ require([
 						});
 				};
 				for (var parameter in identifyPerameters){
+					var pointGeometry;
+					var pxWidth = map.extent.getWidth() / map.width;
+					var padding = 8 * pxWidth;
 					if (identifyPerameters.hasOwnProperty(parameter)) {
 						//if (parameter = "bp"){
 						identifyPerameters[parameter].geometry = evt.mapPoint;
 						identifyPerameters[parameter].mapExtent = map.extent;
+						//add padding to point geometry or use tolerance porperty, in this case we add padding
+						pointGeometry = new Extent({
+							"xmin": identifyPerameters[parameter].geometry.x - padding,
+							"ymin": identifyPerameters[parameter].geometry.y - padding,
+							"xmax": identifyPerameters[parameter].geometry.x + padding,
+							"ymax": identifyPerameters[parameter].geometry.y + padding,
+							"spatialReference": identifyPerameters[parameter].geometry.spatialReference
+						});
+						identifyPerameters[parameter].geometry = pointGeometry;
+						
 						var deferred = getDeferred();
 
 						deferredList.push(deferred); // create deferred objects llist obj
@@ -616,7 +618,15 @@ require([
     var extent = new esri.geometry.Extent(MAPCONFIG.mapExtent); //DONE
 
     var popupProperties = {  //DONE
-        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol	
+        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])), //add default selection symbol
+		markerSymbol: new SimpleMarkerSymbol("circle", 24,
+				new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 0]), 3),
+									new Color([255, 255, 255, 0])),
+		lineSymbol: new SimpleLineSymbol(
+			SimpleLineSymbol.STYLE_DASH,
+			new Color([193, 39, 45, 1]),
+			3
+		),
 		//outerText: "Priartinti",  //xhange default outerText;
         titleInBody: false // showing title outside
     };
@@ -625,10 +635,10 @@ require([
     popup = new Popup(popupProperties, popupDom);  //DONE
 
 	
-	var defaultSelect = new SimpleMarkerSymbol("circle", 24,
-									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 0]), 3),
+/*	var defaulMarkertSelect = new SimpleMarkerSymbol("circle", 24,
+									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 1]), 3),
 									new Color([255, 255, 255, 0]));	
-	popup.markerSymbol = defaultSelect;
+	popup.markerSymbol = defaulMarkertSelect;*/
 	
 	//popup.markerSymbol.setOffset(20, 32);
 	
