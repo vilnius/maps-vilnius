@@ -1,7 +1,4 @@
 var MAPCONFIG = {
-    mapSettings: {
-
-    },
 	themes: {
 		buildings: {
 			custom: true, // true if theme funcionality is custom  
@@ -34,7 +31,20 @@ var MAPCONFIG = {
 			layers: {
 				bpPasiulymai: { // layer unique name // 
 					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+						//"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+				}
+			}
+		},
+		TeritoryMaintenance: {
+			name: "Miesto tvarkymas", //theme name
+			id: "teritory-maintenance", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/tvarkymas.png", //image URL
+			imgAlt: "Miesto tvarkymas", // image alt attribute
+			layers: {
+				grindaTvarkomosTeritorijos: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Grinda_miesto_tvarkymo_darbai/MapServer"
 				}
 			}
 		},		
