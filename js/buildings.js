@@ -36,11 +36,9 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		"dojo/dom-construct",
 		"dojo/dom-class",
 		"esri/symbols/SimpleFillSymbol",
-		//TOC START
 		"esri/renderers/ClassBreaksRenderer",
 		//Measure
 		"esri/dijit/Measurement", "esri/units",
-		//TOC END
 		"esri/dijit/Geocoder",
 		"esri/symbols/SimpleLineSymbol", "esri/geometry/Extent",
 		//cluster
@@ -48,7 +46,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		"dijit/registry",
 		"esri/dijit/Scalebar",
 		"esri/layers/LayerInfo",
-		"js/photoswipe.min.js", 
+		"js/photoswipe.min.js",
         "js/photoswipe-ui-default.min.js",
 		"dijit/layout/TabContainer",
 		"dijit/layout/BorderContainer",
@@ -105,75 +103,75 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		var pswpElement = document.querySelectorAll('.pswp')[0];
 		var galleryHelp = document.getElementById("building-help");
 
-		galleryHelp.addEventListener("click", function() {
-		
+		galleryHelp.addEventListener("click", function () {
+
 			// build items array
 			var items = [
-			    {
-			        src: '/maps_vilnius/img/help_1.png',
-			        title: '1. Adresų paieškos lauko arba navigacijos meniu (jei ieškote tiesiogiai žemėlapyje) pagalba priartinkite žemėlapio vaizdą kol matysite pastatų kontūrus',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_1.png',
+					title: '1. Adresų paieškos lauko arba navigacijos meniu (jei ieškote tiesiogiai žemėlapyje) pagalba priartinkite žemėlapio vaizdą kol matysite pastatų kontūrus',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_2.png',
-			        title: '2. Pažymėkite konkretų pastatą, dešinėje atsidarusiame lange rasite visą turimą pastato informaciją bei paryškintas potemes',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_2.png',
+					title: '2. Pažymėkite konkretų pastatą, dešinėje atsidarusiame lange rasite visą turimą pastato informaciją bei paryškintas potemes',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_3.png',
-			        title: '3. Norėdami palyginti pastatų tarifus, pasirinkite "Tarifų palyginimas" potemę',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_3.png',
+					title: '3. Norėdami palyginti pastatų tarifus, pasirinkite "Tarifų palyginimas" potemę',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_4.png',
-			        title: '4. Norėdami palyginti dviejų pastatų tarifus, spūstelkite mygtuką "Pasirinkite pastatą palyginimui" ',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_4.png',
+					title: '4. Norėdami palyginti dviejų pastatų tarifus, spūstelkite mygtuką "Pasirinkite pastatą palyginimui" ',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_5.png',
-			        title: '5. Pelės pagalba pažymėkite naują pastatą palyginimui',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_5.png',
+					title: '5. Pelės pagalba pažymėkite naują pastatą palyginimui',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_6.png',
-			        title: '6. Pažymėjus pastatą palyginimui, dešinėje atsidarusiame lange rasite dviejų pastatų turimų tarifų lentelę. Norėdami nutraukti palyginimą spūtelkite mygtuką "Atgal"',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_6.png',
+					title: '6. Pažymėjus pastatą palyginimui, dešinėje atsidarusiame lange rasite dviejų pastatų turimų tarifų lentelę. Norėdami nutraukti palyginimą spūtelkite mygtuką "Atgal"',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_7.png',
-			        title: '7. Norėdami palyginti visų administratorių pastatų tarifų vidurkius, spūstelkite opciją "Pasirinkite palyginamąjį vidutinį tarifą" bei pažymėkite konkretų tarifą ',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_7.png',
+					title: '7. Norėdami palyginti visų administratorių pastatų tarifų vidurkius, spūstelkite opciją "Pasirinkite palyginamąjį vidutinį tarifą" bei pažymėkite konkretų tarifą ',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_8.png',
-			        title: '8. Pažymėjus konkretų tarifą grafike matysite administratorių vidutinius vidurkius. PASTABA: bendrijų ir JVS duomenis nėra tikslūs',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_8.png',
+					title: '8. Pažymėjus konkretų tarifą grafike matysite administratorių vidutinius vidurkius. PASTABA: bendrijų ir JVS duomenis nėra tikslūs',
+					w: 1408,
+					h: 828
 			    }
 			];
-			
+
 			// define options (if needed)
 			var options = {
 				showAnimationDuration: 200,
 				errorMsg: '<div class="pswp__error-msg"><a href="%url%" target="_blank">Įvyko klaida.</a> Atsiprašome galerija nepasiekiama.</div>',
-			    // optionName: 'option value'
-			    // for example:
-			    index: 0 // start at first slide
+				// optionName: 'option value'
+				// for example:
+				index: 0 // start at first slide
 			};
-			
+
 			// Initializes and opens PhotoSwipe
-			var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+			var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 			gallery.init();
 		});
 		//End Photoswipe
-		
+
 		// Full  administrators comparison
 		var administratorGraph = {
 			bendrijosColor: "rgba(115, 178, 255, 1)",
@@ -219,7 +217,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				graphQuery.where = "1=1";
 				graphQuery.returnGeometry = false;
 				graphQuery.outFields = ["*"];
-				
+
 				graphQueryTask.execute(graphQuery).then(function (deferred) {
 					var res = self.showGraphData(deferred, currentSelect, valdName);
 					promise.resolve(res);
@@ -247,7 +245,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					techP.push(dataPath.Tech_priez);
 					sildP.push(dataPath.Sild_sist_priez);
 					sildVid.push(dataPath.Sildymas);
-					
+
 					switch (dataPath.VALDF_GR) {
 						case 2: //Bendrijos
 							bgColour.push(this.bendrijosColor);
@@ -263,7 +261,16 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 							break;
 					}
 				}
-				var graphData = {labels:labels, labelsStr:labelsStr, admT:admT, atliek:atliek, techP:techP, sildP:sildP, sildVid:sildVid, bgColour:bgColour};
+				var graphData = {
+					labels: labels,
+					labelsStr: labelsStr,
+					admT: admT,
+					atliek: atliek,
+					techP: techP,
+					sildP: sildP,
+					sildVid: sildVid,
+					bgColour: bgColour
+				};
 
 				this.showGraphics(graphData, currentSelect);
 
@@ -374,8 +381,8 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 						myBarLengendStr += "<p><span style='background-color:" + myBarLegend[i] + " '></span>JVS</p>";
 				}
 				dom.byId("bar-legend").innerHTML = "<div id='chart-legend'><div class='line-legend'>" + myBarLengendStr + "</div></div>";
-				
-				dom.byId("bar-tips").innerHTML = "<div id='chart-legend'><div class='line-legend'><h5><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Dėl bendrijų ir JVS vidutinių tarifų:</h5><p>Bendrijų ir JVS duomenys nėra tikslūs, nes informacija apie tarifus pateikta mažiau kaip 50 proc. bendrijų arba  jungtinės veiklos sutartimi  valdomų namų.</br>Sprendimas  dėl įmokų tarifų dydžio priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka</p><p><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Duomenys atliekų tarifo grafike pateikiami neįvertinus atliekų tvarkymo paskirstymo skaičiavimo būdo. Bendrijų ir JVS valdomų daugiabučių namų butų ir kitų patalpų savininkams mokestis už atliekų tvarkymą skaičiuojamas ne tik nuo buto naudingo  ploto, bet ir nuo gyventojų skaičiaus bute. Sprendimas priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka.</p></div></div>";				
+
+				dom.byId("bar-tips").innerHTML = "<div id='chart-legend'><div class='line-legend'><h5><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Dėl bendrijų ir JVS vidutinių tarifų:</h5><p>Bendrijų ir JVS duomenys nėra tikslūs, nes informacija apie tarifus pateikta mažiau kaip 50 proc. bendrijų arba  jungtinės veiklos sutartimi  valdomų namų.</br>Sprendimas  dėl įmokų tarifų dydžio priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka</p><p><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Duomenys atliekų tarifo grafike pateikiami neįvertinus atliekų tvarkymo paskirstymo skaičiavimo būdo. Bendrijų ir JVS valdomų daugiabučių namų butų ir kitų patalpų savininkams mokestis už atliekų tvarkymą skaičiuojamas ne tik nuo buto naudingo  ploto, bet ir nuo gyventojų skaičiaus bute. Sprendimas priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka.</p></div></div>";
 			}
 		};
 
@@ -445,12 +452,12 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		on(featureBuildings, "click", runQuery);
 
 		function showData(results) {
-			
+
 			// AG TEMP destroy Chart.js canvas graphic
 			if (typeof myLine !== "undefined") {
 				myLine.destroy();
 			}
-			
+
 			if (typeof myLineHeating !== "undefined") {
 				myLineHeating.destroy();
 			}
@@ -617,41 +624,41 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			var totalLastYearCompared; //compared buildgins' consumption
 			var statusCompare = false; // true if using Comparing mode
 			//special tooltips for cursors
-			function compareTooltip() {			
+			function compareTooltip() {
 				var tooltipC;
 
-					on(map, "mouse-move", function (evt) {
-						if (statusCompare) { //check status
-							//destroy widget on every move
-							if (typeof (tooltipC) != "undefined") {
-								tooltipC.destroy();
-							}
-
-							tooltipC = new TooltipDialog({
-								id: 'myTooltipDialogCompare',
-								style: "width: 160px;",
-								content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
-								onMouseEnter: function () {
-									dijitPopup.close(tooltipC);
-								}
-							});
-
-							tooltipC.startup();
-							dijitPopup.open({
-								popup: tooltipC,
-								x: evt.pageX + 10, //AG add padding for mouse hovering and click events
-								y: evt.pageY + 10
-							});
-						}
-					});
-					on(map, "mouse-out", function () {
+				on(map, "mouse-move", function (evt) {
+					if (statusCompare) { //check status
+						//destroy widget on every move
 						if (typeof (tooltipC) != "undefined") {
 							tooltipC.destroy();
 						}
-					});			
-					
-				
-  				
+
+						tooltipC = new TooltipDialog({
+							id: 'myTooltipDialogCompare',
+							style: "width: 160px;",
+							content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
+							onMouseEnter: function () {
+								dijitPopup.close(tooltipC);
+							}
+						});
+
+						tooltipC.startup();
+						dijitPopup.open({
+							popup: tooltipC,
+							x: evt.pageX + 10, //AG add padding for mouse hovering and click events
+							y: evt.pageY + 10
+						});
+					}
+				});
+				on(map, "mouse-out", function () {
+					if (typeof (tooltipC) != "undefined") {
+						tooltipC.destroy();
+					}
+				});
+
+
+
 			}
 
 			function compareAdm() {
@@ -680,8 +687,8 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				//get back from comparign block to main block and remove compared layer
 				var statsCloseBtn = dom.byId("stats-close");
 				statsCloseBtn.addEventListener("click", function () {
-					 statusCompare = false; //set compare status mode true
-					
+					statusCompare = false; //set compare status mode true
+
 					//TEMP show bar graphic if exists
 					//if (typeof myBar != "undefined") {
 					domClass.add("myBarChart", "show");
@@ -749,7 +756,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				function runQueryCompare(e) {
 					//console.log("POINT");
 					//console.log(e);
-					
+
 					window.location.hash = '#close'; //remove panel
 
 					var zoomLevel = map.getMaxZoom() - 1;
@@ -959,7 +966,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					checkUrlDocs(urlStack[docUrlName], docUrlName);
 				}
 			}
-			
+
 			//Get attachments
 			window.attachmentsObj = {}; //store attachments functions to save files with file.js // TOTO eliminate global object
 			var attachmentsHtml = "";
@@ -973,55 +980,57 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			//base64 blob
 			attachmentQuery.where = "fld_unikalus_nr1= '" + ntrun + "' OR fld_unikalus_nr2= '" + ntrun + "' OR fld_unikalus_nr3= '" + ntrun + "'";
 			attachmentQuery.returnGeometry = false;
-			attachmentQuery.outFields = ["*"];	
+			attachmentQuery.outFields = ["*"];
 			attachmentTask.execute(attachmentQuery, showAttachments);
-		
+
 			function showAttachments(results) {
 				//get features array
 				var features = results.features,
 					i = 0;
 				if (features.length > 0) {
-					for(i; i < features.length; i +=1) {
+					for (i; i < features.length; i += 1) {
 						var name = "";
 						name += i;
-						
-						//Add attachment anchor with  unique onclick function
-						attachmentsHtml += "<p><span class='anchor-tag' href='' onclick='attachmentsObj[" + i + "](" +i+")'>" + features[i].attributes.att_title +  "</span></p>";
 
-						attachmentsObj[name] = function(i) {
+						//Add attachment anchor with  unique onclick function
+						attachmentsHtml += "<p><span class='anchor-tag' href='' onclick='attachmentsObj[" + i + "](" + i + ")'>" + features[i].attributes.att_title + "</span></p>";
+
+						attachmentsObj[name] = function (i) {
 							//base 64 string
 							var blobType = features[i].attributes.att_contentType;
 							var byteCharacters = atob(features[i].attributes.att_encodedContent);
-							var fileName = "Aktas: " + features[i].attributes.att_title;							
+							var fileName = "Aktas: " + features[i].attributes.att_title;
 							var byteNumbers = new Array(byteCharacters.length);
 
 							for (var n = 0; n < byteCharacters.length; n++) {
-									byteNumbers[n] = byteCharacters.charCodeAt(n);
+								byteNumbers[n] = byteCharacters.charCodeAt(n);
 							}
 							var byteArray = new Uint8Array(byteNumbers);
 
 							// construct the blob from from byte array
-							var blob = new Blob([byteArray], {type: blobType});
+							var blob = new Blob([byteArray], {
+								type: blobType
+							});
 
-							saveAs(blob, fileName);										
+							saveAs(blob, fileName);
 						}
-						
+
 					}
 				}
-				
+
 				//var buildAtt = "<h3>" + adresas + "<br></h3>" + "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml;
-				
+
 				//console.log(typeof(attachmentsHtml));
 				var buildAtt = "<h3>" + adresas + "<br></h3>" + (attachmentsHtml === '' ? "<p>Priežiūros aktų nėra</p>" : "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml);
-				
-				dom.byId("build-inner-att").innerHTML = buildAtt;				
+
+				dom.byId("build-inner-att").innerHTML = buildAtt;
 			}
 			//EDN Get attachments 
 
 			var buildDocs = "<h3>" + adresas + "<br></h3>";
 
 			dom.byId("build-inner-d").innerHTML = buildDocs;
-			
+
 
 			var buildHelp = "<h3>" + adresas + "<br></h3>" + "<p>Turite pasiūlymų ar pastabų? Matote klaidų?</p> <p>Susisiekite el. paštu: <a href='mailto:pastatai@vilnius.lt'>pastatai@vilnius.lt</a></p><p>Norėdami pateikti duomenys apie konkretų pastatą, kviečiame užpildyti <a href='http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/lentele.xlsx'>duomenų suvedimo lentelę</a> ir persiųsti aukščiau nurodytu el. pašto adresu.</p><p>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'>bendrijų steigimą</a></p>";
 
@@ -1421,38 +1430,38 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				});
 			}, 1000);
 		}
-		
+
 		//show tooltip for building theme
-		var tooltip;	
-		
+		var tooltip;
+
 		on(featureBuildings, "mouse-move", function (evt) {
 			//destroy widget on every move
-			if (typeof(tooltip) != "undefined") {
+			if (typeof (tooltip) != "undefined") {
 				tooltip.destroy();
 			}
-			
+
 			tooltip = new TooltipDialog({
 				id: 'myTooltipDialog',
 				style: "width: 160px;",
 				content: "<p>Pažymėkite pastatą</p>",
 				onMouseEnter: function () {
-						dijitPopup.close(tooltip);
+					dijitPopup.close(tooltip);
 				}
 			});
 
-				tooltip.startup();
-				dijitPopup.open({
-					popup: tooltip,
-					padding: {
-						x: 10, 
-						y: 10
-					},
-					x: evt.pageX, //AG add padding for mouse hovering and click events
-					y: evt.pageY
-				});
+			tooltip.startup();
+			dijitPopup.open({
+				popup: tooltip,
+				padding: {
+					x: 10,
+					y: 10
+				},
+				x: evt.pageX, //AG add padding for mouse hovering and click events
+				y: evt.pageY
+			});
 		});
 		on(featureBuildings, "mouse-out", function () {
 			tooltip.destroy();
-		});	
+		});
 	});
 };

@@ -1,7 +1,4 @@
 var MAPCONFIG = {
-    mapSettings: {
-
-    },
 	themes: {
 		buildings: {
 			custom: true, // true if theme funcionality is custom  
@@ -34,7 +31,20 @@ var MAPCONFIG = {
 			layers: {
 				bpPasiulymai: { // layer unique name // 
 					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+						//"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+				}
+			}
+		},
+		TeritoryMaintenance: {
+			name: "Miesto tvarkymas", //theme name
+			id: "teritory-maintenance", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/tvarkymas.png", //image URL
+			imgAlt: "Miesto tvarkymas", // image alt attribute
+			layers: {
+				grindaTvarkomosTeritorijos: { // layer unique name // 
+					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Grinda_miesto_tvarkymo_darbai/MapServer"
 				}
 			}
 		},		
@@ -45,75 +55,6 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
 			imgAlt: "Senoji versija", // image alt attribute
 			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
-		},		
-		schools: {
-			custom: true,
-			name: "Švietimas", //theme name
-			id: "schools", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/svietimas.png", //image URL
-			imgAlt: "Švietimas", // image alt attribute
-			layers: {
-				mokyklos: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer"
-				}
-			}
-		},
-		transport: {
-			name: "Transportas", //theme name
-			id: "transport", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/transportas.png", //image URL
-			imgAlt: "Transportas", // image alt attribute
-			layers: {
-/*				transportLayer: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://www.sviesoforai.lt/arcgis/rest/services/Vilnius_sde_dynamic/MapServer"
-				},*/
-				dviraciuTrasos: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Aplinkosauga/dviraciai_sisp_dynamic/MapServer"
-				},
-				gatviuTvarkymas: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://195.182.69.66/ArcGIS/rest/services/Interaktyviam_zemelapiui/Grinda_gatviu_tvarkymas2/MapServer"
-				}
-			}
-		},
-		demo: {
-			name: "Demo versija", //theme name
-			id: "demo", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
-			imgAlt: "demo versija", // image alt attribute
-			layers: {
-				demoLayer: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Demo/MapServer"
-				},
-				badministravimas: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer"
-				},
-/*				tesd: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Vietines_rinkliavos_zonos/MapServer"
-				},*/
-				bp: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
-				}
-			}
-		},
-		bpDemo: {
-			name: "BP demo", //theme name
-			id: "bp", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
-			imgAlt: "bp demo versija", // image alt attribute
-			layers: {
-				bp: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
-				}
-			}
 		}
 	},
     mapExtent: {
@@ -197,11 +138,9 @@ require([
     "dojo/dom",
     "dojo/dom-construct",
     "dojo/dom-class",
-    //TOC START
     "esri/renderers/ClassBreaksRenderer", "esri/symbols/PictureMarkerSymbol",
     //Measure
     "esri/dijit/Measurement", "esri/units",
-    //TOC END
     "esri/dijit/Search", "esri/tasks/locator", 
     "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleMarkerSymbol",  "esri/renderers/SimpleRenderer", "esri/symbols/SimpleLineSymbol", "esri/Color", "esri/geometry/Extent",
     //cluster
@@ -250,7 +189,6 @@ require([
     domClass,
     //SimpleFillSymbol, 
     ClassBreaksRenderer, PictureMarkerSymbol,
-    //TOC,
     //Measure
     Measurement, Units,
     Search, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleRenderer, SimpleLineSymbol, Color, Extent, 
@@ -267,14 +205,15 @@ require([
 	var horizontalSlider;
 	
 	var DEFCONFIG = {
-		extent:  new esri.geometry.Extent(MAPCONFIG.mapExtent),
+		extent: new esri.geometry.Extent(MAPCONFIG.mapExtent),
 		//TODO not implemented yet: integrate
-		popupProperties: { 
-        	fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol	
-        	titleInBody: false // showing title outside
-    	},
-		popupDom: domConstruct.create("div", { id: "ad-popup" }),
-		popup: function() {
+		popupProperties: {
+			titleInBody: false // showing title outside
+		},
+		popupDom: domConstruct.create("div", {
+			id: "ad-popup"
+		}),
+		popup: function () {
 			var that = this;
 			return new Popup(that.popupProperties, that.popupDom);
 		}
@@ -387,6 +326,7 @@ require([
 							}
 							dynamicLayersArray = dynamicLayersArray.reverse(); //reverse array for correct map visibility (according to legend tab) // TODO change , reverser method is slow
 							this.addDynamicLayers(dynamicLayersArray);
+							
 							runShowLegendInput();
 						}
 					}
@@ -418,10 +358,9 @@ require([
 			var dynamicLayers = {};
 			var themeLayers = theme.layers;
 			for (var layer in themeLayers) {			
-				if (typeof layer !== 'undefined') {				
+				if (typeof layer !== 'undefined') {			
 					dynamicLayers["dyn" + themeName + layer] = new ArcGISDynamicMapServiceLayer( themeLayers[layer].dynimacLayerUrls, {id: "dyn" + "-" + themeName + "-" + layer}); //create unique property (ArcGISDynamicMapServiceLayer) dynamcLayers property, then add to map layer
 					dynamicLayers["dyn" + themeName + layer].configLayerName = layer; // property for infowindow infotemplate 
-			
 				}
 			}
 			return dynamicLayers;
@@ -667,22 +606,13 @@ require([
 									layerName = result.layerName,
 									attributes = feature.attributes;
 
-								/*					var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0]));
-													feature.setSymbol(symbol);	
-													map.graphics.add(feature);*/
-
-								//console.log("identifyPerameters");
-								//console.log(feature);
-								//console.log(layerName);
-
 								feature.attributes.layerName = layerName;
-
 
 								for (var resultAtr in attributes) {
 									if (attributes.hasOwnProperty(resultAtr)) {
-										//do not add layername and objectid attributes
-										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName")) {
-											//AG check date string
+										//console.log(resultAtr);									
+										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName" || resultAtr == "SHAPE" || resultAtr == "SHAPE.area" || resultAtr == "SHAPE.len" || resultAtr == "SHAPE.fid")) { //add layers attributes that you do not want to show
+											//AG check for date string
 											if (Date.parse(attributes[resultAtr])) {
 												var attributeDate = attributes[resultAtr];
 												var reg = /(\d+)[.](\d+)[.](\d+)\s.*/; //regex: match number with . char, clear everything else
@@ -708,10 +638,23 @@ require([
 						});
 				};
 				for (var parameter in identifyPerameters){
+					var pointGeometry;
+					var pxWidth = map.extent.getWidth() / map.width;
+					var padding = 8 * pxWidth;
 					if (identifyPerameters.hasOwnProperty(parameter)) {
 						//if (parameter = "bp"){
 						identifyPerameters[parameter].geometry = evt.mapPoint;
 						identifyPerameters[parameter].mapExtent = map.extent;
+						//add padding to point geometry or use tolerance porperty, in this case we add padding
+						pointGeometry = new Extent({
+							"xmin": identifyPerameters[parameter].geometry.x - padding,
+							"ymin": identifyPerameters[parameter].geometry.y - padding,
+							"xmax": identifyPerameters[parameter].geometry.x + padding,
+							"ymax": identifyPerameters[parameter].geometry.y + padding,
+							"spatialReference": identifyPerameters[parameter].geometry.spatialReference
+						});
+						identifyPerameters[parameter].geometry = pointGeometry;
+						
 						var deferred = getDeferred();
 
 						deferredList.push(deferred); // create deferred objects llist obj
@@ -756,7 +699,15 @@ require([
     var extent = new esri.geometry.Extent(MAPCONFIG.mapExtent); //DONE
 
     var popupProperties = {  //DONE
-        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])),  //add default selection symbol	
+        fillSymbol: new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0])), //add default selection symbol
+		markerSymbol: new SimpleMarkerSymbol("circle", 24,
+				new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 0]), 3),
+									new Color([255, 255, 255, 0])),
+		lineSymbol: new SimpleLineSymbol(
+			SimpleLineSymbol.STYLE_DASH,
+			new Color([193, 39, 45, 1]),
+			3
+		),
 		//outerText: "Priartinti",  //xhange default outerText;
         titleInBody: false // showing title outside
     };
@@ -765,10 +716,10 @@ require([
     popup = new Popup(popupProperties, popupDom);  //DONE
 
 	
-	var defaultSelect = new SimpleMarkerSymbol("circle", 24,
-									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 0]), 3),
+/*	var defaulMarkertSelect = new SimpleMarkerSymbol("circle", 24,
+									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 1]), 3),
 									new Color([255, 255, 255, 0]));	
-	popup.markerSymbol = defaultSelect;
+	popup.markerSymbol = defaulMarkertSelect;*/
 	
 	//popup.markerSymbol.setOffset(20, 32);
 	
@@ -1701,11 +1652,9 @@ require([
 		"dojo/dom-construct",
 		"dojo/dom-class",
 		"esri/symbols/SimpleFillSymbol",
-		//TOC START
 		"esri/renderers/ClassBreaksRenderer",
 		//Measure
 		"esri/dijit/Measurement", "esri/units",
-		//TOC END
 		"esri/dijit/Geocoder",
 		"esri/symbols/SimpleLineSymbol", "esri/geometry/Extent",
 		//cluster
@@ -1713,7 +1662,7 @@ require([
 		"dijit/registry",
 		"esri/dijit/Scalebar",
 		"esri/layers/LayerInfo",
-		"js/photoswipe.min.js", 
+		"js/photoswipe.min.js",
         "js/photoswipe-ui-default.min.js",
 		"dijit/layout/TabContainer",
 		"dijit/layout/BorderContainer",
@@ -1770,75 +1719,75 @@ require([
 		var pswpElement = document.querySelectorAll('.pswp')[0];
 		var galleryHelp = document.getElementById("building-help");
 
-		galleryHelp.addEventListener("click", function() {
-		
+		galleryHelp.addEventListener("click", function () {
+
 			// build items array
 			var items = [
-			    {
-			        src: '/maps_vilnius/img/help_1.png',
-			        title: '1. Adresų paieškos lauko arba navigacijos meniu (jei ieškote tiesiogiai žemėlapyje) pagalba priartinkite žemėlapio vaizdą kol matysite pastatų kontūrus',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_1.png',
+					title: '1. Adresų paieškos lauko arba navigacijos meniu (jei ieškote tiesiogiai žemėlapyje) pagalba priartinkite žemėlapio vaizdą kol matysite pastatų kontūrus',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_2.png',
-			        title: '2. Pažymėkite konkretų pastatą, dešinėje atsidarusiame lange rasite visą turimą pastato informaciją bei paryškintas potemes',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_2.png',
+					title: '2. Pažymėkite konkretų pastatą, dešinėje atsidarusiame lange rasite visą turimą pastato informaciją bei paryškintas potemes',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_3.png',
-			        title: '3. Norėdami palyginti pastatų tarifus, pasirinkite "Tarifų palyginimas" potemę',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_3.png',
+					title: '3. Norėdami palyginti pastatų tarifus, pasirinkite "Tarifų palyginimas" potemę',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_4.png',
-			        title: '4. Norėdami palyginti dviejų pastatų tarifus, spūstelkite mygtuką "Pasirinkite pastatą palyginimui" ',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_4.png',
+					title: '4. Norėdami palyginti dviejų pastatų tarifus, spūstelkite mygtuką "Pasirinkite pastatą palyginimui" ',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_5.png',
-			        title: '5. Pelės pagalba pažymėkite naują pastatą palyginimui',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_5.png',
+					title: '5. Pelės pagalba pažymėkite naują pastatą palyginimui',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_6.png',
-			        title: '6. Pažymėjus pastatą palyginimui, dešinėje atsidarusiame lange rasite dviejų pastatų turimų tarifų lentelę. Norėdami nutraukti palyginimą spūtelkite mygtuką "Atgal"',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_6.png',
+					title: '6. Pažymėjus pastatą palyginimui, dešinėje atsidarusiame lange rasite dviejų pastatų turimų tarifų lentelę. Norėdami nutraukti palyginimą spūtelkite mygtuką "Atgal"',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_7.png',
-			        title: '7. Norėdami palyginti visų administratorių pastatų tarifų vidurkius, spūstelkite opciją "Pasirinkite palyginamąjį vidutinį tarifą" bei pažymėkite konkretų tarifą ',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_7.png',
+					title: '7. Norėdami palyginti visų administratorių pastatų tarifų vidurkius, spūstelkite opciją "Pasirinkite palyginamąjį vidutinį tarifą" bei pažymėkite konkretų tarifą ',
+					w: 1408,
+					h: 828
 			    },
-			    {
-			        src: '/maps_vilnius/img/help_8.png',
-			        title: '8. Pažymėjus konkretų tarifą grafike matysite administratorių vidutinius vidurkius. PASTABA: bendrijų ir JVS duomenis nėra tikslūs',
-			        w: 1408,
-			        h: 828
+				{
+					src: '/maps_vilnius/img/help_8.png',
+					title: '8. Pažymėjus konkretų tarifą grafike matysite administratorių vidutinius vidurkius. PASTABA: bendrijų ir JVS duomenis nėra tikslūs',
+					w: 1408,
+					h: 828
 			    }
 			];
-			
+
 			// define options (if needed)
 			var options = {
 				showAnimationDuration: 200,
 				errorMsg: '<div class="pswp__error-msg"><a href="%url%" target="_blank">Įvyko klaida.</a> Atsiprašome galerija nepasiekiama.</div>',
-			    // optionName: 'option value'
-			    // for example:
-			    index: 0 // start at first slide
+				// optionName: 'option value'
+				// for example:
+				index: 0 // start at first slide
 			};
-			
+
 			// Initializes and opens PhotoSwipe
-			var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+			var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 			gallery.init();
 		});
 		//End Photoswipe
-		
+
 		// Full  administrators comparison
 		var administratorGraph = {
 			bendrijosColor: "rgba(115, 178, 255, 1)",
@@ -1884,7 +1833,7 @@ require([
 				graphQuery.where = "1=1";
 				graphQuery.returnGeometry = false;
 				graphQuery.outFields = ["*"];
-				
+
 				graphQueryTask.execute(graphQuery).then(function (deferred) {
 					var res = self.showGraphData(deferred, currentSelect, valdName);
 					promise.resolve(res);
@@ -1912,7 +1861,7 @@ require([
 					techP.push(dataPath.Tech_priez);
 					sildP.push(dataPath.Sild_sist_priez);
 					sildVid.push(dataPath.Sildymas);
-					
+
 					switch (dataPath.VALDF_GR) {
 						case 2: //Bendrijos
 							bgColour.push(this.bendrijosColor);
@@ -1928,7 +1877,16 @@ require([
 							break;
 					}
 				}
-				var graphData = {labels:labels, labelsStr:labelsStr, admT:admT, atliek:atliek, techP:techP, sildP:sildP, sildVid:sildVid, bgColour:bgColour};
+				var graphData = {
+					labels: labels,
+					labelsStr: labelsStr,
+					admT: admT,
+					atliek: atliek,
+					techP: techP,
+					sildP: sildP,
+					sildVid: sildVid,
+					bgColour: bgColour
+				};
 
 				this.showGraphics(graphData, currentSelect);
 
@@ -2039,8 +1997,8 @@ require([
 						myBarLengendStr += "<p><span style='background-color:" + myBarLegend[i] + " '></span>JVS</p>";
 				}
 				dom.byId("bar-legend").innerHTML = "<div id='chart-legend'><div class='line-legend'>" + myBarLengendStr + "</div></div>";
-				
-				dom.byId("bar-tips").innerHTML = "<div id='chart-legend'><div class='line-legend'><h5><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Dėl bendrijų ir JVS vidutinių tarifų:</h5><p>Bendrijų ir JVS duomenys nėra tikslūs, nes informacija apie tarifus pateikta mažiau kaip 50 proc. bendrijų arba  jungtinės veiklos sutartimi  valdomų namų.</br>Sprendimas  dėl įmokų tarifų dydžio priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka</p><p><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Duomenys atliekų tarifo grafike pateikiami neįvertinus atliekų tvarkymo paskirstymo skaičiavimo būdo. Bendrijų ir JVS valdomų daugiabučių namų butų ir kitų patalpų savininkams mokestis už atliekų tvarkymą skaičiuojamas ne tik nuo buto naudingo  ploto, bet ir nuo gyventojų skaičiaus bute. Sprendimas priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka.</p></div></div>";				
+
+				dom.byId("bar-tips").innerHTML = "<div id='chart-legend'><div class='line-legend'><h5><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Dėl bendrijų ir JVS vidutinių tarifų:</h5><p>Bendrijų ir JVS duomenys nėra tikslūs, nes informacija apie tarifus pateikta mažiau kaip 50 proc. bendrijų arba  jungtinės veiklos sutartimi  valdomų namų.</br>Sprendimas  dėl įmokų tarifų dydžio priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka</p><p><i class='fa fa-exclamation' style='color: #C1272D; height: auto'></i>Duomenys atliekų tarifo grafike pateikiami neįvertinus atliekų tvarkymo paskirstymo skaičiavimo būdo. Bendrijų ir JVS valdomų daugiabučių namų butų ir kitų patalpų savininkams mokestis už atliekų tvarkymą skaičiuojamas ne tik nuo buto naudingo  ploto, bet ir nuo gyventojų skaičiaus bute. Sprendimas priimamas Civilinio kodekso 4.85 straipsnyje nustatyta tvarka.</p></div></div>";
 			}
 		};
 
@@ -2110,12 +2068,12 @@ require([
 		on(featureBuildings, "click", runQuery);
 
 		function showData(results) {
-			
+
 			// AG TEMP destroy Chart.js canvas graphic
 			if (typeof myLine !== "undefined") {
 				myLine.destroy();
 			}
-			
+
 			if (typeof myLineHeating !== "undefined") {
 				myLineHeating.destroy();
 			}
@@ -2282,41 +2240,41 @@ require([
 			var totalLastYearCompared; //compared buildgins' consumption
 			var statusCompare = false; // true if using Comparing mode
 			//special tooltips for cursors
-			function compareTooltip() {			
+			function compareTooltip() {
 				var tooltipC;
 
-					on(map, "mouse-move", function (evt) {
-						if (statusCompare) { //check status
-							//destroy widget on every move
-							if (typeof (tooltipC) != "undefined") {
-								tooltipC.destroy();
-							}
-
-							tooltipC = new TooltipDialog({
-								id: 'myTooltipDialogCompare',
-								style: "width: 160px;",
-								content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
-								onMouseEnter: function () {
-									dijitPopup.close(tooltipC);
-								}
-							});
-
-							tooltipC.startup();
-							dijitPopup.open({
-								popup: tooltipC,
-								x: evt.pageX + 10, //AG add padding for mouse hovering and click events
-								y: evt.pageY + 10
-							});
-						}
-					});
-					on(map, "mouse-out", function () {
+				on(map, "mouse-move", function (evt) {
+					if (statusCompare) { //check status
+						//destroy widget on every move
 						if (typeof (tooltipC) != "undefined") {
 							tooltipC.destroy();
 						}
-					});			
-					
-				
-  				
+
+						tooltipC = new TooltipDialog({
+							id: 'myTooltipDialogCompare',
+							style: "width: 160px;",
+							content: "<p>Pažymėkite kitą pastatą palyginimui</p>",
+							onMouseEnter: function () {
+								dijitPopup.close(tooltipC);
+							}
+						});
+
+						tooltipC.startup();
+						dijitPopup.open({
+							popup: tooltipC,
+							x: evt.pageX + 10, //AG add padding for mouse hovering and click events
+							y: evt.pageY + 10
+						});
+					}
+				});
+				on(map, "mouse-out", function () {
+					if (typeof (tooltipC) != "undefined") {
+						tooltipC.destroy();
+					}
+				});
+
+
+
 			}
 
 			function compareAdm() {
@@ -2345,8 +2303,8 @@ require([
 				//get back from comparign block to main block and remove compared layer
 				var statsCloseBtn = dom.byId("stats-close");
 				statsCloseBtn.addEventListener("click", function () {
-					 statusCompare = false; //set compare status mode true
-					
+					statusCompare = false; //set compare status mode true
+
 					//TEMP show bar graphic if exists
 					//if (typeof myBar != "undefined") {
 					domClass.add("myBarChart", "show");
@@ -2414,7 +2372,7 @@ require([
 				function runQueryCompare(e) {
 					//console.log("POINT");
 					//console.log(e);
-					
+
 					window.location.hash = '#close'; //remove panel
 
 					var zoomLevel = map.getMaxZoom() - 1;
@@ -2624,7 +2582,7 @@ require([
 					checkUrlDocs(urlStack[docUrlName], docUrlName);
 				}
 			}
-			
+
 			//Get attachments
 			window.attachmentsObj = {}; //store attachments functions to save files with file.js // TOTO eliminate global object
 			var attachmentsHtml = "";
@@ -2638,55 +2596,57 @@ require([
 			//base64 blob
 			attachmentQuery.where = "fld_unikalus_nr1= '" + ntrun + "' OR fld_unikalus_nr2= '" + ntrun + "' OR fld_unikalus_nr3= '" + ntrun + "'";
 			attachmentQuery.returnGeometry = false;
-			attachmentQuery.outFields = ["*"];	
+			attachmentQuery.outFields = ["*"];
 			attachmentTask.execute(attachmentQuery, showAttachments);
-		
+
 			function showAttachments(results) {
 				//get features array
 				var features = results.features,
 					i = 0;
 				if (features.length > 0) {
-					for(i; i < features.length; i +=1) {
+					for (i; i < features.length; i += 1) {
 						var name = "";
 						name += i;
-						
-						//Add attachment anchor with  unique onclick function
-						attachmentsHtml += "<p><span class='anchor-tag' href='' onclick='attachmentsObj[" + i + "](" +i+")'>" + features[i].attributes.att_title +  "</span></p>";
 
-						attachmentsObj[name] = function(i) {
+						//Add attachment anchor with  unique onclick function
+						attachmentsHtml += "<p><span class='anchor-tag' href='' onclick='attachmentsObj[" + i + "](" + i + ")'>" + features[i].attributes.att_title + "</span></p>";
+
+						attachmentsObj[name] = function (i) {
 							//base 64 string
 							var blobType = features[i].attributes.att_contentType;
 							var byteCharacters = atob(features[i].attributes.att_encodedContent);
-							var fileName = "Aktas: " + features[i].attributes.att_title;							
+							var fileName = "Aktas: " + features[i].attributes.att_title;
 							var byteNumbers = new Array(byteCharacters.length);
 
 							for (var n = 0; n < byteCharacters.length; n++) {
-									byteNumbers[n] = byteCharacters.charCodeAt(n);
+								byteNumbers[n] = byteCharacters.charCodeAt(n);
 							}
 							var byteArray = new Uint8Array(byteNumbers);
 
 							// construct the blob from from byte array
-							var blob = new Blob([byteArray], {type: blobType});
+							var blob = new Blob([byteArray], {
+								type: blobType
+							});
 
-							saveAs(blob, fileName);										
+							saveAs(blob, fileName);
 						}
-						
+
 					}
 				}
-				
+
 				//var buildAtt = "<h3>" + adresas + "<br></h3>" + "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml;
-				
+
 				//console.log(typeof(attachmentsHtml));
 				var buildAtt = "<h3>" + adresas + "<br></h3>" + (attachmentsHtml === '' ? "<p>Priežiūros aktų nėra</p>" : "<p>Atsisiųskite priežiūros aktus: </p>" + attachmentsHtml);
-				
-				dom.byId("build-inner-att").innerHTML = buildAtt;				
+
+				dom.byId("build-inner-att").innerHTML = buildAtt;
 			}
 			//EDN Get attachments 
 
 			var buildDocs = "<h3>" + adresas + "<br></h3>";
 
 			dom.byId("build-inner-d").innerHTML = buildDocs;
-			
+
 
 			var buildHelp = "<h3>" + adresas + "<br></h3>" + "<p>Turite pasiūlymų ar pastabų? Matote klaidų?</p> <p>Susisiekite el. paštu: <a href='mailto:pastatai@vilnius.lt'>pastatai@vilnius.lt</a></p><p>Norėdami pateikti duomenys apie konkretų pastatą, kviečiame užpildyti <a href='http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/lentele.xlsx'>duomenų suvedimo lentelę</a> ir persiųsti aukščiau nurodytu el. pašto adresu.</p><p>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'>bendrijų steigimą</a></p>";
 
@@ -3086,38 +3046,38 @@ require([
 				});
 			}, 1000);
 		}
-		
+
 		//show tooltip for building theme
-		var tooltip;	
-		
+		var tooltip;
+
 		on(featureBuildings, "mouse-move", function (evt) {
 			//destroy widget on every move
-			if (typeof(tooltip) != "undefined") {
+			if (typeof (tooltip) != "undefined") {
 				tooltip.destroy();
 			}
-			
+
 			tooltip = new TooltipDialog({
 				id: 'myTooltipDialog',
 				style: "width: 160px;",
 				content: "<p>Pažymėkite pastatą</p>",
 				onMouseEnter: function () {
-						dijitPopup.close(tooltip);
+					dijitPopup.close(tooltip);
 				}
 			});
 
-				tooltip.startup();
-				dijitPopup.open({
-					popup: tooltip,
-					padding: {
-						x: 10, 
-						y: 10
-					},
-					x: evt.pageX, //AG add padding for mouse hovering and click events
-					y: evt.pageY
-				});
+			tooltip.startup();
+			dijitPopup.open({
+				popup: tooltip,
+				padding: {
+					x: 10,
+					y: 10
+				},
+				x: evt.pageX, //AG add padding for mouse hovering and click events
+				y: evt.pageY
+			});
 		});
 		on(featureBuildings, "mouse-out", function () {
 			tooltip.destroy();
-		});	
+		});
 	});
 };
