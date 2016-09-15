@@ -173,7 +173,7 @@
 			</div>
 			<div id="building-help" class="animate">
 				<a href="#help-gallery">
-					<p>Pagalba</p>
+					<p>Valdymo instrukcija</p>
 				</a>
 			</div>
 			<div id="help-gallery" class="animate">

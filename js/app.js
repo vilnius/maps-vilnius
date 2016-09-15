@@ -8,7 +8,7 @@ var MAPCONFIG = {
 			imgAlt: "Pastatai ir statyba", // image alt attribute
 			layers: {
 				administravimas: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Demo/MapServer",
 					featureLayerUrls: [
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/1"
@@ -30,8 +30,7 @@ var MAPCONFIG = {
 			imgAlt: "Teritorijų planavimas", // image alt attribute
 			layers: {
 				bpPasiulymai: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						//"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
 				}
 			}
@@ -43,7 +42,7 @@ var MAPCONFIG = {
 			imgAlt: "Miesto tvarkymas", // image alt attribute
 			layers: {
 				grindaTvarkomosTeritorijos: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Grinda_miesto_tvarkymo_darbai/MapServer"
 				}
 			}
@@ -55,6 +54,19 @@ var MAPCONFIG = {
 			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
 			imgAlt: "Senoji versija", // image alt attribute
 			url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
+		},		
+		schools: {
+			custom: true,
+			name: "Švietimas", //theme name
+			id: "schools", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/svietimas.png", //image URL
+			imgAlt: "Švietimas", // image alt attribute
+			layers: {
+				mokyklos: { // layer unique name // 
+					dynimacLayerUrls:  //  dynamicService URL, only 1 url per uniquer Layer
+						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer"
+				}
+			}
 		}
 	},
     mapExtent: {
@@ -555,7 +567,7 @@ require([
 			//layers in reverse order to indetify depending on inputs and legend order
 			//var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
 			identifyPerameters = this.getParameters(layerInfo);			
-			map.on("click", this.executeIdentify); //TODO remove global map
+			map.on("click", this.executeIdentify);
 		},
 		//identify after checkbox update
 		updatedIdentify: function(layerInfo) {

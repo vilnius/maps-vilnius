@@ -474,7 +474,7 @@ require([
 			//layers in reverse order to indetify depending on inputs and legend order
 			//var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
 			identifyPerameters = this.getParameters(layerInfo);			
-			map.on("click", this.executeIdentify); //TODO remove global map
+			map.on("click", this.executeIdentify);
 		},
 		//identify after checkbox update
 		updatedIdentify: function(layerInfo) {
