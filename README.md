@@ -6,8 +6,8 @@ VCMA interactive maps based on ArcGis API
 ## Configuration file
 Add default funcionality themes with Dynamic layers based on ArcMaps *.mxd project and REST services to and existing configuration.js file
 
-## Example
 
+## Example
 ``` HTML
 // Create new theme with defaul Dynamic layer funcionality
 
