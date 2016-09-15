@@ -24,7 +24,7 @@ themes: {
 				dynimacLayerUrls: "http://zemelapiai.vplanas.lt/arcgis/rest/services/administration/MapServer"
 			},
 			heating: { // 2nd layer unique name
-				// dynamicService URL, only 1 url per unique Layer
+				// dynamicService URL, only 1 url per unique Layer 
 				dynimacLayerUrls: "http://zemelapiai.vplanas.lt/arcgis/rest/services/heating/MapServer"
 			}
 		}
