@@ -6,15 +6,15 @@ VCMA interactive maps based on ArcGis API
 ## Configuration file
 Add default funcionality themes with Dynamic layers based on ArcMaps *.mxd project and REST services to and existing configuration.js file
 
-## Example
 
+## Example
 ``` HTML
 // Create new theme with defaul Dynamic layer funcionality
 
 themes: {
 	buildingsTheme: { //add new unique theme
 		custom: false; //default  value false
-		name: "Pastatai ir statyba", //theme's name
+		name: "Pastatai ir statyba", //theme name
 		id: "theme-buildings", //theme id class and theme URL query name
 		imgUrl: "/maps_vilnius/img/statyba.png", //image URL
 		imgAlt: "Pastatai ir statyba", // image alt attribute
@@ -23,8 +23,8 @@ themes: {
 				// dynamicService URL, only 1 url per unique Layer
 				dynimacLayerUrls: "http://zemelapiai.vplanas.lt/arcgis/rest/services/administration/MapServer"
 			},
-			heating: { // 2nd layer unique name
-				// dynamicService URL, only 1 url per unique Layer 
+			heating: { // 2nd layer unique name adn etc.
+				// dynamicService URL, only 1 url per unique Layer
 				dynimacLayerUrls: "http://zemelapiai.vplanas.lt/arcgis/rest/services/heating/MapServer"
 			}
 		}
