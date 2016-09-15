@@ -8,7 +8,7 @@ var MAPCONFIG = {
 			imgAlt: "Pastatai ir statyba", // image alt attribute
 			layers: {
 				administravimas: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Demo/MapServer",
 					featureLayerUrls: [
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/1"
@@ -30,8 +30,7 @@ var MAPCONFIG = {
 			imgAlt: "Teritorijų planavimas", // image alt attribute
 			layers: {
 				bpPasiulymai: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						//"http://zemelapiai.vplanas.lt/arcgis/rest/services/BP/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
+					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/BP_gyv_siulymai_interaktyviam_VMS_vaizdavimas/MapServer"
 				}
 			}
@@ -43,7 +42,7 @@ var MAPCONFIG = {
 			imgAlt: "Miesto tvarkymas", // image alt attribute
 			layers: {
 				grindaTvarkomosTeritorijos: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Grinda_miesto_tvarkymo_darbai/MapServer"
 				}
 			}
@@ -64,64 +63,8 @@ var MAPCONFIG = {
 			imgAlt: "Švietimas", // image alt attribute
 			layers: {
 				mokyklos: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
+					dynimacLayerUrls:  //  dynamicService URL, only 1 url per uniquer Layer
 						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer"
-				}
-			}
-		},
-		transport: {
-			name: "Transportas", //theme name
-			id: "transport", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/transportas.png", //image URL
-			imgAlt: "Transportas", // image alt attribute
-			layers: {
-/*				transportLayer: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://www.sviesoforai.lt/arcgis/rest/services/Vilnius_sde_dynamic/MapServer"
-				},*/
-				dviraciuTrasos: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Aplinkosauga/dviraciai_sisp_dynamic/MapServer"
-				},
-				gatviuTvarkymas: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://195.182.69.66/ArcGIS/rest/services/Interaktyviam_zemelapiui/Grinda_gatviu_tvarkymas2/MapServer"
-				}
-			}
-		},
-		demo: {
-			name: "Demo versija", //theme name
-			id: "demo", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
-			imgAlt: "demo versija", // image alt attribute
-			layers: {
-				demoLayer: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Demo/MapServer"
-				},
-				badministravimas: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer"
-				},
-/*				tesd: { // layer unique name
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Vietines_rinkliavos_zonos/MapServer"
-				},*/
-				bp: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
-				}
-			}
-		},
-		bpDemo: {
-			name: "BP demo", //theme name
-			id: "bp", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/laisvalaikis.png ", //image URL
-			imgAlt: "bp demo versija", // image alt attribute
-			layers: {
-				bp: { // layer unique name // 
-					dynimacLayerUrls:  // static dynamicServices URLs, only 1 url per uniquer Layer
-						"http://zemelapiai.vplanas.lt/arcgis/rest/services/Teritorijos/VBP_LGII/MapServer"
 				}
 			}
 		}
