@@ -6,24 +6,20 @@
 	<meta charset="utf-8">
 	<!--<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">-->
 	<meta name="viewport" content="width=1028, initial-scale=1">
-	<!--2014: Render IE-version as IE9-->
-	<meta http-equiv='X-UA-Compatible' content='IE=EmulateIE9'>
+	<!--2014: Render IE-version as IE10-->
+	<meta http-equiv='X-UA-Compatible' content='IE=EmulateIE10'>
 	<meta name="robots" content="noindex,nofollow">
 	<link rel="shortcut icon" type="image/ico" href="/maps_vilnius/img/favicon.ico">
-	<link rel="stylesheet" href="http://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
-	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900,600italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="http://js.arcgis.com/3.17/esri/css/esri.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
 	<link rel="stylesheet" href="/maps_vilnius/css/page.css">
 	<link rel="stylesheet" href="/maps_vilnius/webfont/stylesheet.css">
 	<link rel="stylesheet" href="/maps_vilnius/css/font-awesome.min.css">
 	<!-- Photoswipe -->
 	<link rel="stylesheet" href="/maps_vilnius/css/photoswipe.css">
-	<link rel="stylesheet" href="/maps_vilnius/css/default-skin/default-skin.css">	
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/plugins/CSSPlugin.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/easing/EasePack.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenLite.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TimelineMax.min.js"></script>
-	
+	<link rel="stylesheet" href="/maps_vilnius/css/default-skin/default-skin.css">
+	<link rel="stylesheet" href="/maps_vilnius/css/outdatedbrowser.css">
+	<script src="/maps_vilnius/js/outdatedbrowser.min.js"></script>
 	<script src="/maps_vilnius/js/Blob.js"></script>
 	<script src="/maps_vilnius/js/FileSaver.min.js"></script>
 	<script src="../maps_vilnius/js/Chart.js"></script>
@@ -41,13 +37,24 @@
 	<script src="https://js.arcgis.com/3.17/"></script>
 	<script src="/maps_vilnius/js/permits.js"></script>
 	<script src="/maps_vilnius/js/buildings.js"></script>
+	<script src="/maps_vilnius/js/energetics.js"></script>
 	<script src="/maps_vilnius/js/schools.js"></script>
 	<script src="/maps_vilnius/js/configuration.js"></script>
 	<script src="/maps_vilnius/js/main.js"></script>
 </head>
 
 <body class="claro">
-	<img id="loading-gif" src="img/vilnius_load.gif" alt="Luktelkite" />
+	<div id="outdated"></div>
+<!--	<img id="loading-gif" src="img/vilnius_load.gif" alt="Luktelkite" />-->
+	<div id="loading-gif">
+		<div class="showbox">
+		  <div class="loader">
+			<svg class="circular" viewBox="25 25 50 50">
+			  <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+			</svg>
+		  </div>
+		</div>
+	</div>
 
 	<div id="mainWindow" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:false" style="width:100%; height:100%;">
 
@@ -173,7 +180,7 @@
 			</div>
 			<div id="building-help" class="animate">
 				<a href="#help-gallery">
-					<p>Valdymo instrukcija</p>
+					<p title="Valdymo instrukcija">Instrukcija</p>
 				</a>
 			</div>
 			<div id="help-gallery" class="animate">
@@ -287,6 +294,31 @@
 		ga('create', 'UA-73336418-1', 'auto');
 		ga('send', 'pageview');
 	</script>
+	<script type="text/javascript">
+		//event listener: DOM ready
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function() {
+					if (oldonload) {
+						oldonload();
+					}
+					func();
+				}
+			}
+		}
+		//call plugin function after DOM ready
+		addLoadEvent(function(){
+			outdatedBrowser({
+				bgColor: '#f25648',
+				color: '#ffffff',
+				lowerThan: 'transform',
+				languagePath: '/maps_vilnius/lang/lt.html'
+			})
+		});	
+	</script>	
 </body>
 
 </html>

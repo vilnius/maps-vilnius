@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 		  separator: ';',
 		},
 		dist: {
-		  src: ['js/configuration.js', 'js/main.js', 'js/permits.js', 'js/buildings.js'], //, 'js/clusterfeaturelayer.js', 'js/Chart.js'
+		  src: ['js/configuration.js', 'js/main.js', 'js/permits.js', 'js/buildings.js', 'js/schools.js'], //, 'js/clusterfeaturelayer.js', 'js/Chart.js'
 		  dest: 'js/app.js',
 		}
     },

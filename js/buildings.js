@@ -1,5 +1,5 @@
 var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuildingsUrl, showCursor) {
-
+	
 	require([
 		"dijit/TooltipDialog",
 		"dijit/popup",
@@ -212,7 +212,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			setQuery: function (currentSelect, valdName) {
 				var promise = new Deferred(),
 					graphQuery = new Query(),
-					graphQueryTask = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/4"),
+					graphQueryTask = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/4"),
 					self = this;
 				graphQuery.where = "1=1";
 				graphQuery.returnGeometry = false;
@@ -370,15 +370,16 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				var ctb = document.getElementById("myBarChart").getContext("2d");
 				window.myBar = new Chart(ctb).Bar(data, options);
 				//myBar.width.ratio = 0.1;
-				var myBarLegend = myBar.datasets[0].fillColor.getUnique();
-				var myBarLengendStr;
+				var myBarLegend = myBar.datasets[0].fillColor;
+				var uniqueLegend = myBarLegend.getUnique();
+				var myBarLengendStr = "";
 				for (var i = 0; i < myBarLegend.length; i += 1) {
-					if (myBarLegend[i] === this.admColor)
-						myBarLengendStr = "<p><span style='background-color:" + myBarLegend[i] + " '></span>Administratoriai</p>";
-					if (myBarLegend[i] === this.bendrijosColor)
-						myBarLengendStr += "<p><span style='background-color:" + myBarLegend[i] + " '></span>Bendrijos</p>";
-					if (myBarLegend[i] === this.jvsColor)
-						myBarLengendStr += "<p><span style='background-color:" + myBarLegend[i] + " '></span>JVS</p>";
+					if (uniqueLegend[i] === this.admColor)
+						myBarLengendStr += "<p><span style='background-color:" + uniqueLegend[i] + " '></span>Administratoriai</p>";
+					if (uniqueLegend[i] === this.bendrijosColor)
+						myBarLengendStr += "<p><span style='background-color:" + uniqueLegend[i] + " '></span>Bendrijos</p>";
+					if (uniqueLegend[i] === this.jvsColor)
+						myBarLengendStr += "<p><span style='background-color:" + uniqueLegend[i] + " '></span>JVS</p>";
 				}
 				dom.byId("bar-legend").innerHTML = "<div id='chart-legend'><div class='line-legend'>" + myBarLengendStr + "</div></div>";
 
@@ -391,7 +392,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 		//NEW 2015 11
 		//QueryTask: namo bendrieji tarifai
-		var buildingAdministrationTask = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/1");
+		var buildingAdministrationTask = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1");
 		var buildingAdministration = new Query();
 		buildingAdministration.outSpatialReference = {
 			wkid: 3346
@@ -403,11 +404,11 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		var queryHeating = new Query();
 		var queryTaskHeating;
 		setTimeout(function () {
-			queryTaskHeating = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/2");
+			queryTaskHeating = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/2");
 		}, 150);
 
 
-		// selection symbol used to draw the selected census block points within the buffer polygon
+		// selection symbol used to draw the selected census block points within polygon
 		var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0]));
 
 		featureBuildings.setSelectionSymbol(symbol);
@@ -462,8 +463,15 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				myLineHeating.destroy();
 			}
 
-			var einMetai, galiojMetai, adresas, administr, statM, statPask, nrPlane, bendrPlotas, patalpugsk, naudPlotas, patalpunks,
-				valdForm, valdFormString, bnovAdr, bnovPask, bnovVadov, bnovTel, bnovVadyb, bnovVadybTel, bnovElP, bnovKodas, skundSk, skundPob,
+			var einMetai, galiojMetai, adresas, 
+				administr, administrLast, admChangeYear, statM, statPask, nrPlane, bendrPlotas, patalpugsk, naudPlotas, patalpunks,
+				valdForm, valdFormString, bnovAdr, bnovPask, bnovPaskMsg,
+				bnovVadov, bnovTel, bnovVadyb, bnovVadybTel,
+				bnovVadov1, bnovTel1, bnovVadyb1, bnovVadybTel1, bnovElP1,
+				bnovVadov2, bnovTel2, bnovVadyb2, bnovVadybTel2, bnovElP2,
+				bnovVadov3, bnovTel3, bnovVadyb3, bnovVadybTel3, bnovElP3,
+				bnovVadov4, bnovTel4, bnovVadyb4, bnovVadybTel4, bnovElP4, vadovVisi,
+				bnovKodas, skundSk, skundPob,
 				energE, renov, renovApr,
 				atliekMax, atliekMid, atliekMin,
 				liftImok, ltptMax, ltptMid, ltptMin,
@@ -513,15 +521,41 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			ntrunStr = ntrun.toString().substr(0, 4) + "-" + ntrun.toString().substr(4, 4) + "-" + ntrun.toString().substr(8);
 			//Valdytojai BNOV
 			administr = dataPath.ADMINISTR; //valdytojas
+			administrLast = dataPath.ADMINISTR_BUV || "Nėra duomenų"; //senas valdytojas 
+			admChangeYear = dataPath.ADMINISTR_BUV_DAT; //valdytojo pasikeitimo metai
+			//check if admChangeYear is undefined
+			if ((typeof admChangeYear === "undefined")) {
+				admChangeYear = "Nėra duomenų";
+			}
 			valdForm = dataPath.VALDFORM; //valdymo forma
 			valdFormString = valdFormFunc();
 			bnovAdr = dataPath.A_ADRES; //bnov adresas
 			bnovPask = dataPath.A_PASKPAGR; //vmsa įsakymas
+			//msg
+			bnovPaskMsg = ((valdForm == 1 ? "<p>" + bnovPask + "<br><span><span class='bnov'>Vilniaus miesto savivaldybės administracijos įsakymas</span></span></p>" : "") + 
+				(valdForm == 2 ? "<p>" + bnovPask + "<br><span><span class='bnov'>BNOV  registravimo data  JAR‘e (Juridinių asmenų registras)</span></span></p>" : "") +
+				(valdForm == 3 ? "<p>" + bnovPask + "<br><span><span class='bnov'>BNOV  registravimo data NTR‘e (Nekilnojamo turto registras)</span></span></p>" : "") );
 			bnovVadov = dataPath.A_VADOVAS;
 			bnovTel = dataPath.A_VADTEL;
+			bnovVadov1 = dataPath.A_VADOVAS1;
+			bnovTel1 = dataPath.A_VADTEL1;
+			bnovElP1 = dataPath.A_ELPAST1;
+			bnovVadov2 = dataPath.A_VADOVAS2;
+			bnovTel2 = dataPath.A_VADTEL2;
+			bnovElP2 = dataPath.A_ELPAST2;
+			bnovVadov3 = dataPath.A_VADOVAS3;
+			bnovTel3 = dataPath.A_VADTEL3;
+			bnovElP3 = dataPath.A_ELPAST3;
+			bnovVadov4 = dataPath.A_VADOVAS4;
+			bnovTel4 = dataPath.A_VADTEL4;
+			bnovElP4 = dataPath.A_ELPAST4;
 			bnovVadyb = dataPath.NPVADYB;
 			bnovVadybTel = dataPath.A_VADYBTEL;
 			bnovElP = dataPath.A_ELPAST;
+			vadovVisi = (bnovVadov1 == "Nėra duomenų" ? "" : "<p>" + bnovVadov1 + "<br><span><span class='bnov'>BNOV</span> vadovas</span></p><p>" + bnovTel1 + "<br><span><span class='bnov'>BNOV</span> vadovo telefonas</span></p>" + (bnovElP1 == "Nėra duomenų" ? "" : "<p>" + bnovElP1 + "<br><span><span class='bnov'>BNOV</span> vadovo el. paštas</span></p>")) + 
+				(bnovVadov2 == "Nėra duomenų" ? "" : "<p>" + bnovVadov2 + "<br><span><span class='bnov'>BNOV</span> vadovas</span></p><p>" + bnovTel2 + "<br><span><span class='bnov'>BNOV</span> vadovo telefonas</span></p>" + (bnovElP2 == "Nėra duomenų" ? "" : "<p>" + bnovElP2 + "<br><span><span class='bnov'>BNOV</span> vadovo el. paštas</span></p>")) +
+				(bnovVadov3 == "Nėra duomenų" ? "" : "<p>" + bnovVadov3 + "<br><span><span class='bnov'>BNOV</span> vadovas</span></p><p>" + bnovTel3 + "<br><span><span class='bnov'>BNOV</span> vadovo telefonas</span></p>" + (bnovElP3 == "Nėra duomenų" ? "" : "<p>" + bnovElP3 + "<br><span><span class='bnov'>BNOV</span> vadovo el. paštas</span></p>")) +
+				(bnovVadov4 == "Nėra duomenų" ? "" : "<p>" + bnovVadov4 + "<br><span><span class='bnov'>BNOV</span> vadovas</span></p><p>" + bnovTel4 + "<br><span><span class='bnov'>BNOV</span> vadovo telefonas</span></p>"  + (bnovElP4 == "Nėra duomenų" ? "" : "<p>" + bnovElP4 + "<br><span><span class='bnov'>BNOV</span> vadovo el. paštas</span></p>"));
 			bnovKodas = dataPath.A_KODAS;
 			skundSk = dataPath.SKUNDUSK == "Nėra duomenų" ? "Nėra duomenų" : dataPath.SKUNDUSK + " vnt.";
 			skundPob = dataPath.SKUNDPOB;
@@ -600,7 +634,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 			dom.byId("build-inner-i").innerHTML = buildInfo;
 
-			var buildManager = "<h3>" + adresas + "<br></h3>" + "<p>" + valdFormString + " <br><span>Valdymo forma</span></p>" + "<p>" + administr + " <br><span>administratorius</span></p>" + "<p>" + galiojMetai + " <br><span>administratoriaus paskyrimo terminas</span></p>" + "<p>" + bnovAdr + "<br><span><span class='bnov'>BNOV (Bendrojo naudojimo objektų valdytojas)</span> adresas</span></p>" + "<p>" + bnovPask + "<br><span> Vilniaus miesto savivaldybės administracijos įsakymas</span></p>" + "<p>" + bnovVadov + "<br><span><span class='bnov'>BNOV</span> vadovas</span></p>" + "<p>" + bnovTel + "<br><span><span class='bnov'>BNOV</span> vadovo telefonas</span></p>" + "<p>" + bnovVadyb + "<br><span>Namo priežiūros vadybininkas:</span></p>" + "<p style='display:none;'>" + bnovVadybTel + "<br><span>Namo priežiūros vadybininko telefonas</span></p>" + "<p>" + skundSk + "<br><span><span class='bnov'>BNOV</span> gaunamų skundų skaičius</span></p>" + "<p>" + skundPob + "<br><span><span class='bnov'>BNOV</span> gaunamų skundų pobūdis</span></p>" + "<p>" + bnovKodas + " <br><span><span class='bnov'>BNOV</span> kodas</span></p>" + "<p><a href='mailto:" + bnovElP + "' class='email'>" + bnovElP + "</a><br><span><span class='bnov'>BNOV</span> el. paštas</span></p>" + "<p class='info-highlight'><i class='fa fa-exclamation' style='color: #C1272D;'></i>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' class='email' target='_blank'>bendrijų steigimą</a></p>";
+			var buildManager = "<h3>" + adresas + "<br></h3>" + "<p>" + valdFormString + " <br><span>Valdymo forma</span></p>" + "<p>" + administr + " <br><span>" + (valdFormString == "JVS" ? "Jungtinės veiklos sutartimi valdomas namas" : "<span class='bnov'>BNOV administratorius</span>") + "<br><span class='bnov'>BNOV (Bendrojo naudojimo objektų valdytojas)</span></span></p>" + "<p>" + galiojMetai + " <br><span>administratoriaus paskyrimo terminas</span></p>" + "<p>" + bnovAdr + "<br><span><span class='bnov'>BNOV</span> adresas</span></p>" + bnovPaskMsg + "<p>" + bnovVadov + "<br><span><span class='bnov'>BNOV</span> vadovas</span></p>" + "<p>" + bnovTel + "<br><span><span class='bnov'>BNOV</span> vadovo telefonas</span></p>" + vadovVisi + "<p>" + bnovVadyb + "<br><span>Namo priežiūros vadybininkas:</span></p>" + "<p style='display:none;'>" + bnovVadybTel + "<br><span>Namo priežiūros vadybininko telefonas</span></p>" + "<p>" + skundSk + "<br><span><span class='bnov'>BNOV</span> gaunamų skundų skaičius</span></p>" + "<p>" + skundPob + "<br><span><span class='bnov'>BNOV</span> gaunamų skundų pobūdis</span></p>" + "<p>" + bnovKodas + " <br><span><span class='bnov'>BNOV</span> kodas</span></p>" + "<p><a href='mailto:" + bnovElP + "' class='email'>" + bnovElP + "</a><br><span><span class='bnov'>BNOV</span> el. paštas</span></p>" + "<span><p class='info-highlight'><i class='fa fa-exclamation' style='color: #C1272D;'></i>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' class='email' target='_blank'>bendrijų steigimą</a></p></span>";
 
 			dom.byId("build-inner-mng").innerHTML = buildManager;
 
@@ -662,6 +696,16 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			}
 
 			function compareAdm() {
+				//create close button on Map immediately
+				var div =  document.createElement('div');				
+				var p = document.createElement('p');
+				var mapDom = dom.byId("map");
+				div.setAttribute('id', 'stats-close-button');
+				div.setAttribute('class', 'animate');
+				div.appendChild(p).innerHTML = "Baigti palyginimą"
+				mapDom.appendChild(div);
+				domClass.add("map", "start-compare-hide");
+				
 				//hide graphic if exists
 				//TEMP hide chart
 				//if (typeof myBar != "undefined") {
@@ -684,41 +728,6 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 				tooltipCompare = compareTooltip(); //asign tooltip to tooltipCompare var
 
-				//get back from comparign block to main block and remove compared layer
-				var statsCloseBtn = dom.byId("stats-close");
-				statsCloseBtn.addEventListener("click", function () {
-					statusCompare = false; //set compare status mode true
-
-					//TEMP show bar graphic if exists
-					//if (typeof myBar != "undefined") {
-					domClass.add("myBarChart", "show");
-					domClass.remove("myBarChart", "hide");
-					//}	
-
-					domClass.remove("start-compare", "hide");
-					domClass.add("start-compare", "show");
-
-					domClass.remove("bar-legend", "hide");
-					domClass.add("bar-legend", "show");
-
-					domClass.remove("bar-tips", "hide");
-					domClass.add("bar-tips", "show");
-
-					//add comapre btn, remove exit btn
-					/*							var backCompareDom = "<span class='compare'><p>Norėdami  palyginti du skirtingu pastatus, spūstelkite žemiau esantį mygtuką ir palyginimui žemėlapyje pažymėkite naują pastatą.</p><div id='compare-btn' class='bt'><a class='button'><i class='fa fa-angle-left' aria-hidden='true'></i> Pasirinkite sekantį pastatą palyginimui</a></div></span><div id='build-inner-stat-table'></div>"; 
-												dom.byId("compare-btn-block").innerHTML = backCompareDom; */
-
-
-					//domConstruct.destroy("tooltip-span"); // AG destroy tooltip
-					window.location.hash = '#build-data'; //AG get back
-
-					map.removeLayer(layerBuildignsCompare);
-					layerBuildignsCompare = {}; //AG BUG fix, beacause removeLayer doesn't completely remove layer from map (layer is still accesible with getLayer(layerid) method)
-
-					dom.byId("build-inner-stat-table").innerHTML = ""; //when closing block remove compare table
-					featureBuildings.enableMouseEvents(); //enable first buildings featureLayer mouse events
-				}, false);
-
 				//disable firts buildings featureLayer mouse events
 				featureBuildings.disableMouseEvents();
 				//alert("S"); 
@@ -739,10 +748,26 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				layerBuildignsCompare.setRenderer(new SimpleRenderer(symbolBuild));
 
 				map.addLayer(layerBuildignsCompare);
+				
+				//get back from comparign block to main block and remove compared layer
+				var statsCloseBtn = dom.byId("stats-close");
+				var statsCloseBtnOnMap = dom.byId("stats-close-button");
+				statsCloseBtn.addEventListener("click", function () {
+					statusCompare = false; //set compare status mode true				
+					//close compare functionality and remove compared feature layers
+					closeCompareAdm(featureBuildings, layerBuildignsCompare);
+
+				}, false);				
+				statsCloseBtnOnMap.addEventListener("click", function () {
+					statusCompare = false; //set compare status mode true					
+					//close compare functionality and remove compared feature layers
+					closeCompareAdm(featureBuildings, layerBuildignsCompare);
+
+				}, false);				
 
 
 				//QueryTask for comparing: namo bendrieji tarifai
-				var buildingAdministrationTaskCompare = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/1");
+				var buildingAdministrationTaskCompare = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1");
 				var buildingAdministrationCompare = new Query();
 				buildingAdministrationCompare.outSpatialReference = {
 					wkid: 3346
@@ -795,7 +820,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					var adresasC, administrC, bendrPlotasC,
 						atliekMaxC, ntptMaxC,
 						nsptMaxC,
-						ntrunC;
+						ntrunC, admC;
 
 					//Bendroji informacija
 					ntrunC = dataPath.NTRUNKNR; //unikalus id 
@@ -814,7 +839,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					totalLastYear = typeof totalLastYear === "undefined" ? totalLastYear = "Nėra duomenų" : totalLastYear;
 
 					var process = setQuery(ntrunC); //set Query for compared building
-
+					//console.log(ntrunC);
 					process.then(function (t) {
 						var buildCompareAdministrators =
 							"<div id='build-inner-stat-adm' class='section group animate'> <div class='colu span_1_of_3'><p ></p></div>" +
@@ -857,6 +882,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 							"</p></div>";
 
 						//console.log("PR:");
+						console.log(buildCompareAdministrators);
 						//console.log(t);
 
 						dom.byId("build-inner-stat-table").innerHTML = buildCompareAdministrators;
@@ -864,6 +890,48 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					});
 				}
 			}
+			
+			//close buildings compare funcionality and remove compared feature layers
+			function closeCompareAdm(featureBuildings, layerBuildignsCompare) {
+				//destroy comapare button on map
+				domConstruct.destroy("stats-close-button");
+				
+				domClass.remove("map", "start-compare-hide");
+				
+				//TEMP show bar graphic if exists
+				//if (typeof myBar != "undefined") {
+				domClass.add("myBarChart", "show");
+				domClass.remove("myBarChart", "hide");
+				//}	
+
+				domClass.remove("start-compare", "hide");
+				domClass.add("start-compare", "show");
+
+				domClass.remove("bar-legend", "hide");
+				domClass.add("bar-legend", "show");
+
+				domClass.remove("bar-tips", "hide");
+				domClass.add("bar-tips", "show");
+
+				//domConstruct.destroy("tooltip-span"); // AG destroy tooltip
+				window.location.hash = '#build-statistics'; //AG get back
+
+				//map.removeLayer(layerBuildignsCompare);
+				//layerBuildignsCompare = {}; //AG BUG fix, beacause removeLayer doesn't completely remove layer from map (layer is still accesible with getLayer(layerid) method)
+
+				dom.byId("build-inner-stat-table").innerHTML = ""; //when closing block remove compare table
+				featureBuildings.enableMouseEvents(); //enable first buildings featureLayer mouse events
+				
+				//console.log(map);
+				
+				//remove layer
+				var tempBuildCompareLayer = map.getLayer("buildings-compare");
+				if (tempBuildCompareLayer) {
+					map.removeLayer(tempBuildCompareLayer);
+					tempBuildCompareLayer = {};
+				}							
+			}
+			
 			var compareBtn = dom.byId("compare-btn");
 			compareBtn.addEventListener("click", compareAdm, false);
 
@@ -873,9 +941,9 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			//checking valid url for documents
 			//AG TODO sukurti dokumentu einamuju metu atributo irasa, kiekviena kart ikeliant dokumentus i serveri
 			var urlStack = {
-				ilgalaikisPlanas: "http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/IP_" + ntrun + ".pdf",
-				ukinisPlanas: "http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/P_" + ntrun + ".pdf",
-				metineVeiklosAtaskaita: "http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/AT_" + ntrun + ".pdf"
+				ilgalaikisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/IP_" + ntrun + ".pdf",
+				ukinisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/P_" + ntrun + ".pdf",
+				metineVeiklosAtaskaita: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/AT_" + ntrun + ".pdf"
 			};
 
 			//AG checking for broken docs URL 
@@ -900,7 +968,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 							//console.log("BROKEN URL 404 STATUS + STATUS: " + request.status);
 							//console.log("BROKEN URL 404 STATUS + URL: " + url);
 							StackStatusTemp += 1;
-							console.log(StackStatusTemp);
+							//console.log(StackStatusTemp);
 							//invoke docNameCheckOnError
 							docNameCheckOnError(docName, url);
 							return false;
@@ -970,7 +1038,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			//Get attachments
 			window.attachmentsObj = {}; //store attachments functions to save files with file.js // TOTO eliminate global object
 			var attachmentsHtml = "";
-			var attachmentTask = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/Pastatu_administravimas_test/MapServer/5");
+			var attachmentTask = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/5");
 			var attachmentQuery = new Query();
 			attachmentQuery.outSpatialReference = {
 				wkid: 3346
@@ -1032,13 +1100,72 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			dom.byId("build-inner-d").innerHTML = buildDocs;
 
 
-			var buildHelp = "<h3>" + adresas + "<br></h3>" + "<p>Turite pasiūlymų ar pastabų? Matote klaidų?</p> <p>Susisiekite el. paštu: <a href='mailto:pastatai@vilnius.lt'>pastatai@vilnius.lt</a></p><p>Norėdami pateikti duomenys apie konkretų pastatą, kviečiame užpildyti <a href='http://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/lentele.xlsx'>duomenų suvedimo lentelę</a> ir persiųsti aukščiau nurodytu el. pašto adresu.</p><p>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'>bendrijų steigimą</a></p>";
+			var buildHelp = "<h3>" + adresas + "<br></h3>" + "<p>Turite pasiūlymų ar pastabų? Matote klaidų?</p> <p>Susisiekite el. paštu: <a href='mailto:pastatai@vilnius.lt'>pastatai@vilnius.lt</a></p><p>Norėdami pateikti duomenys apie konkretų pastatą, kviečiame užpildyti <a href='https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/lentele.xlsx'>duomenų suvedimo lentelę</a> ir persiųsti aukščiau nurodytu el. pašto adresu.</p><p>Informacija apie <a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'>bendrijų steigimą</a></p>";
 
 			dom.byId("build-inner-h").innerHTML = buildHelp;
 
 			var buildImpInfo = "<h3>" + adresas + "<br></h3>" + "<p><a href='http://www.vilnius.lt/index.php?4265980094' target='_blank'> Bendrijų steigimas </a></p><p><a href='http://www.vilnius.lt/index.php?1568645331' target='_blank'>Jungtinės veiklos sutarties sudarymas</a></p><p><a href='http://www.vilnius.lt/index.php?4278773191' target='_blank'>Administratoriaus keitimas</a></p>";
 
 			dom.byId("build-inner-imp-i").innerHTML = buildImpInfo;
+			
+			
+			//calculate chart datasets data, add data if only one attribtue exists
+			function caclculateDatasets() {
+				var dataset = [];
+				if ((atliekTarifai.reduce(function(a, b){ return a + b })) > 0) {
+					var dataObj = {
+						label: "Atliekų tarifai",
+						fillColor: "rgba(84,59,13, 0.4)",
+						strokeColor: "rgba(212,203,188,1)",
+						pointColor: "rgba(212,203,188,1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(212,203,188,1)",
+						data: atliekTarifai
+					};
+					dataset.push(dataObj)
+				}
+				if ((liftuPriezTarifai.reduce(function(a, b){ return a + b })) > 0) {
+					var dataObj = {
+						label: "Lifto techninės priežiūros tarifai Eur/m²",
+						fillColor: "rgba(151, 187, 205, 1)",
+						strokeColor: "rgba(151, 187, 205, 1)",
+						pointColor: "rgba(151, 187, 205, 1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(151,187,205,1)",
+						data: liftuPriezTarifai
+					};
+					dataset.push(dataObj)
+				}
+				if ((namoPriezTarifai.reduce(function(a, b){ return a + b })) > 0) {
+					var dataObj = {
+						label: "Namo techninės priežiūros tarifai Eur/m²",
+						fillColor: "rgba(154, 195, 146, 1)",
+						strokeColor: "rgba(154, 195, 146, 1)",
+						pointColor: "rgba(154, 195, 146, 1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(220, 220, 220, 1)",
+						data: namoPriezTarifai
+					};
+					dataset.push(dataObj)
+				}
+				if ((namoSildPriezTarifai.reduce(function(a, b){ return a + b })) > 0) {
+					var dataObj = {
+						label: "Namo šildymo sistemų priežiūros tarifai Eur/m²",
+						fillColor: "rgba(222, 135, 71, 1)",
+						strokeColor: "rgba(222, 135, 71, 1)",
+						pointColor: "rgba(222, 135, 71, 1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(222, 135, 71, 1)",
+						data: namoSildPriezTarifai
+					};
+					dataset.push(dataObj)
+				}
+				return dataset;
+			}
 
 			//check if tarfofs arrays properties are null / tariffs has nor value
 			function checkTariffs(arr) {
@@ -1061,49 +1188,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				//Charts
 				var lineChartData = {
 					labels: [einMetai - 2 + " metai", einMetai - 1 + " metai", einMetai + " metai"],
-					datasets: [
-						{
-							label: "Atliekų tarifai",
-							fillColor: "rgba(84,59,13,0.2)",
-							strokeColor: "rgba(212,203,188,1)",
-							pointColor: "rgba(212,203,188,1)",
-							pointStrokeColor: "#fff",
-							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(212,203,188,1)",
-							data: atliekTarifai
-								},
-
-						{
-							label: "Lifto techninės priežiūros tarifai Eur/m²",
-							fillColor: "rgba(151, 187, 205, 0.6)",
-							strokeColor: "rgba(151, 187, 205, 1)",
-							pointColor: "rgba(151, 187, 205, 1)",
-							pointStrokeColor: "#fff",
-							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(151,187,205,1)",
-							data: liftuPriezTarifai
-								},
-						{
-							label: "Namo techninės priežiūros tarifai Eur/m²",
-							fillColor: "rgba(154, 195, 146, 0.6)",
-							strokeColor: "rgba(154, 195, 146, 1)",
-							pointColor: "rgba(154, 195, 146, 1)",
-							pointStrokeColor: "#fff",
-							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(220, 220, 220, 1)",
-							data: namoPriezTarifai
-								},
-						{
-							label: "Namo šildymo sistemų priežiūros tarifai Eur/m²",
-							fillColor: "rgba(222, 135, 71, 0.6)",
-							strokeColor: "rgba(222, 135, 71, 1)",
-							pointColor: "rgba(222, 135, 71, 1)",
-							pointStrokeColor: "#fff",
-							pointHighlightFill: "#fff",
-							pointHighlightStroke: "rgba(222, 135, 71, 1)",
-							data: namoSildPriezTarifai
-								}
-							]
+					datasets: caclculateDatasets()
 
 				};
 
@@ -1159,7 +1244,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 					multiTooltipTemplate: "<%= value %> Eur/m² ", //"<%= datasetLabel %> - <%= value %>",
 
 					//String - A legend template
-					legendTemplate: "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i += 1){%><p><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>"
+					legendTemplate: "<div class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i += 1){%><p><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></p><%}%></div>" + ( admChangeYear != "Nėra duomenų" ? "<span><p><strong>" + ((new Date(admChangeYear)).getFullYear()) + " m.</strong> paskirtas naujas administratorius - <strong>" +  administr + "</strong> (buvęs administratorius - " + administrLast + ")</p></span>" : "")
 
 				};
 
@@ -1261,9 +1346,12 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 							heatingGraph.apply(null, priceArray);
 							//alert(priceArray);
 						};
-
+						
 						setTimeout(function () {
-							runHeatGraph(duomenysSilumosGrafikui);
+							//AG check if heating data is defined, otherwise set heatingStatusOn to false and eliminate chart rendering
+							if ((typeof (heatingGraphData.paskutiniaiMetai) != "undefined") & (typeof (heatingGraphData.viduriniaiMetai) != "undefined") & (typeof (heatingGraphData.galiniaiMetai) != "undefined")) {
+								runHeatGraph(duomenysSilumosGrafikui);
+							}
 						}, 50);
 
 						//AG last year total consumption, devided from 7 months
@@ -1274,10 +1362,13 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 								return a + b;
 							}) / 7).toFixed(3);
 						} else {
-							totalLastYear = heatingGraphData.paskutiniaiMetai.reduce(function (a, b) {
-								return a + b;
-							});
-							totalLastYear = (totalLastYear / 7).toFixed(3);
+							if (typeof heatingGraphData.paskutiniaiMetai !== 'undefined') {
+								totalLastYear = heatingGraphData.paskutiniaiMetai.reduce(function (a, b) {
+									return a + b;
+								});
+								totalLastYear = (totalLastYear / 7).toFixed(3);
+							}
+
 						}
 						promise.resolve(totalLastYearCompared);
 					}
@@ -1415,13 +1506,15 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 				selectAdm.on("change", function (newValue) {
 					//AG run query and draw relative graphic, if value  = "none" - destroy graphic
 					if (newValue !== "none") {
-						administratorGraph.setQuery(newValue, administr); //start query and add Chart	
+						administratorGraph.setQuery(newValue, administr); //start query and add Chart							
 						domClass.add("bar-legend", "show");
 						domClass.remove("bar-legend", "hide");
 						domClass.add("bar-tips", "show");
 						domClass.remove("bar-tips", "hide");
 					} else {
 						myBar.destroy();
+						dom.byId("bar-legend").innerHTML = "";
+						dom.byId("bar-tips").innerHTML = "";						
 						domClass.add("bar-legend", "hide");
 						domClass.remove("bar-legend", "show");
 						domClass.add("bar-tips", "hide");

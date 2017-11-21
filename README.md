@@ -1,7 +1,9 @@
 # Vilnius maps
 
-VCMA interactive maps based on ArcGis API
+VCMA interactive maps based on ArcGis API (deprecated)
 [www.maps.vilnius.lt](http://maps.vilnius.lt)
+
+Maps used for old custom themes, to check new default Maps refer to [vilnius-maps-ng repo](https://github.com/vilnius/vilnius-maps-ng)
 
 ## Configuration file
 Add default funcionality themes with Dynamic layers based on ArcMaps *.mxd project and REST services to and existing configuration.js file

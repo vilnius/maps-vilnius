@@ -69,7 +69,7 @@ var permitsTheme = function (map) {
                     "<ul><li>${DATA:DateFormat(selector: 'date', fullYear: true)}<br><span>Leidimo data</span></li>" + "<li>${GALIOJA_IKI:DateFormat(selector: 'date', fullYear: true)}<br><span>Galioja iki</span></li>" + 
                     "<li>${ADRESAS}<br><span>Adresas</span></li>" + "<li>${SENIUNIJA}<br><span>Seniūnija</span></li>" + 
                     "<li>${UZSAKOVAS}<br><span>Užsakovas</span></li>" + "<li>${UZSAKOVO_KODAS}<br><span>Užsakovo kodas</span></li></ul>"  + 
-                    "<p>Dokumentai atsisiųsti:</p><div id='ad-attachment'><p style='text-align: center;'><img src='http://vilniausplanas.lt/maps_vilnius/img/ajax-loader.gif' style=' width: 20px;    text-align: Center;    margin: 0 auto;'></p></div>" + 
+                    "<p>Dokumentai atsisiųsti:</p><div id='default-attachment'><p style='text-align: center;'><img src='./img/ajax-loader.gif' style=' width: 20px;    text-align: Center;    margin: 0 auto;'></p></div>" + 
                     "<p>${SHOWS}<br><span>Reg. nr.</span></p>" +
                     "<p>${REKLAMOS_TIPAS}<br><span>Reklamos Tipas</span></p>" + 
                     "<p>${TURINYS}<br><span>Turinys</span></p>" + 
@@ -93,7 +93,7 @@ var permitsTheme = function (map) {
                     }
                     
 
-                    dom.byId("ad-attachment").innerHTML = adMsgComplete;
+                    dom.byId("default-attachment").innerHTML = adMsgComplete;
                     //map.infoWindow.setContent(adMsg);
                     return a;
                 }
@@ -114,7 +114,7 @@ var permitsTheme = function (map) {
 		
 		            // Add cluster renderer
 		            clusterLayer = new ClusterFeatureLayer({
-		                "url": "http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/0",
+		                "url": "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/0",
 		                "distance": 30,
 		                "id": "clusters",
 		                "labelColor": "#484848",
@@ -223,7 +223,7 @@ var permitsTheme = function (map) {
                     queryAdURL.where = "VLN_REKLAMOS_ID = '" + id + "'";
                     //AG check if querytask service instance number is equal or more then actual entries, in this case service instance > 12K
                     var queryTaskAdURL;
-                    queryTaskAdURL = new QueryTask("http://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/1");
+                    queryTaskAdURL = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/1");
                     
                     promise.resolve({query: queryAdURL, task: queryTaskAdURL});
     
@@ -323,10 +323,10 @@ var permitsTheme = function (map) {
 					var hasClass;
 					
 					//remove classes if exists 
-					if (domClass.contains("ad-popup", "invalid-ad")) {
-						domClass.remove("ad-popup", "invalid-ad");
-					} else if (domClass.contains("ad-popup", "valid-ad")) {
-						domClass.remove("ad-popup", "valid-ad");
+					if (domClass.contains("default-popup", "invalid-ad")) {
+						domClass.remove("default-popup", "invalid-ad");
+					} else if (domClass.contains("default-popup", "valid-ad")) {
+						domClass.remove("default-popup", "valid-ad");
 					}
                     
                     //AG get different symbols with newlys created VALID ID = GALIOJA on popup selection change
@@ -347,13 +347,13 @@ var permitsTheme = function (map) {
                         if ((galiojaKEY === 1) || (galiojaKEY === 3)) {
                             map.infoWindow.setTitle("Galiojantis reklamos registro leidimas " );   //BUG FIX for showing titles               
                             adClusterTemplate.setTitle("Galiojantis reklamos registro leidimas ");   //BUG FIX for showing titles               
-                            hasClass = domClass.contains("ad-popup", "invalid-ad") ? domClass.remove("ad-popup", "invalid-ad") : domClass.add("ad-popup", "valid-ad");
-                            domClass.add("ad-popup", "valid-ad");  
+                            hasClass = domClass.contains("default-popup", "invalid-ad") ? domClass.remove("default-popup", "invalid-ad") : domClass.add("default-popup", "valid-ad");
+                            domClass.add("default-popup", "valid-ad");  
                         } else if (galiojaKEY === 2) {
                             map.infoWindow.setTitle("Negaliojantis reklamos registro leidimas "); //BUG FIX for showing titles
                             adClusterTemplate.setTitle("Negaliojantis reklamos registro leidimas "); //BUG FIX for showing titles
-                            hasClass = domClass.contains("ad-popup", "valid-ad") ? domClass.remove("ad-popup", "valid-ad") : domClass.add("ad-popup", "invalid-ad"); 
-                            domClass.add("ad-popup", "invalid-ad");  
+                            hasClass = domClass.contains("default-popup", "valid-ad") ? domClass.remove("default-popup", "valid-ad") : domClass.add("default-popup", "invalid-ad"); 
+                            domClass.add("default-popup", "invalid-ad");  
                         }             
                    // console.log("features set");
                    // console.log(selected);

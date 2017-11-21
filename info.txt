@@ -1,0 +1,3 @@
+#permanent redirects from - to:
+http://maps.vplanas.lt/aplinka/ - https://maps.vilnius.lt/?theme=env
+https://www.vilnius.lt/vmap/t1.php - https://maps.vilnius.lt

@@ -45,6 +45,28 @@ p {
 	line-height: 34px;
 	letter-spacing: -0.4px;
 }
+p, a, h1, h2, h3, h4, div {
+	/*prevent text select*/
+	
+	-webkit-touch-callout: none;
+	/* iOS Safari */
+	
+	-webkit-user-select: none;
+	/* Chrome/Safari/Opera */
+	
+	-khtml-user-select: none;
+	/* Konqueror */
+	
+	-moz-user-select: none;
+	/* Firefox */
+	
+	-ms-user-select: none;
+	/* Internet Explorer/Edge */
+	
+	user-select: none;
+	/* Non-prefixed version, currently
+    not supported by any browser */
+}
 
 h3,
 h4 {
@@ -68,6 +90,121 @@ a.email:hover {
 	background-color: #efefef;
 	background-color: #555966;
 	overflow: auto;
+}
+.showbox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5%;
+}
+
+.loader {
+  width: 50px;
+}
+.loader:before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
+
+.circular {
+  -webkit-animation: rotate 2s linear infinite;
+          animation: rotate 2s linear infinite;
+  height: 50%;
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+  width: 50%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.show .loader .path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  -webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+          animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+  stroke-linecap: round;
+  stroke-width: 3px;
+}
+
+@-webkit-keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+@-webkit-keyframes color {
+  100%,
+  0% {
+    stroke: rgb(223, 52, 59);;
+  }
+  40% {
+    stroke: rgb(223, 52, 59);;
+  }
+  66% {
+    stroke: rgb(223, 52, 59);;
+  }
+  80%,
+  90% {
+    stroke: rgb(223, 52, 59);;
+  }
+}
+@keyframes color {
+  100%,
+  0% {
+    stroke: rgb(223, 52, 59);;
+  }
+  40% {
+    stroke: rgb(223, 52, 59);;
+  }
+  66% {
+    stroke: rgb(223, 52, 59);;
+  }
+  80%,
+  90% {
+    stroke: rgb(223, 52, 59);;
+  }
 }
 
 
@@ -577,6 +714,20 @@ a.email:hover {
 
 #credits {
 	position: absolute;
+	bottom: 0;
+	padding: 4px;
+	right: 0;
+	z-index: 41;
+	background: rgba(255, 255, 255, 0.5);
+	font-size: 12px;
+	color: #3A3A3A;
+	border-radius: 2px;
+}
+.default-theme .esriLegendMsg {
+    padding: 10px 0 15px;
+}
+.esriControlsBR {
+	position: absolute;
 	bottom: 26px;
 	padding: 4px;
 	right: 20px;
@@ -586,14 +737,13 @@ a.email:hover {
 	color: #C1272D;
 	border-radius: 2px;
 }
-
 #credits a {
-	color: #ffc6c8;
-	color: #3A3A3A;
+	color: #C1272D;
 }
 
 #credits a:hover {
 	text-decoration: none;
+	color: #3A3A3A;
 }
 
 #search {
@@ -603,8 +753,20 @@ a.email:hover {
 	top: 20px;
 	left: 75px;
 }
-
-
+.schools-theme .arcgisSearch .moreResults .resultsList {
+   display: block; 
+}
+.schools-theme .arcgisSearch .moreResults .moreItem {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+.schools-theme #search-schools_more_results_list ul {
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+.schools-theme .arcgisSearch .moreResults #search-schools_more_results_show {
+   display: none;
+}
 /* Hide TOC layer when out of scale */
 
 #tocDiv {
@@ -624,6 +786,11 @@ a.email:hover {
 
 .hide {
 	display: none;
+}
+
+.start-compare-hide #top-menu,  
+.start-compare-hide #building-help  {
+	top: -40px;
 }
 
 .show {
@@ -846,7 +1013,7 @@ svg g {
     top: 180px;
     right: 17px;
 }
-#building-help {
+#building-help, #stats-close-button {
 	display: none;
 	position: absolute;
 	z-index: 70;
@@ -873,11 +1040,18 @@ svg g {
     -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-.building-theme #building-help {
+.building-theme #stats-close-button {
+    left: 0;
+    padding: 8px;
+    right: 0;
+    margin: 0 auto;
+    width: 240px;
+}
+.building-theme #building-help, .building-theme #stats-close-button {
 	display: block;
 }
 
-#building-help p {
+#building-help p, #stats-close-button  p {
     text-align: center;
     text-transform: none;
     padding: 2px 10px;
@@ -886,19 +1060,12 @@ svg g {
     letter-spacing: 0.4px;
     line-height: 34px;
 }
-#building-help:hover {
+#building-help:hover, #stats-close-button:hover {
     background-color: #30333a;
     cursor: pointer;
 }
 #help-gallery {
-/*
-    width: 100%;
-    height: 100%;
-    background-color: rgba(83, 86, 93, 0.9);
-    position: fixed;
-    z-index: -1;
-    opacity: 0;
-*/
+
 }
 #help-gallery:target {
 /*
@@ -1837,7 +2004,7 @@ temporary solution: display map full width in map div */
     border-top:  1px solid rgba(202, 201, 201, 0.2);
 	overflow: hidden;
 	position: absolute;
-	bottom: 60px;
+	bottom: 40px;
 	z-index: 1200;
 	right: 20px;
 	display: block;
@@ -2296,7 +2463,7 @@ pad1y {
 	transform: translateY(-40px);
 }
 
-.module-build:target {
+.module-build:target, .module-schools:target, .module-schools.active {
 	z-index: 2001;
 	opacity: 1;
 	-webkit-transform: translateX(0);
@@ -2318,6 +2485,19 @@ pad1y {
     -ms-user-select: none;
     user-select: none;
 */
+	-webkit-transform: translateX(80px);
+	-moz-transform: translateX(80px);
+	-ms-transform: translateX(80px);
+	transform: translateX(80px);
+}
+.module-schools {
+	z-index: -1;
+	height: auto;
+	position: relative;
+	top: 0;
+	right: 0;
+	left: initial;
+	opacity: 0;
 	-webkit-transform: translateX(80px);
 	-moz-transform: translateX(80px);
 	-ms-transform: translateX(80px);
@@ -2370,17 +2550,22 @@ esriMeasurement .dijitContentPane,
 	height: 46px;
 }
 
-#legend.sub-menu {
+#legend.sub-menu, #layers.sub-menu {
 	height: auto;
 	overflow: hidden;
 	overflow-y: auto;
-	min-height: 140px;
+	min-height: 100px;
 	max-height: -moz-calc(100% - 146px);
 	max-height: -webkit-calc(100% - 146px);
 	max-height: -o-calc(100% - 146px);
 	max-height: calc(100% - 146px);
 }
-
+#legend.sub-menu {
+	min-height: 130px;
+}
+.default-theme #legend-list .esriLegendService {
+    padding-bottom: 10px;
+}
 #tools.sub-menu {
 	width: 462px;
 	height: 300px;
@@ -2389,7 +2574,46 @@ esriMeasurement .dijitContentPane,
 #build-data.sub-menu {
 	height: 100%;
 }
+#legend-list .esriLegendLayerLabel, #legend-list .esriLegendService table {
+	width: 100%;	
+}
+#legend-list .esriLegendLayerLabel {
 
+}
+.esriLegendGroupLayer {
+    margin-left: -12px;
+    margin-right: -12px;
+    margin-top: -20px;
+}
+.esriLegendGroupLayer .esriLegendLayerLabel:first-child tr td {
+	font-size: 15px;
+    color: #555;
+    line-height: 34px;
+    letter-spacing: -0.4px;
+    font-weight: bold;
+	background: #F3F3F3;
+}
+.esriLegendGroupLayer .esriLegendLayerLabel:first-child tbody, .esriLegendGroupLayer .esriLegendLayerLabel:first-child tr, .esriLegendGroupLayer .esriLegendLayerLabel:first-child tr td {
+	padding: 6px 10px;
+    width: 100%;
+}
+.esriLegendGroupLayer .esriLegendLeft .esriLegendLayerLabel:first-child tr td {
+	font-size: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    font-weight: inherit;	
+    background: inherit;	
+	left: -10px;
+    position: relative;
+	padding: 0 10px;
+	line-height: 1.6;
+}
+.esriLegendLayerLabel {
+    padding-top: 0;
+}
+.esriLegendGroupLayer {
+    padding-bottom: 20px;
+}
 #layers.sub-menu p,
 #legend.sub-menu p,
 #tools.sub-menu p,
@@ -2482,7 +2706,7 @@ p.build-p:first-child {
 	margin-top: 26px;
 	font-size: 16px;
 	line-height: 28px;
-	font-weight: normal;
+/*	font-weight: normal;*/
 }
 
 .module-build .inner h4.border-top {
@@ -2561,7 +2785,8 @@ p.build-p:first-child {
 #open-data.sub-menu .inner a,
 #build-docs.sub-menu .inner a,
 #build-help.sub-menu .inner a,
-#build-imp-info.sub-menu .inner a {
+#build-imp-info.sub-menu .inner a,
+.page-content #content a {
 	color: #C1272D;
 	border-bottom: 1px solid #C1272D;
 	font-weight: normal;
@@ -2571,7 +2796,8 @@ p.build-p:first-child {
 #open-data.sub-menu .inner a:hover,
 #build-docs.sub-menu .inner a:hover,
 #build-help.sub-menu .inner a:hover,
-#build-imp-info.sub-menu .inner a:hover {
+#build-imp-info.sub-menu .inner a:hover,
+.page-content #content a:hover {
 	color: #C1272D;
 	border-bottom: none;
 }
@@ -2653,6 +2879,7 @@ p.build-p:first-child {
 
 #layers .inner {
 	padding-bottom: 10px;
+	min-height: 30px;
 }
 
 .inner p {
@@ -2674,6 +2901,9 @@ p.build-p:first-child {
 	margin-top: 10px;
 	background-color: #fff;
 	line-height: 3;
+    margin: 10px 20px;
+    padding: 6px 10px;
+    border-left: 1px solid #e61c24;		
 }
 
 .module-build .inner p.normalf {
@@ -2707,6 +2937,14 @@ p.build-p:first-child {
 	font-size: 13px;
 	line-height: 16px;
 	font-weight: normal;
+}
+
+.module-build .inner #chart-legend span p {
+	line-height: 20px;
+    background: #e8e8e8;
+    margin: 0 20px;
+    padding: 6px 10px;
+    border-left: 1px solid #e61c24;	
 }
 
 .inner #bar-legend #chart-legend p,
@@ -3054,7 +3292,46 @@ p.build-p:first-child {
 
 
 /*resetinam checkboxam claro tema*/
-
+.layer-group {
+	padding:0;
+    display: inline-block;
+    background: #F3F3F3;
+    position: relative;
+    width: 346px;
+    top: -13px;
+}
+.one-service {
+    margin-top: 14px;
+}
+.first-one-service {
+    margin-top: 0;
+	border-top: 1px solid #E9E9E9;
+	border-top: 1px solid #e61c24;
+}
+#legend-list .layer-group {
+	display: block;
+    top: 1px;
+    margin: -10px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+.layer-group p {
+    font-size: 15px;
+    color: #555;
+    line-height: 34px;
+    letter-spacing: -0.4px;
+    font-weight: bold;
+}
+.default-theme-layers {
+	margin-bottom: 15px;
+}
+.default-theme #legend-list_msg {
+    padding-top: 10px;
+    min-height: 80px;
+}
+#layer-list .default-theme-layers:last-child {
+	margin-bottom: 0;
+}
 .claro .dijitCheckBox {
 	background: none;
 	padding: 10px;
@@ -3063,7 +3340,9 @@ p.build-p:first-child {
 	width: auto;
 	height: inherit;
 }
-
+.default-theme #legend-list {
+	padding-top: 0;
+}
 
 /*loader*/
 
@@ -3076,10 +3355,11 @@ p.build-p:first-child {
 	z-index: 100;
 	left: 0;
 	right: 0;
-	background-color: rgba(255, 255, 255, 0.54);
 	border-radius: 5px;
 }
-
+.schools-theme #loading-gif {
+    right: 346px;
+}
 
 /*Scalebar*/
 
@@ -3172,10 +3452,43 @@ canvas {
 	z-index: 12;
 }
 
+
 #vilnius-logo img {
 	width: 40px;
 }
 
+/* Schools page htm */
+.page-content {
+	width: 100%;
+	min-width: auto;
+}
+#content {
+	max-width: 680px;
+	margin: 0 auto;
+	padding: 20px;
+	text-align: center;
+}
+#content .actionList {
+	padding: 10px 15px;
+    text-align: left;
+    float: left;
+    margin-top: 20px;
+}
+#content .actionList a {
+    color: #2d2d2d;
+	border-bottom: none;
+}
+#content h1 {
+	line-height: 1.8;
+    margin-bottom: 20px;
+}
+#content h1, #content p {
+	text-align: left;
+}
+.schools-page-logo img, .not-found-page-logo img {
+	width: 80px;
+	padding: 40px;
+}
 
 /* Cluster layer */
 
@@ -3261,19 +3574,23 @@ theme ad
 
 .esriPopup.valid-ad .contentPane,
 .esriPopup.invalid-ad .contentPane,
-#ad-popup p {
+#default-popup p {
 	font-size: 15px;
 	line-height: 19px;
 	font-weight: bold;
 	color: #555;
 }
+#default-popup p.raster {
+	line-height: 1.6;
+	font-weight: normal;
+}
 
-#ad-popup p, #ad-popup .title {
+#default-popup p, #default-popup .title {
 	margin-left: 11px;
 	margin-bottom: 4px;
 }
 
-#ad-popup .title p, #ad-popup .title {
+#default-popup .title p, #default-popup .title {
 	color: #FFF;
 	width: 80%;
 	width: 265px;
@@ -3292,8 +3609,16 @@ theme ad
 	margin-left: 0;
 }
 
-#ad-popup p span {
+#default-popup p span {
 	line-height: 16px;
+}
+.schools-theme #default-popup p span {
+    line-height: 16px;
+    font-style: normal;
+    font-size: 14px;
+    text-transform: lowercase;
+    color: #7D7D7D;
+    font-weight: normal;
 }
 .index-total {
     padding: 4px 8px;
@@ -3306,29 +3631,29 @@ theme ad
     line-height: 1.8;
 }
 
-#ad-popup ul {
+#default-popup ul {
 	margin-bottom: 16px;
 	width: 100%;
 	background: #E9E9E9;
 	/*    padding: 10px 6px 6px 10px;*/
 }
 
-#ad-popup ul li {
+#default-popup ul li {
 	width: 44%;
 	display: inline-block;
 	padding: 6px 3%;
 }
 
-#ad-popup ul li span {
+#default-popup ul li span {
 	margin-left: 0;
 	line-height: 16px;
 }
 
-#ad-popup .sizer.content {
+#default-popup .sizer.content {
 	background-color: #F7F7F7;
 }
 
-#ad-popup .sizer.content .contentPane {
+#default-popup .sizer.content .contentPane {
 	padding: 20px 10px;
 	background: -webkit-radial-gradient(left ellipse, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 0 center, -webkit-radial-gradient(right ellipse, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 100% center;
 	background: radial-gradient(ellipse at bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 0 bottom, radial-gradient(ellipse at bottom, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 75%) 100% bottom;
@@ -3337,7 +3662,7 @@ theme ad
 	background-repeat: no-repeat;
 }
 
-#ad-attachment p {
+#default-attachment p {
 	display: inline-block;
 }
 
@@ -3372,9 +3697,13 @@ THEMES
 #map:hover #tooltip-span, .footer-navigation ul li.menu-item-1797 {
 	display: block;
 }
-
+.red {
+	color: #B9161C;
+	padding-left:4px; 
+	padding-right:4px; 
+}
 /*building tooltip*/
-.claro .dijitTooltipContainer {
+.claro .dijitTooltipContainer, .dijitTooltipAbove .dijitTooltipContainer {
     background-color: #ffffff;
     background-image: -moz-linear-gradient(bottom, rgba(207, 229, 250, 0.1) 0px, #ffffff 10px);
     background-image: -webkit-linear-gradient(bottom, rgba(207, 229, 250, 0.1) 0px, #ffffff 10px);
@@ -3391,8 +3720,11 @@ THEMES
     font-size: 1em;
     color: #000000;
 }
-.claro #myTooltipDialogCompare .dijitTooltipContainer {
+.claro #myTooltipDialogCompare .dijitTooltipContainer, .dijitTooltipAbove .dijitTooltipContainer {
     padding: 8px 6px;
+}
+.dijitTooltipAbove .dijitTooltipContainer {
+	padding: 14px;
 }
 .claro .dijitTooltipConnector {
     border: 0;
@@ -3434,7 +3766,7 @@ THEMES
 }
 
 .claro .dijitSelect .dijitArrowButton {
-	padding: 8px;
+	padding: 4px;
 }
 
 /*SCHOOLS THEME*/
@@ -3464,6 +3796,36 @@ THEMES
 }
 #search-schools {
 	padding: 20px;
+}
+claro .dijitSelect .dijitArrowButton {
+    background: none;
+    background-image: none;
+}
+dijitSelect .dijitButtonContents {
+    padding: 0;
+    white-space: nowrap;
+    text-align: left;
+    border-style: none solid none none;
+    border-width: 0px;
+}
+.claro .dijitSelect .dijitArrowButton {
+	background: none;
+}
+.claro .dijitSelect, .claro .dijitSelect .dijitButtonContents, .claro .dijitTextBox, .claro .dijitTextBox .dijitButtonNode {
+    border-color: #d6d4d4;
+    -webkit-transition-property: background-color, border;
+    -moz-transition-property: background-color, border;
+    transition-property: background-color, border;
+    -webkit-transition-duration: 0.35s;
+    -moz-transition-duration: 0.35s;
+    transition-duration: 0.35s;
+}
+.dijitSelect .dijitButtonContents {
+    border-width: 0px;
+}
+.arcgisSearch .noResultsBody {
+    padding: 14px;
+	z-index: 9999999;
 }
 #search-schools .searchGroup .searchInput {
     position: relative;
@@ -3527,8 +3889,8 @@ THEMES
     -ms-user-select: none;
     user-select: none;
     border: none;
-    -webkit-border-radius: 0 2px 2px 0;
-    border-radius: 0 2px 2px 0;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
     background-color: #fff;
 	background-color: #53565d;
     -moz-box-sizing: content-box;
@@ -3544,8 +3906,13 @@ THEMES
 }
 .schools-theme .arcgisSearch .searchMenu {
     top: 50%;
-	padding-top: 4px;
-	padding-bottom: 4px;
+}
+.schools-theme .arcgisSearch .searchMenu.suggestionsMenu {
+    top: 50px;
+    color: #999;
+    padding: 8px 0;
+    font-size: 15px;
+	z-index: 999999;
 }
 .school-no,
 .school-str {
@@ -3623,22 +3990,141 @@ THEMES
 }
 .schools p.school-count {
     padding-top: 13px;
+    padding-bottom: 13px;
     background-color: #fff;
-	color: #53565D;
-	font-weight: bold;
+    color: #53565D;
+    font-weight: bold;
+    border-bottom: 1px solid #E9E9E9;
 }
-.schools p.school-count span, .schools p.address span {
+.schools p.school-count span, .schools p.address span, .schools .bg-w span {
     text-transform: lowercase;
 	font-weight: normal;
 	color: #96989E;
 	font-size: 15px;
+}
+#schools-filtered-list span {
+	margin-bottom: 10px;
+}
+.schools .bg-w span {
+    font-size: 16px;
+    color: #53565D;
+    font-weight: bold;	
+}
+.schools .bg-w {
+	padding-top: 5px;
+}
+#schools-filtered-list {
+	padding: 20px;
+	padding-top: 5px;
+    list-style: none;
+	background: #fff;
+}
+.bg-w {
+	background-color: #fff;
+}
+#schools-filtered-list button {
+	cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    box-sizing: border-box;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #c5c5c5;
+    border-color: #e7b9fe;
+    border-image: initial;
+    color: #53565d;
+    font-weight: bold;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;	
+}
+#schools-filtered-list .lie button {
+	border-color: #4ab55a;
+}
+#schools-filtered-list .rus button {
+	border-color: #73b2ff;
+}
+#schools-filtered-list .len button {
+	border-color: #ff7f7f;
+}
+#schools-filtered-list .rus-len button, #schools-filtered-list .len-rus button {
+	border-color: #ff7f7f;
+	border-style: dashed;
+}
+#schools-filtered-list button:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+/*	border-color: #c2c2c3;*/
+}
+#schools-filtered-list button:focus, #schools-filtered-list button.focus {
+    outline: rgba(249, 185, 187,0) auto 1px;
+    background: #eaeaea;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);	
+}
+#schools-filter {
+	padding-top: 10px;
+}
+
+#schools-filter p:first-child {
+    color: #53565d;
+    font-weight: bold;
+	
+    background: #dcdcdc;
+    padding: 10px;
+    margin: 4px 15px;
+}
+#schools-filter label {
+    color: #53565d;
+    font-size: 14px;
+    letter-spacing: 0;
+	font-weight: normal;
+}
+#schools-filter label.class-year {
+    width: 106px;
+    float: right;
+}
+#schools-filter TABLE.dijitSelect {
+	margin-top: 4px;
+    padding: 4px 15px !important;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+#language-filter .dijitButtonContents {
+    width: 100px;
+}
+#language-filter .dijitSelect .dijitArrowButton {
+    padding: 3px;
+    width: 5%;
+}
+#year-filter .dijitButtonContents  {
+    width: 50px;
+}
+#year-filter {
+	float: right;
 }
 .claro .dijitPopup .dijitTooltipContainer p {
     line-height: 1.6;
 	padding-top: 6px;
 	padding-bottom: 6px;
 }
-
+.claro .dijitSelect .dijitArrowButtonContainer {
+    border: none;
+}
+.claro .dijitSelect, .claro .dijitTextBox {
+    background-color: rgba(255, 255, 255, 0.69);
+}
 /* PHOTOSWIPE */
 .pswp__counter {
     text-align: center;
@@ -3661,4 +4147,49 @@ THEMES
     font-size: 16px !important;
     line-height: 26px !important;
     color: #fff !important;
+}
+/*STATIC FRONT END*/
+#dyn-teritory-teritorijuPlanavimas_dyn-teritory-teritorijuPlanavimas_0_group, 
+#dyn-environment-aplinkosauga_dyn-environment-aplinkosauga_0_group, 
+#dyn-cyclingTracks-transportas_dyn-cyclingTracks-transportas_0_group, 
+#dyn-TeritoryMaintenance-miestoTvarkymas_dyn-TeritoryMaintenance-miestoTvarkymas_0_group {
+    margin-left: -12px;
+    margin-right: -12px;
+    margin-top: -10px;
+	padding-bottom: 20px;
+}
+#dyn-teritory-teritorijuPlanavimas_dyn-teritory-teritorijuPlanavimas_0_group  .esriLegendLayerLabel:first-child tr td,
+#dyn-environment-aplinkosauga_dyn-environment-aplinkosauga_0_group .esriLegendLayerLabel:first-child tr td,
+#dyn-cyclingTracks-transportas_dyn-cyclingTracks-transportas_0_group .esriLegendLayerLabel:first-child tr td ,
+#dyn-TeritoryMaintenance-miestoTvarkymas_dyn-TeritoryMaintenance-miestoTvarkymas_0_group .esriLegendLayerLabel:first-child tr td {
+	font-size: 15px;
+    color: #555;
+    line-height: 34px;
+    letter-spacing: -0.4px;
+    font-weight: bold;
+	background: #F3F3F3;
+}
+#dyn-teritory-teritorijuPlanavimas_dyn-teritory-teritorijuPlanavimas_0_group  .esriLegendLayerLabel:first-child tbody, #dyn-teritory-teritorijuPlanavimas_dyn-teritory-teritorijuPlanavimas_0_group .esriLegendLayerLabel:first-child tr, #dyn-teritory-teritorijuPlanavimas_dyn-teritory-teritorijuPlanavimas_0_group .esriLegendLayerLabel:first-child tr td,
+#dyn-environment-aplinkosauga_dyn-environment-aplinkosauga_0_group .esriLegendLayerLabel:first-child tbody, #dyn-environment-aplinkosauga_dyn-environment-aplinkosauga_0_group .esriLegendLayerLabel:first-child tr, #dyn-environment-aplinkosauga_dyn-environment-aplinkosauga_0_group .esriLegendLayerLabel:first-child tr td,
+#dyn-cyclingTracks-transportas_dyn-cyclingTracks-transportas_0_group .esriLegendLayerLabel:first-child tbody, #dyn-cyclingTracks-transportas_dyn-cyclingTracks-transportas_0_group .esriLegendLayerLabel:first-child tr, #dyn-cyclingTracks-transportas_dyn-cyclingTracks-transportas_0_group .esriLegendLayerLabel:first-child tr td,
+#dyn-TeritoryMaintenance-miestoTvarkymas_dyn-TeritoryMaintenance-miestoTvarkymas_0_group .esriLegendLayerLabel:first-child tbody, #dyn-TeritoryMaintenance-miestoTvarkymas_dyn-TeritoryMaintenance-miestoTvarkymas_0_group .esriLegendLayerLabel:first-child tr, #dyn-TeritoryMaintenance-miestoTvarkymas_dyn-TeritoryMaintenance-miestoTvarkymas_0_group .esriLegendLayerLabel:first-child tr td {
+	padding: 6px 10px;
+    width: 100%;
+}
+#dyn-teritory-teritorijuPlanavimas_dyn-teritory-teritorijuPlanavimas_0_group .esriLegendLeft .esriLegendLayerLabel:first-child tr td,
+#dyn-environment-aplinkosauga_dyn-environment-aplinkosauga_0_group .esriLegendLeft .esriLegendLayerLabel:first-child tr td,
+#dyn-cyclingTracks-transportas_dyn-cyclingTracks-transportas_0_group .esriLegendLeft .esriLegendLayerLabel:first-child tr td,
+#dyn-TeritoryMaintenance-miestoTvarkymas_dyn-TeritoryMaintenance-miestoTvarkymas_0_group .esriLegendLeft .esriLegendLayerLabel:first-child tr td {
+	font-size: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    font-weight: inherit;	
+    background: inherit;	
+	left: -10px;
+    position: relative;
+	padding: 0 10px;
+	line-height: 1.6;
+}
+.one-service-theme #legend-list .legend-group:first-child .layer-group {
+	border-bottom: 1px solid #e61c24;
 }

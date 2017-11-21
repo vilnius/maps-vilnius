@@ -231,7 +231,7 @@ define([
 
             this._getServiceDetails();
 
-            esriConfig.defaults.geometryService = 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Utilities/Geometry/GeometryServer';
+            esriConfig.defaults.geometryService = 'https://zemelapiai.vplanas.lt/arcgis/rest/services/Utilities/Geometry/GeometryServer';
         },
 		_getUrlQueryName: function (name, url) {
 			if (!url) url = window.location.href;
