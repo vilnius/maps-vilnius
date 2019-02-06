@@ -3340,6 +3340,12 @@ p.build-p:first-child {
 	width: auto;
 	height: inherit;
 }
+.claro.schools-theme .dijitCheckBox {
+	display: none;
+}
+.claro.schools-theme .dijitCheckBox:first-child {
+	display: block;
+}
 .default-theme #legend-list {
 	padding-top: 0;
 }
@@ -4040,6 +4046,9 @@ dijitSelect .dijitButtonContents {
     font-weight: bold;
     -webkit-border-radius: 2px;
     border-radius: 2px;	
+}
+#schools-filtered-list .spec button {
+    border-color: #7a7a00;
 }
 #schools-filtered-list .lie button {
 	border-color: #4ab55a;

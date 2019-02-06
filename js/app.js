@@ -1,232 +1,314 @@
 var MAPCONFIG = {
 	themes: {
-		buildings: {
+		newTheme: {
+			url: "https://maps.vilnius.lt",
+      production: true, //if theme is ready for production
+      custom: true, // true if theme funcionality is custom
+      name: "Nauja žemėlapio versija", //theme name
+      //id: "theme-buildings", //theme id class and theme URL query name
+      id: "nauja-versija", //theme id class and theme URL query name
+      imgUrl: "/maps_vilnius/img/home-url.png", //image URL
+      imgAlt: "Nauja žemėlapio versija", // image alt attribute
+      layers: {
+				administravimas: { // layer unique name
+					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+					"https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer",
+				}
+			}
+    },
+		buildingsAdministration: {
 			production: true, //if theme is ready for production
-			custom: true, // true if theme funcionality is custom  
-			name: "Pastatai ir statyba", //theme name
+			custom: true, // true if theme funcionality is custom
+			name: "Pastatų administravimas", //theme name
 			id: "theme-buildings", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
-			imgAlt: "Pastatai ir statyba", // image alt attribute
+			//id: "pastatu-administravimas", //theme id class and theme URL query name
+			imgUrl: "/maps_vilnius/img/pastatu-administravimas.png", //image URL
+			imgAlt: "Pastatų administravimas", // image alt attribute
 			layers: {
 				administravimas: { // layer unique name
 					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer",
+					"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer",
 					featureLayerUrls: [
 						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1"
 					]
 				}
 			}
 		},
-		energetics: {
-			production: false, //if theme is ready for production
-			custom: true, // true if theme funcionality is custom  
-			name: "Energetika", //theme name
-			id: "theme-energetics", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/statyba.png", //image URL
-			imgAlt: "Energetika", // image alt attribute
-			layers: {
-				energetika: { // layer unique name
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Energetika/MapServer",
-					featureLayerUrls: [
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Energetika/MapServer/0"
-					]
-				}
-			}
-		},
-		itvTheme: {
-		  url: "https://maps.vilnius.lt/projektai",
-		  production: true, //if theme is ready for production
-		  hide: false, //hide from themes menu, but add route with functionality
-		  version: "arcgis4",
-		  custom: true,
-		  name: "Investiciniai projektai", //theme name
-		  id: "theme-itv", //theme id class and theme URL query name
-		  imgUrl: "/maps_vilnius/img//projektai.png", //image URL
-		  imgAlt: "Investiciniai projektai", // image alt attribute
-		  layers: {
-			//maps layers for scaling on map
-			mapLayer: 'https://zemelapiai.vplanas.lt/arcgis/rest/services/TESTAVIMAI/ITV_test_masteliavimas_no_goups_p/MapServer',
-			//all projects (converted to polygon) for lsiting and identify features
-			uniqueProjects: 'https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/ITV_bendri/MapServer/0',
-			//identify map service
-			identifyLayer: 'https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/ITV_bendri/MapServer'
-		  }
-		},
-		advertise: {
-			production: true, //if theme is ready for production
-			custom: true, // true if theme funcionality is custom  
-			name: "Reklamos leidimai", //theme name
-			id: "ad", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/laisvalaikis.png", //image URL
-			imgAlt: "Reklamos vietos" // image alt attribute
-		},
-		schools: {
-			production: true, //if theme is ready for production
-			custom: true,
-			name: "Švietimas", //theme name
-			id: "schools", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/svietimas.png", //image URL
-			imgAlt: "Švietimas", // image alt attribute
-			layers: {
-				mokyklos: { // layer unique name // 
-					dynimacLayerUrls:  //  dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer"
-				}
-			}
-		},
-		teritory: {
-			url: "https://maps.vilnius.lt/teritoriju-planavimas",
-			production: true, //if theme is ready for production
-			name: "Teritorijų planavimas", //theme name
-			id: "teritory-planning", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/teritorijos.png", //image URL
-			imgAlt: "Teritorijų planavimas", // image alt attribute
-			layers: {
-                teritorijuPlanavimas: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Teritoriju_planavimas/MapServer",
-					name: "Teritorijų planavimas:",
-					isGroupService: true
-				}
-			}
-		},
-		teritoryReturn: {
-			url: "https://maps.vilnius.lt/zemes-grazinimas",
-			production: true, //if theme is ready for production
-			name: "Žemės grąžinimas", //theme name
-			id: "teritory-return", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/zeme.png", //image URL
-			imgAlt: "Teritorijų grąžinimas", // image alt attribute
-			layers: {
-                teritorijuGrazinimas: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Zemes_grazinimas/MapServer",
-					name: "Teritorijų grąžinimas:",
-					isGroupService: true
-				}
-			}
-		},
-		TeritoryMaintenance: {
-			url: "https://maps.vilnius.lt/miesto-tvarkymas",
-			production: true, //if theme is ready for production
-			name: "Miesto tvarkymas", //theme name
-			id: "teritory-maintenance", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/tvarkymas.png", //image URL
-			imgAlt: "Miesto tvarkymas", // image alt attribute
-			layers: {
-				miestoTvarkymas: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Miesto_tvarkymas/MapServer",
-					name: "Miesto tvarkymas:", // dynamicLayers group name
-                    isGroupService: true
-				}
-			}
-		},
-		environment: {
-			url: "https://maps.vilnius.lt/aplinkosauga",
-			production: true, //if theme is ready for production
-			name: "Aplinkosauga", //theme name
-			id: "env", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/aplinkosauga.png", //image URL
-			imgAlt: "Aplinkosauga", // image alt attribute
-			layers: {
-				aplinkosauga: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Aplinkosauga/MapServer",
-					name: "Aplinkosauginiai sluoksniai:", // dynamicLayers group name
-					isGroupService: true // if layers has grouping in mxd / value for administration purpose only
-				}
-			}
-		},
-        publicOffices: {
-			production: false, //if theme is ready for production
-			name: "Viešos įstaigos", //theme name
-			id: "public-offices", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/tvarkymas.png", //image URL
-			imgAlt: "Viešos įstaigos", // image alt attribute
-			layers: {
-				viesosIstaigos: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Viesos_istaigos/MapServer",
-					name: "Viešos įstaigos" // dynamicLayers group name
-				}
-			}
-		},
-        cyclingTracks: {
-			url: "https://maps.vilnius.lt/transportas",
-			production: true, //if theme is ready for production
-			name: "Transportas / Dviračiai", //theme name
-			id: "cycling-tracks", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/dviraciai.png", //image URL
-			imgAlt: "Transportas / Dviračių takai", // image alt attribute
-			layers: {
-				transportas: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Transportas/MapServer",
-					name: "Transportas / Dviračiai:" // dynamicLayers group name
-				},
-				accidentsRaster: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Eismo_ivykiu_tankumas/MapServer",
-					name: "Eismo įvykių tankumas" // dynamicLayers group name
-				}
-			}
-		},
-		leisure: {
-		  url: "https://maps.vilnius.lt/laisvalaikis",
-		  production: true, //if theme is ready for production
-		  name: "Laisvalaikis", //theme name
-		  id: "laisvalaikis", //theme id class and theme URL query name
-		  imgUrl: "/maps_vilnius/img/aktyvus-laisvalaikis.png", //image URL
-		  imgAlt: "Laisvalaikis", // image alt attribute
-		  layers: {
-			laisvalaikis: { // layer unique name //
-			  dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-			  "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Laisvalaikis/MapServer",
-			  name: "Laisvalaikis" // dynamicLayers group name
-			}
-		  }
-		},		
-        publicCaffes: {
-			url: "https://maps.vilnius.lt/kavines",
-			production: true, //if theme is ready for production
-			name: "Lauko kavinės", //theme name
-			id: "caffee", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/kavines.png", //image URL
-			imgAlt: "Lauko kavinės", // image alt attribute
-			layers: {
-				publicCaf: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/lauko_kavines/MapServer",
-					name: "Lauko kavinės" // dynamicLayers group name
-				}
-			}
-		},
-		civilSecurity: {
-			url: "https://maps.vilnius.lt/civiline-sauga",
-			production: true, //if theme is ready for production
-			name: "Civilinė sauga", //theme name
-			id: "civ-sauga", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/civiline-sauga.png", //image URL
-			imgAlt: "Civilinė sauga", // image alt attribute
-			layers: {
-				publicCaf: { // layer unique name // 
-					dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
-						"https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Civiline_sauga/MapServer",
-					name: "Civilinė sauga" // dynamicLayers group name
-				}
-			}
-		},
-		legacyMap: {
-			production: true, //if theme is ready for production
-			custom: true, // true if theme funcionality is custom  
-			name: "Senoji žemėlapio versija", //theme name
-			id: "legacy", //theme id class and theme URL query name
-			imgUrl: "/maps_vilnius/img/old_version.png", //image URL
-			imgAlt: "Senoji versija", // image alt attribute
-			url: "https://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property 
-		}
+		// buildings: {
+		// 	url: "https://maps.vilnius.lt/pastatai",
+    //   production: true, //if theme is ready for production
+    //   custom: true, // true if theme funcionality is custom
+    //   name: "Pastatai", //theme name
+    //   //id: "theme-buildings", //theme id class and theme URL query name
+    //   id: "pastatai", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/pastatai.png", //image URL
+    //   imgAlt: "Pastatai", // image alt attribute
+    //   layers: {
+    //     silumosSuvartojimas: { // layer unique name
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatai_statyba/MapServer",
+    //       name: "Pastatai"
+    //     }
+    //   }
+    // },
+    // itvTheme: {
+		// 	url: "https://maps.vilnius.lt/projektai",
+    //   production: true, //if theme is ready for production
+    //   version: "arcgis4",
+    //   hide: false, //hide from themes menu, but add route with functionality
+    //   custom: true,
+    //   name: "Investiciniai projektai", //theme name
+    //   id: "projektai", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/projektai.png", //image URL
+    //   imgAlt: "Investiciniai projektai", // image alt attribute
+    //   info: "Uses static menu legend", //Meta info about project
+    //   layers: {
+    //     //maps layers for scaling on map
+    //     mapLayer: 'https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/itv_projects_GDB/MapServer',
+    //     //all projects (converted to polygon) for listing
+    //     uniqueProjects: 'https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/itv_projects_common_GDB/MapServer',
+    //     //2 base teritories south and north
+    //     teritories: 'https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/itv_teritories/MapServer',
+    //     //identify map service
+    //     identifyLayer: 'https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/ITV_bendri/MapServer',
+    //     name: 'Investiciniai projektai'
+    //   }
+    // },
+    advertise: {
+      production: true, //if theme is ready for production
+      custom: true, // true if theme funcionality is custom
+      name: "Reklamos leidimai", //theme name
+      id: "ad", //theme id class and theme URL query name
+      imgUrl: "/maps_vilnius/img/reklamos.png", //image URL
+      imgAlt: "Reklamos vietos" // image alt attribute
+    },
+    schools: {
+      production: true, //if theme is ready for production
+      custom: true,
+      name: "Švietimas", //theme name
+      //id: "schools", //theme id class and theme URL query name
+      id: "schools", //theme id class and theme URL query name
+      imgUrl: "/maps_vilnius/img/mokyklos.png", //image URL
+      imgAlt: "Švietimas", // image alt attribute
+      layers: {
+        mokyklos: { // layer unique name //
+          dynimacLayerUrls:  //  dynamicService URL, only 1 url per uniquer Layer
+          "https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer"
+        }
+      }
+    }
+    // kindergartens: {
+		// 	url: "https://maps.vilnius.lt/darzeliai",
+    //   production: true, //if theme is ready for production
+    //   custom: true, // true if theme funcionality is custom
+    //   name: "Darželiai", //theme name
+    //   //id: "theme-buildings", //theme id class and theme URL query name
+    //   id: "darzeliai", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/darzeliai.png", //image URL
+    //   imgAlt: "Darželiai", // image alt attribute
+    //   layers: {
+    //     darzeliai: { // layer unique name
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Darzeliai/MapServer",
+    //       name: "Darželiai"
+    //     }
+    //   }
+    // },
+    // teritory: {
+		// 	url: "https://maps.vilnius.lt/teritoriju-planavimas",
+    //   production: true, //if theme is ready for production
+    //   name: "Planavimas ir statyba", //theme name
+    //   //id: "teritory-planning", //theme id class and theme URL query name
+    //   id: "teritoriju-planavimas", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/teritorijos.png", //image URL
+    //   imgAlt: "Teritorijų planavimas", // image alt attribute
+    //   layers: {
+    //     teritorijuPlanavimas: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Teritoriju_planavimas/MapServer",
+    //       name: "Teritorijų planavimas ir statyba:",
+    //       isGroupService: true,
+    //       opacity: 0.9
+    //     }
+    //   }
+    // },
+    // teritoryReturn: {
+		// 	url: "https://maps.vilnius.lt/zemes-grazinimas",
+    //   production: true, //if theme is ready for production
+    //   name: "Žemės grąžinimas", //theme name
+    //   //id: "teritory-return", //theme id class and theme URL query name
+    //   id: "zemes-grazinimas", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/zeme.png", //image URL
+    //   imgAlt: "Teritorijų grąžinimas", // image alt attribute
+    //   layers: {
+    //     teritorijuGrazinimas: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Zemes_grazinimas/MapServer",
+    //       name: "Teritorijų grąžinimas:",
+    //       isGroupService: true
+    //     }
+    //   }
+    // },
+    // TeritoryMaintenance: {
+		// 	url: "https://maps.vilnius.lt/miesto-tvarkymas",
+    //   production: true, //if theme is ready for production
+    //   name: "Miesto tvarkymas", //theme name
+    //   //id: "teritory-maintenance", //theme id class and theme URL query name
+    //   id: "miesto-tvarkymas", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/miesto-tvarkymas.png", //image URL
+    //   imgAlt: "Miesto tvarkymas", // image alt attribute
+    //   layers: {
+    //     miestoTvarkymas: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://gis.vplanas.lt/arcgisin/rest/services/Interaktyvus_zemelapis/Miesto_tvarkymas/MapServer",
+    //       name: "Miesto tvarkymas:", // dynamicLayers group name
+    //       isGroupService: true
+    //     }
+    //   }
+    // },
+    // environment: {
+		// 	url: "https://maps.vilnius.lt/aplinkosauga",
+    //   production: true, //if theme is ready for production
+    //   name: "Aplinkosauga", //theme name
+    //   //id: "env", //theme id class and theme URL query name
+    //   id: "aplinkosauga", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/aplinkosauga.png", //image URL
+    //   imgAlt: "Aplinkosauga", // image alt attribute
+    //   layers: {
+    //     aplinkosauga: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Aplinkosauga/MapServer",
+    //       name: "Aplinkosauginiai sluoksniai:", // dynamicLayers group name
+    //       opacity: 0.7,
+    //       isGroupService: true // if layers has grouping in mxd / value for administration purpose only
+    //     }
+    //   }
+    // },
+    // publicOffices: {
+		// 	url: "https://maps.vilnius.lt/viesosios-istaigos",
+    //   production: false, //if theme is ready for production
+    //   name: "Viešos įstaigos", //theme name
+    //   //id: "public-offices", //theme id class and theme URL query name
+    //   id: "viesosios-istaigos", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/tvarkymas.png", //image URL
+    //   imgAlt: "Viešos įstaigos", // image alt attribute
+    //   layers: {
+    //     viesosIstaigos: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Viesos_istaigos/MapServer",
+    //       opacity: 0.6,
+    //       name: "Viešos įstaigos" // dynamicLayers group name
+    //     }
+    //   }
+    // },
+    // cyclingTracks: {
+		// 	url: "https://maps.vilnius.lt/transportas",
+    //   production: true, //if theme is ready for production
+    //   name: "Transportas / Dviračiai", //theme name
+    //   //id: "cycling-tracks", //theme id class and theme URL query name
+    //   id: "transportas", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/dviraciai.png", //image URL
+    //   imgAlt: "Transportas / Dviračiai", // image alt attribute
+    //   layers: {
+    //     // accidentsRaster: { // layer unique name //
+    //     //   dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //     //   "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Eismo_ivykiu_tankumas/MapServer",
+    //     //   name: "Eismo įvykių tankumas", // dynamicLayers group name
+    //     //   opacity: 0.7,
+    //     //   isRaster: true //is layer Ratser , do not identify layer if true / default value is false
+    //     // },
+    //     transportas: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Transportas/MapServer",
+    //       name: "Transportas / Dviračiai:",// dynamicLayers group name
+    //       opacity: 0.9
+    //     }
+    //   }
+    // },
+    // leisure: {
+		// 	url: "https://maps.vilnius.lt/laisvalaikis",
+    //   production: true, //if theme is ready for production
+    //   name: "Laisvalaikis", //theme name
+    //   id: "laisvalaikis", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/laisvalaikis.png", //image URL
+    //   imgAlt: "Laisvalaikis", // image alt attribute
+    //   layers: {
+    //     laisvalaikis: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Laisvalaikis/MapServer",
+    //       name: "Laisvalaikis" // dynamicLayers group name
+    //     }
+    //   }
+    // },
+    // publicCaffes: {
+		// 	url: "https://maps.vilnius.lt/kavines",
+    //   production: true, //if theme is ready for production
+    //   name: "Lauko kavinės", //theme name
+    //   //id: "caffee", //theme id class and theme URL query name
+    //   id: "kavines", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/kavines.png", //image URL
+    //   imgAlt: "Lauko kavinės", // image alt attribute
+    //   layers: {
+    //     publicCaf: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/lauko_kavines/MapServer",
+    //       name: "Lauko kavinės" // dynamicLayers group name
+    //     }
+    //   }
+    // },
+    // civilSecurity: {
+		// 	url: "https://maps.vilnius.lt/civiline-sauga",
+    //   production: true, //if theme is ready for production
+    //   name: "Civilinė sauga", //theme name
+    //   //id: "civ-sauga", //theme id class and theme URL query name
+    //   id: "civiline-sauga", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/civiline-sauga.png", //image URL
+    //   imgAlt: "Civilinė sauga", // image alt attribute
+    //   layers: {
+    //     publicCaf: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Civiline_sauga/MapServer",
+    //       opacity: 0.8,
+    //       name: "Civilinė sauga" // dynamicLayers group name
+    //     }
+    //   }
+    // },
+    // elderships: {
+		// 	url: "https://maps.vilnius.lt/seniunijos",
+    //   production: true, //if theme is ready for production
+    //   name: "Seniūnijos", //theme name
+    //   //id: "civ-sauga", //theme id class and theme URL query name
+    //   id: "seniunijos", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/seniunijos.png", //image URL
+    //   imgAlt: "Seniūnijos", // image alt attribute
+    //   layers: {
+    //     elderships: { // layer unique name //
+    //       dynimacLayerUrls:  // dynamicService URL, only 1 url per uniquer Layer
+    //       "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Seniunijos/MapServer",
+    //       opacity: 1,
+    //       name: "Seniūnijos" // dynamicLayers group name
+    //     }
+    //   }
+    // },
+    // legacyMap: {
+    //   production: false, //if theme is ready for production
+    //   custom: true, // true if theme funcionality is custom
+    //   name: "Senoji žemėlapio versija", //theme name
+    //   id: "legacy", //theme id class and theme URL query name
+    //   imgUrl: "/app/img/old_version.png", //image URL
+    //   imgAlt: "Senoji versija", // image alt attribute
+    //   url: "http://www.vilnius.lt/vmap/t1.php" // external url if required, if not - gets internal url depending on id property
+    // },
+    // emptyTeam: {
+    //   //url: "https://maps.vilnius.lt/maps_vilnius/?theme=civ-sauga",
+    //   production: true, //if theme is ready for production
+    //   hide: true, //hide from themes menu, but add route with functionality
+    //   name: "Tuščia tema", //theme name
+    //   //id: "civ-sauga", //theme id class and theme URL query name
+    //   id: "empty", //theme id class and theme URL query name
+    //   imgUrl: "/maps_vilnius/img/civiline-sauga.png", //image URL
+    //   imgAlt: "Tuščia tema" // image alt attribute
+    // }
 	},
     mapExtent: {
         "xmin": 555444.210800001,
@@ -247,14 +329,11 @@ var MAPCONFIG = {
             featureLayerBuildings: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1",
             dynamicLayerBuildings: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer"
         },
-		energeticsTheme: {
-            featureLayerEnergetics: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Energetika/MapServer/0",
-            dynamicLayerEnergetics: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Energetika/MapServer"
-        },
         dynamicLayerAdverts: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer",
         featureLayerAdverts: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/0"
     }
-};;/*
+};
+;/*
 2016-06-21
 MV 0.0.2
 JS
@@ -267,7 +346,7 @@ Array.prototype.getUnique = function () {
 		a = [],
 		i = 0,
 		l = this.length;
-	
+
 	for (i, l; i < l; i += 1) {
 		if (u.hasOwnProperty(this[i])) {
 			//continue;
@@ -318,7 +397,7 @@ require([
     "esri/renderers/ClassBreaksRenderer", "esri/symbols/PictureMarkerSymbol",
     //Measure
     "esri/dijit/Measurement", "esri/units",
-    "esri/dijit/Search", "esri/tasks/locator", 
+    "esri/dijit/Search", "esri/tasks/locator",
     "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleMarkerSymbol",  "esri/renderers/SimpleRenderer", "esri/symbols/SimpleLineSymbol", "esri/Color", "esri/geometry/Extent",
 	"esri/tasks/GeometryService",
     //cluster
@@ -365,7 +444,7 @@ require([
     dom,
     domConstruct,
     domClass,
-    //SimpleFillSymbol, 
+    //SimpleFillSymbol,
     ClassBreaksRenderer, PictureMarkerSymbol,
     //Measure
     Measurement, Units,
@@ -384,7 +463,7 @@ require([
 	var horizontalSlider;
 	var popup;
 	var a = 0;
-	
+
 	var DEFCONFIG = {
 		extent: new esri.geometry.Extent(MAPCONFIG.mapExtent),
 		//TODO not implemented yet: integrate
@@ -399,11 +478,11 @@ require([
 			return new Popup(that.popupProperties, that.popupDom);
 		}
 	};
-	
+
 	var CONTROL = {
 		_getUrlQueryName: function (name, url) {
 			if (!url) url = window.location.href;
-			url = url.toLowerCase(); // avoid case sensitiveness  
+			url = url.toLowerCase(); // avoid case sensitiveness
 			name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();// avoid case sensitiveness for query parameter name
 			var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
 				results = regex.exec(url);
@@ -419,7 +498,7 @@ require([
 						zoom: 5,
 						infoWindow: DEFCONFIG.popup(),
 						nav: false // hides Pan Arrows
-					});	
+					});
 		},
 		currentTheme: function () {
 			return this._getUrlQueryName("theme");
@@ -430,10 +509,10 @@ require([
 			var themeDomDivs = themeDom.getElementsByTagName("div");
 			for (var i = 0; i < themeDomDivs.length; i++) {
 				if (themeDomDivs[i].id === theme) {
-					themeDomDivs[i].className += " current-theme";   
+					themeDomDivs[i].className += " current-theme";
 				} else {
 					//AG else: remove class from element TODO: check if class exists
-					themeDomDivs[i].className = themeDomDivs[i].className.replace( /(?:^|\s)current-theme(?!\S)/g , '' ); 
+					themeDomDivs[i].className = themeDomDivs[i].className.replace( /(?:^|\s)current-theme(?!\S)/g , '' );
 					//AG TEMP default theme #buildings
 					if (!theme) {
 						document.getElementById("theme-buildings").className += " current-theme";
@@ -448,12 +527,12 @@ require([
 				//console.log(a, i);
 				a.on("mouse-over", function() {
 					map.setMapCursor("pointer");
-				
+
 				});
 				a.on("mouse-out", function() {
 					map.setMapCursor("default");
 				});
-			});	
+			});
 		},
 		//END Mouse cursor
 		createThemeDom: function() {
@@ -494,15 +573,15 @@ require([
 							dynimacThemesLayer = this.createDynicLayers(themesObj[theme], theme); //create dynimac specific themes' layers
 							for (var layerAdd in dynimacThemesLayer) { //run through layers and add them to the map with all default functionality
 								if (dynimacThemesLayer.hasOwnProperty(layerAdd)) {
-									dynamicLayersArray.push(dynimacThemesLayer[layerAdd]); //push layers to array 
+									dynamicLayersArray.push(dynimacThemesLayer[layerAdd]); //push layers to array
 									//console.log("DYNAMIC LAyeriai");
 									//console.log(dynimacThemesLayer);
-									//console.log(Object.getOwnPropertyNames(dynimacThemesLayer[layerAdd]));	
+									//console.log(Object.getOwnPropertyNames(dynimacThemesLayer[layerAdd]));
 								}
 							}
 							dynamicLayersArray = dynamicLayersArray.reverse(); //reverse array for correct map visibility (according to legend tab) // TODO change , reverser method is slow
 							this.addDynamicLayers(dynamicLayersArray);
-							
+
 							this.runShowLegendInput(dynimacThemesLayer);
 						}
 					}
@@ -510,9 +589,9 @@ require([
 			}
 			//reorderlayers
 			//this.reorderLayers();
-			
-			//set Opacity slider for each dynamic layer							
-			return dynimacThemesLayer;			
+
+			//set Opacity slider for each dynamic layer
+			return dynimacThemesLayer;
 		},
 		runShowLegendInput: function (layers) {
 			var that = this;
@@ -532,21 +611,21 @@ require([
 				if (i > 1) {
 					map.reorderLayer("dyn-demo-bp", 2);
 				}
-			});	
+			});
 		},
 		//create dynamic map layers for all theme layers
 		createDynicLayers: function (theme, themeName){
 			var uniqueID = 0;
 			var dynamicLayers = {};
 			var themeLayers = theme.layers;
-			for (var layer in themeLayers) {			
-				if (typeof layer !== 'undefined') {	
+			for (var layer in themeLayers) {
+				if (typeof layer !== 'undefined') {
 					var groupIdStr = "dyn-" + themeName + "-" + layer; //group name id for legend group dom
 					var groupNameStr = themeLayers[layer].name;
 					this.createLegendGroups(groupIdStr, groupNameStr, theme.name);
-					
+
 					dynamicLayers["dyn" + themeName + layer] = new ArcGISDynamicMapServiceLayer( themeLayers[layer].dynimacLayerUrls, {id: "dyn" + "-" + themeName + "-" + layer}); //create unique property (ArcGISDynamicMapServiceLayer) dynamcLayers property, then add to map layer
-					dynamicLayers["dyn" + themeName + layer].configLayerName = layer; // property for infowindow infotemplate 
+					dynamicLayers["dyn" + themeName + layer].configLayerName = layer; // property for infowindow infotemplate
 					if (themeLayers[layer].name) {
 						dynamicLayers["dyn" + themeName + layer].groupName = themeLayers[layer].name; // legend group name
 					} else {
@@ -568,7 +647,7 @@ require([
 				msg = domConstruct.toDom("<div class='layer-group'><p>" + name + "</p></div><div id='" + groupIdStr + "'></div>");
 			} else {
 				msg = domConstruct.toDom("<div class='layer-group'><p>" + themeName + "</p></div><div id='" + groupIdStr + "'></div>");
-			}	
+			}
 			tmp.setAttribute("class", "legend-group");
 			//tmp.setAttribute("id", groupIdStr);
 			tmp.appendChild(msg);
@@ -582,7 +661,7 @@ require([
 			}
 		},
 		createLayerInfosArr: function (dynLayersObject) {
-			var commonLayerInfos = []; 
+			var commonLayerInfos = [];
 			// push Layrinfos arrays of each layer and asign to commonLayerInfos variable
 			for (var layer in dynLayersObject) {
 				if (dynLayersObject.hasOwnProperty(layer)) {
@@ -604,16 +683,16 @@ require([
 		createLayerInfosResultArr: function(commonLayerInfos) {
 			var layerinfosArr;
 			//NEW: merge arrays
-			layerinfosArr = [].concat.apply([], commonLayerInfos);	
-			return layerinfosArr;			
+			layerinfosArr = [].concat.apply([], commonLayerInfos);
+			return layerinfosArr;
 		},
 		createGroupName: function (innerLayerInfosArr, name, layersName) {
 			//create groupName for inner arrays
-			for (var i = 0; i < innerLayerInfosArr.length; i++) { // length - 1			
+			for (var i = 0; i < innerLayerInfosArr.length; i++) { // length - 1
 				innerLayerInfosArr[i].groupName = name;
 				innerLayerInfosArr[i].layersGroupName = layersName;
 			}
-			return innerLayerInfosArr;				
+			return innerLayerInfosArr;
 		},
 		//create vissible dom layer groups for layers block
 		createLayersGroupsDom: function (commonLayerInfosResult) {
@@ -654,7 +733,7 @@ require([
 					//console.log(i);
 					var checkBox = new CheckBox({
 						class: "layers-labels",
-						tabindex: info.id.toString(), //AG important: will use tabindex to determind visible layer 
+						tabindex: info.id.toString(), //AG important: will use tabindex to determind visible layer
 						value: info.groupName, //creat same value for sublayers of the same dynamicLayer
 						checked: info.defaultVisibility ? true : false,
 						id: i.toString()
@@ -668,14 +747,14 @@ require([
 					var domElement = document.getElementById(info.groupName);
 					var label;
 					var tmp = document.createElement("div");
-					//check if layer is inner layer (with info.subLayerIds === null),  not a group layer 
+					//check if layer is inner layer (with info.subLayerIds === null),  not a group layer
 					if ((info.subLayerIds === null)) {
 						//convert to dom
 						var inputsList = checkBox.domNode;
 						//label
 						label = domConstruct.toDom("<label for='" + i + "'>" + info.name + "</label>");
 						inputsList.appendChild(label);
-						//workaround, TEMP return string					
+						//workaround, TEMP return string
 						tmp.appendChild(inputsList);
 						//return input via chekcbox widget, will start dojo change event
 						if (domElement) {
@@ -687,8 +766,8 @@ require([
 						tmp.appendChild(label);
 						if (domElement) {
 							domElement.appendChild(tmp);
-							domClass.add(document.body, "one-service-theme");	
-						}						
+							domClass.add(document.body, "one-service-theme");
+						}
 					}
 				});
 
@@ -742,7 +821,7 @@ require([
 			arrayUtils.forEach(layerInfo, function (layer, i) {
 				that.startUpLegendGroup(layer, layerDom, layerName, layerInfo);
 			});
-			
+
 			return layerInfo;
 		},
 		startUpLegendGroup: function (layer, layerDom, layerName, layerInfo){
@@ -752,12 +831,12 @@ require([
 	    		layerInfos: [layer]
 	    	}, layer.layer.id);
 	    	legendDijit.startup();
-			
-			on(layerDom, "click", function(e) {that.updateLayerVisibility(layerName, e, legendDijit, [layer], layerInfo);});	
+
+			on(layerDom, "click", function(e) {that.updateLayerVisibility(layerName, e, legendDijit, [layer], layerInfo);});
 		},
 		showGroups: function (layerInfo) {
 			//create legend Groups
-			this.createLegendGroup(layerInfo);	
+			this.createLegendGroup(layerInfo);
 		},
 		//set default legend
 		setupDefaultLegendLayers: function(layerName) {
@@ -807,7 +886,7 @@ require([
 				this.showHideLayers(layerName, this.cloneVisibleLayer(visibleLayers, visibleLayersResult, e), e);
 			}
 			// if layer is switched off, refresh legend and show only visible layers
-			legendDijit.refresh(layer); //show refreshed legend only from current Theme  
+			legendDijit.refresh(layer); //show refreshed legend only from current Theme
 			this.updatedIdentify(layerInfo); // initiate identify visible layers by new visibility after update
 		},
 		cloneVisibleLayer: function (visibleLayers, visibleLayersResult, e) {
@@ -835,25 +914,25 @@ require([
 						this.getCurrentInput(e, layerName[layer], visibleLayers);
 					}
 				}
-			} 			
+			}
 		},
-		getCurrentInput: function(e, layer, visibleLayers) {			
+		getCurrentInput: function(e, layer, visibleLayers) {
 			if (visibleLayers.hasOwnProperty(e.target.value)){
 				layer.setVisibleLayers(visibleLayers[e.target.value]);
-			}		
+			}
 		},
 		//initiate Idendentify taskss parameters for visible dynamic layers
 		initIdentify: function(layerInfo) {
 			//layers in reverse order to indetify depending on inputs and legend order
 			//var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
-			identifyPerameters = this.getParameters(layerInfo);			
+			identifyPerameters = this.getParameters(layerInfo);
 			map.on("click", this.executeIdentify);
 		},
 		//identify after checkbox update
 		updatedIdentify: function(layerInfo) {
 			//layers in reverse order to indetify depending on inputs and legend order
 			//var layersReveresed = layerInfo.reverse(); //TODO change it, reverse is slow method
-			identifyPerameters = this.getParameters(layerInfo);			
+			identifyPerameters = this.getParameters(layerInfo);
 		},
 		getParameters: function(layerInfo) {
 			var parametersList = {}; // create Parameters list obj
@@ -865,7 +944,7 @@ require([
 					identifyPerameters.tolerance = 3;
 					identifyPerameters.returnGeometry = true;
 					//identifyPerameters.layerIds = layerInfo[layer].layer._defaultVisibleLayers;
-					identifyPerameters.layerIds = this.getVisibleLayerIds(layerInfo[layer].layer.visibleLayers);	
+					identifyPerameters.layerIds = this.getVisibleLayerIds(layerInfo[layer].layer.visibleLayers);
 					identifyPerameters.layerOption = IdentifyParameters.LAYER_OPTION_VISIBLE; //identify only visible layers
 					identifyPerameters.width = map.width;
 					identifyPerameters.height = map.height;
@@ -876,15 +955,15 @@ require([
 			return parametersList;
 		},
 		getVisibleLayerIds: function (visible) {
-			var ids = [];	
-			arrayUtils.map(visible, function (infoL, i) {						
+			var ids = [];
+			arrayUtils.map(visible, function (infoL, i) {
 				ids.push(infoL);
 			});
 			return ids;
 		},
 		executeIdentify: function(evt) {
 			if (!toolsMeasure.activeTool){
-				//validate ArcGis date string 
+				//validate ArcGis date string
 				var reg = /(\d+)[.](\d+)[.](\d+)\s.*/; //regex: match number with . char, clear everything else
 				var isValidDate = function (dateStr) {
 					return dateStr.match(reg) !== null;
@@ -897,7 +976,7 @@ require([
 							// response is an array of identify result objects
 							// Let's return an array of features.
 							return arrayUtils.map(response, function (result) {
-								//console.log(result);	
+								//console.log(result);
 								defResponse = response;
 								var feature = result.feature,
 									content = " ",
@@ -908,12 +987,12 @@ require([
 
 								for (var resultAtr in attributes) {
 									if (attributes.hasOwnProperty(resultAtr)) {
-										//console.log(resultAtr);									
+										//console.log(resultAtr);
 										if (!(resultAtr == "OBJECTID" || resultAtr == "layerName" || resultAtr == "SHAPE" || resultAtr == "SHAPE.area" || resultAtr == "Shape.area" || resultAtr == "SHAPE.STArea()" || resultAtr == "Shape" || resultAtr == "SHAPE.len" || resultAtr == "Shape.len" || resultAtr == "SHAPE.STLength()" || resultAtr == "SHAPE.fid" ||
-										resultAtr == "Class value" || resultAtr == "Pixel Value"  || resultAtr == "Count_" //TEMP check for raster properties 
+										resultAtr == "Class value" || resultAtr == "Pixel Value"  || resultAtr == "Count_" //TEMP check for raster properties
 											 )) { //add layers attributes that you do not want to show
 											//AG check for date string
-											
+
 											if (isValidDate(attributes[resultAtr])) {
 												var attributeDate = attributes[resultAtr];
 												content += "<p class='bord'>" + attributes[resultAtr].replace(reg, '$1-$2-$3') + "</br><span>" + resultAtr + "</span>" + "<p>";
@@ -923,18 +1002,18 @@ require([
 													if ((attributeResult === " ") || (attributeResult === "Null")) {
 														attributeResult = "-";
 													}
-													
+
 												} else {
 													attributeResult = "-";
 												}
 												content += "<p class='bord'>" + attributeResult + "</br><span>" + resultAtr + "</span>" + "<p>";
 											}
-											
+
 										} else if (resultAtr == "Class value" || resultAtr == "Pixel Value") {
 											//TEMP check for raster properties 	and add custom msg
 											content = '<p class="raster">Išsamesnė sluoksnio informacija pateikiama Meniu lauke <strong>"Žymėjimas"</strong></p>';
 										}
-										
+
 									}
 								}
 
@@ -962,7 +1041,7 @@ require([
 							"spatialReference": identifyPerameters[parameter].geometry.spatialReference
 						});
 						identifyPerameters[parameter].geometry = pointGeometry;
-						
+
 						var deferred = getDeferred();
 
 						deferredList.push(deferred); // create deferred objects llist obj
@@ -972,7 +1051,7 @@ require([
 					all(deferredList.reverse()).then(function(result){ //AG run then() method with all/promise widget
 						var resultsMerge = [].concat.apply([], result); // if we have list of results - merger all results
 						//console.log(result);
-						if (resultsMerge.length > 0) { // check if we have response by checking resultsMerge array			
+						if (resultsMerge.length > 0) { // check if we have response by checking resultsMerge array
 							map.infoWindow.setFeatures([].concat.apply([], deferredList)); //set features with all deferred objects
 							map.infoWindow.show(evt.mapPoint);
 							//domClass.add("default-popup", "animate"); //add animation to pup up
@@ -984,28 +1063,28 @@ require([
 		setDefaultSelectionSymbol: function(feature) {
 			// selection symbol used to draw the selected census block points within the buffer polygon
 			var symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 1]), 3), new Color([129, 183, 206, 0]));
-			feature.setSymbol(symbol);	
+			feature.setSymbol(symbol);
 			map.graphics.add(feature);
 		}
 	};
-	
+
 	//create theme menu elements
 	CONTROL.createThemeDom();
 
     //DOM to dijit
     parser.parse();
-    
+
     //AG  current theme
     CONTROL.currenthemeLabel();
-	
+
 	//console.dir(bundle)
 	//Change locale strings
 	bundle.widgets.legend.NLS_noLegend = "Grupės sluoksniai išjungti arba per didelis mastelis";
 	bundle.widgets.popup.NLS_zoomTo = "Priartinti";
 	bundle.widgets.popup.NLS_pagingInfo = "<span class='index-total'>(${index} iš ${total})</span>";
-    
-    var loadGif = dom.byId("loading-gif"); 
-    
+
+    var loadGif = dom.byId("loading-gif");
+
     var extent = new esri.geometry.Extent(MAPCONFIG.mapExtent); //DONE
 
     var popupProperties = {  //DONE
@@ -1025,14 +1104,14 @@ require([
     var popupDom = domConstruct.create("div", { id: "default-popup" });  //DONE
     popup = new Popup(popupProperties, popupDom);  //DONE
 
-	
+
 /*	var defaulMarkertSelect = new SimpleMarkerSymbol("circle", 24,
 									new SimpleLineSymbol(SimpleLineSymbol.STYLE_LONGDASH, new Color([223, 52, 59, 1]), 3),
-									new Color([255, 255, 255, 0]));	
+									new Color([255, 255, 255, 0]));
 	popup.markerSymbol = defaulMarkertSelect;*/
-	
+
 	//popup.markerSymbol.setOffset(20, 32);
-	
+
    var map = new Map("map", {  //DONE
         extent: extent,
         logo: false,
@@ -1041,25 +1120,25 @@ require([
         infoWindow: popup,
         nav: false // hides Pan Arrows
     });
-	
+
 	//map.infoWindow._highlighted.yoffset = -25;
-	
+
 	//map.infoWindow.highlight = false;  // do not show default highlight
 	//map.infoWindow.markerSymbol.outline.color;  // do not show default highlight
 
     var navToolbar = new Navigation(map);
     var extentCenter = dojo.byId("zoomfullext");
-	
+
     on(extentCenter, "click", function() {
         //navToolbar.zoomToFullExtent(); //AG buggy, switching to centerAndZoom
         var location = extent.getCenter();
         map.centerAndZoom(location, 0);
         //console.log("CENTER COORD:" + JSON.stringify(location));
     });
-	
+
 	//S center map after resize event
 	map.on("resize", function() {centerMap();});
-	
+
 	// centerMap function declaration
 	function centerMap() {
 		var top = document.getElementById('map').offsetHeight / 2;
@@ -1068,7 +1147,7 @@ require([
 		var mapPoint = map.toMap(screenPoint);
 		setTimeout(function() {
 			map.centerAt(mapPoint);
-		}, 50);		
+		}, 50);
 	}
 	//E center map after resize event
 
@@ -1079,28 +1158,26 @@ require([
 
     esriConfig.defaults.io.proxyUrl = "proxy/proxy.php";
     esriConfig.defaults.io.corsEnabledServers.push("https://zemelapiai.vplanas.lt"); //https://developers.arcgis.com/javascript/jshelp/inside_defaults.html
-    
+
     //Dependencies from Config file
     //Basemaps / tiled services
     var baseUrl = MAPCONFIG.staticServices.basemapUrl,
         ortoUrl = MAPCONFIG.staticServices.ortofotoUrl,
         //Feature services
         featBuildingsUrl = MAPCONFIG.themesServices.buildingTheme.featureLayerBuildings,
-        featEnergeticsUrl = MAPCONFIG.themesServices.energeticsTheme.featureLayerEnergetics,
         advertsFeatureUrl = MAPCONFIG.themesServices.featureLayerAdverts,
         //Dynamic services
         //theme=build
         dynUrl = MAPCONFIG.themesServices.buildingTheme.dynamicLayerBuildings,
-        energeticsUrl = MAPCONFIG.themesServices.energeticsTheme.dynamicLayerEnergetics,
         //theme=ad
         advertsUrl = MAPCONFIG.themesServices.dynamicLayerAdverts,
         //geometry services
         geomBuildUrl =  MAPCONFIG.staticServices.geometryUrl;
 
     //custom Info Templates
-    //theme adverts template 
+    //theme adverts template
 	var adTemplate = new InfoTemplate();
-    
+
     //Basemaps / tiled services
     var basemap = new ArcGISTiledMapServiceLayer(baseUrl, {
 	    id: "topo"
@@ -1108,7 +1185,7 @@ require([
     var ortofoto = new ArcGISTiledMapServiceLayer(ortoUrl, {
 	    id: "orto"
     });
-    
+
     //Feature services
     var featureBuildings = new FeatureLayer(featBuildingsUrl, {
         id: "buildings-feat",
@@ -1116,62 +1193,51 @@ require([
         maxAllowableOffset: calcOffset(),
         outFields: ["*"]
     });
-    
+
     var advertsFeatureLayer = new FeatureLayer(advertsFeatureUrl, {
         id: "adverts-feat",
         //infoTemplate: adTemplate,
         mode: FeatureLayer.MODE_ONDEMAND,
         outFields: ["*"]
     });
-    
+
     //Dynamic services
     var layerBuild = new ArcGISDynamicMapServiceLayer(dynUrl, {
           opacity: 1.0,
           id: "buildings-dyn"
     });
-	
-	//Energetic theme
-    var featureEnergetics = new FeatureLayer(featEnergeticsUrl, {
-        id: "buildings-feat",
-        mode: FeatureLayer.MODE_ONDEMAND,
-        maxAllowableOffset: calcOffset(),
-        outFields: ["*"]
-    });
-    var layerEnergetics = new ArcGISDynamicMapServiceLayer(energeticsUrl, {
-          opacity: 1.0,
-          id: "energetics-dyn"
-    });
+
     //theme adverts, only for legend and inputs, for graphics use cluster layer instead (cluster layer has no layerinfo property)
     var advertsDynLayer = new ArcGISDynamicMapServiceLayer(advertsUrl, {
         id: "adverts"
     });
     //suspend layer drawing
     advertsDynLayer.suspend();
-    
+
     var baseMaps = [basemap, ortofoto];
     map.addLayers(baseMaps);
-	
+
 	var initiateDefaultLayer = CONTROL.initTheme();
-    
-    //measurements geometric service, changed to VP service 
+
+    //measurements geometric service, changed to VP service
     esri.config.defaults.geometryService = new GeometryService(geomBuildUrl);
 	var geometryService =  esri.config.defaults.geometryService;
-    
+
     var toolsMeasure = new Measurement({
         map: map,
         defaultAreaUnit: Units.HECTARES,
         defaultLengthUnit: Units.KILOMETERS,
         deactivate: function() {
-                var toolName  = this.getTool(); 
+                var toolName  = this.getTool();
                 if (toolName) {
                     this.setTool(toolName.toolName, false);
                     this.clearResult();
-                }   
+                }
         }
     }, dom.byId("tools-measure"));
-    
+
     toolsMeasure.startup();
-	
+
 	//hide infowindow on every top menu anchor click
 	var topMenuAnchors = document.getElementById("top-menu").getElementsByTagName("a");
 	arrayUtils.forEach(topMenuAnchors, function(anchor) {
@@ -1182,9 +1248,9 @@ require([
 
 		});
 	});
-	
-    
-    // Ortofoto toggle	
+
+
+    // Ortofoto toggle
     basemap.show();
     ortofoto.hide();
 
@@ -1213,7 +1279,7 @@ require([
 		url: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI_V1/GeocodeServer",
 		name: "Vilniaus adresai"
 	}];
-	
+
    var geocoder = new Search({
 		//arcgisGeocoder: false,
 		//geocoders: geocoders,
@@ -1231,31 +1297,31 @@ require([
 			localSearchOptions: {
 			  minScale: 300000,
 			  distance: 50000
-			},			
+			},
 			placeholder: "Paieška",
 			highlightSymbol: new PictureMarkerSymbol("/maps_vilnius/img/map_marker.png", 36, 36).setOffset(0, 12)
 		}],
 	    //enableInfoWindow: false,
 		map: map
-		//highlightLocation: true,        
+		//highlightLocation: true,
 /*        autoComplete: true,
         highlightLocation: true,
         arcgisGeocoder: {
             sourceCountry: "LT",
             placeholder: "Gatvė arba adresas"
-        }   */   
+        }   */
     }, "search");
     geocoder.startup();
-	
+
 	//console.log(geocoder);
-	
+
 	on(geocoder, 'select-result', function () {
 		setTimeout(function() {
 			popup.hide(); //let's hide popup after 4 seconds
 		}, 4000);
 	});
     //Geocoder END
-	
+
     //Opacity slider
 	horizontalSlider = new HorizontalSlider({
 		labels: ["0 %", "100 %"],
@@ -1282,12 +1348,12 @@ require([
 	}, "tools-opacity-widget");
 	horizontalSlider.startup();
 
-	//AG initiate layers default opacity 
+	//AG initiate layers default opacity
 	if (initiateDefaultLayer) {
 		for (var layer in initiateDefaultLayer) {
 			if (initiateDefaultLayer.hasOwnProperty(layer)) {
 				initiateDefaultLayer[layer].setOpacity(horizontalSlider.value / 100);
-				
+
 				//TEMP staticly change raster layer opacity, TODO change raster layers oapcity dynamicly
 				if (initiateDefaultLayer[layer].configLayerName === "accidentsRaster") {
 					initiateDefaultLayer[layer].setOpacity(0.6);
@@ -1301,11 +1367,11 @@ require([
 		//featureBuildings.setOpacity(horizontalSlider.value / 10);
 		layerBuild.setOpacity(horizontalSlider.value / 100);
 	}
-    //End Opacity slider	
-	
+    //End Opacity slider
+
 	//console.log(CONTROL.currentTheme("theme"));
-	
-    // Add custom themes	
+
+    // Add custom themes
 	switch (CONTROL.currentTheme("theme")) {
 		case "ad": //add permits theme
 			var permitsCluster = permitsTheme(map);
@@ -1317,61 +1383,51 @@ require([
 			domClass.add(document.body, "building-theme");
 			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
 			break;
-		//case "energeticsTheme"
-		case "theme-energetics": //if theme energetics
-			domClass.add(document.body, "energetics-theme");
-			energeticsTheme(map, featureEnergetics, toolsMeasure, featEnergeticsUrl, CONTROL.showCursor);
-			//change info block name
-			document.getElementById("build-data").getElementsByTagName("p")[0].innerHTML = "Viešieji pastatai";
-			document.getElementById("build-manage").getElementsByTagName("p")[0].innerHTML = "Elektros sunaudojimas";
-			break;
 		case null: //if theme building or null or empty
-			domClass.add(document.body, "building-theme");	
+			domClass.add(document.body, "building-theme");
 			buildingsTheme(map, featureBuildings, toolsMeasure, featBuildingsUrl, CONTROL.showCursor);
 			break;
 		case "schools": //add schools theme
-			
+
 			var mainDijit = registry.byId("mainWindow");
-			
+
 			var rContent = new ContentPane({
 				region: "right",
 				style: "width: 346px; padding: 0",
 				class: "schools",
 				content: "<p class='build-p'>Mokyklų paieška pagal adresą:</p><div id='schools-filter'><p>Mokyklų filtravimas<a href='/maps_vilnius/schools.htm' target='_blank' class='red' style='display: none;'>( išimtys )</a>: <br><label>pagal kalbą</label><label class='class-year'>pagal klasę</label><span id='language-filter'></span><span id='year-filter'></span></p></div><div id='search-schools'></div><div id='schools-list' class='module-schools animate'><div id='schools-data'></div><div class='bg-w'><p><span>Priskirtas mokyklų sąrašas:</span></p><ul id='schools-filtered-list'></ul></div></div><div id='schools-info'></div>"
 			}).placeAt("mainWindow").startup();
-			
+
 			domClass.add(document.body, "schools-theme");
 			schoolsTheme(map, MAPCONFIG, toolsMeasure, CONTROL.showCursor, horizontalSlider, popup, geometryService);
 			break;
 		default:
-			domClass.add(document.body, "default-theme");	
+			domClass.add(document.body, "default-theme");
 	}
-	// End add custom themes	
-	
+	// End add custom themes
+
     map.on("update-start", function () {
     	//esri.show(loadGif);
 		domClass.add("loading-gif", "show");
 		domClass.remove("loading-gif", "hide");
-    		
+
     });
 
     map.on("update-end", function () {
        //esri.hide(loadGif);
-	   domClass.remove("loading-gif", "show"); 
-	   domClass.add("loading-gif", "hide"); 
+	   domClass.remove("loading-gif", "show");
+	   domClass.add("loading-gif", "hide");
     });
- 
+
     //TEMP check url query theme and add/remove layers
     if (CONTROL.currentTheme() === "ad"){
 	     map.addLayers([advertsDynLayer]);
-    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
+    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){
     	map.addLayers([layerBuild]);
-    } else if (CONTROL.currentTheme() === "theme-energetics") {
-		map.addLayers([layerEnergetics]);
-	}
-    
+    }
+
     //var visible = [];
-    
+
 
     on(map, 'onZoomEnd', function() {
         maxOffset = calcOffset();
@@ -1382,8 +1438,8 @@ require([
         return (map.extent.getWidth() / map.width);
     }
 
-    map.infoWindow.resize(350, 300);			
-    
+    map.infoWindow.resize(350, 300);
+
     function updateLayerVisibility() {
             var inputs = dojoQuery(".dijitCheckBoxInput");
             //var input;
@@ -1395,49 +1451,41 @@ require([
                     //TEMP push layer id 0 / CHANGE / REMOVE IT
                     visible.push(0);
                 }
-                  
+
                     //TEMP featureL visibility / CHANGE / REMOVE IT
                     if (inputs[0].checked) {
                         // TEMP show featureL
                         //buildings theme
-                        featureBuildings.show(); 
-                        //layerBuild.show();
-                        featureEnergetics.show();
-                        layerEnergetics.show();
-						
-                        //adverts theme 
+                        featureBuildings.show();
+
+                        //adverts theme
                         advertsDynLayer.show();
                         advertsFeatureLayer.show();
-                        
+
                         if (CONTROL.currentTheme() === "ad"){ //sukurt masyva ir pushint pagal tema
                         	permitsCluster.show();
                         }
                     } else {
                         // TEMP hide featureL
-                        //building theme
-                        //featureBuildings.hide();
-                        //layerBuild.hide();
                         featureBuildings.hide();
-                        featureEnergetics.hide();
-                        layerEnergetics.hide();
                         //advert theme
                         advertsDynLayer.hide();
                         advertsFeatureLayer.hide();
                         if (CONTROL.currentTheme() === "ad"){ //sukurt masyva ir pushint pagal tema
                         	permitsCluster.hide();
-                        }                        
+                        }
                     }
-                    //End TEMP featureL visibility, CHANGE / REMOVE IT        
-                  
+                    //End TEMP featureL visibility, CHANGE / REMOVE IT
+
             });
               //if there aren't any layers visible set the array to be -1
             if (visible.length === 0) {
                 visible.push(-1);
             }
             layerBuild.setVisibleLayers(visible);
-            
-              
-            
+
+
+
             // if layer is switched off, refresh legend and show only visible layers
             //refresh building theme or advertise theme
             var currentTheme = CONTROL.currentTheme();
@@ -1445,24 +1493,22 @@ require([
 				currentTheme = {layer:advertsDynLayer};
 			} else if ((currentTheme) === "theme-buildings") {
 				currentTheme = {layer:layerBuild};
-			} else if ((currentTheme) === "theme-energetics") {
-				currentTheme = {layer:layerEnergetics};
 			}
-            legendDijit.refresh([currentTheme]); //show refreshed legend only from current Theme     
+            legendDijit.refresh([currentTheme]); //show refreshed legend only from current Theme
 
     }
-    
+
     //legend
     map.on("layers-add-result", function (evt) {
 		//console.log("EVENTAS");
 		//console.log(evt);
-	 if ((CONTROL.currentTheme() === "ad") || (CONTROL.currentTheme() === "theme-buildings") ||(CONTROL.currentTheme() === "theme-energetics") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){    
+	 if ((CONTROL.currentTheme() === "ad") || (CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){
 	    //create / control inputs and legend of each theme
 	  	var showLegendInput = function(layerName, layerId) {
 	        var items = arrayUtils.map(layerName.layerInfos, function (info, i) {
 				var checkBox;
 	       		//console.log(info);
-	       		//TEMP 
+	       		//TEMP
 	       		//Pastatai: input for second Layer
 	       		//Reklama: input for first layer
 	       		if (i === layerId) {
@@ -1485,7 +1531,7 @@ require([
 	       			visible.push(info.id);
 	       		}
 	       		//console.log(visible);
-	       		//senas metodas  
+	       		//senas metodas
 	       		//return "<div class='layers-labels'><input type='checkbox' value='" + (layer.visibleLayers[i]) + "' class='list_item'" + (info.defaultVisibility ? "checked=checked" : "") + "' id='" + info.id + "'' /><label for='" + info.id + "'>" + info.name + "</label></div>";
 	       		//convert to dom
 	       		inputsList = checkBox.domNode;
@@ -1498,19 +1544,19 @@ require([
 	       		//return input via chekcbox widget, will start dojo change event
 	       		return tmp.innerHTML;
 	       		// return "checkBox.domNode";
-	             
+
 	        });
-	        
+
 	        var ll = dom.byId("layer-list");
 	        ll.innerHTML = items.join(' ');
 	        layerBuild.setVisibleLayers(visible);
-	        on(ll, "click", updateLayerVisibility);  
-	        
+	        on(ll, "click", updateLayerVisibility);
+
 	        //legend
 	        var layerInfo = arrayUtils.map(evt.layers, function (layer, index) {
 	          return {layer: layer.layer, title: "Įjungti sluoksniai"};
 	    });
-	          
+
 	        //console.log(evt);
 	        //if (layerInfo.length > 0) {
 	        if (layerInfo.length < 2) { //TEMP do not show legend for base layers
@@ -1519,54 +1565,52 @@ require([
 	                layerInfos: layerInfo
 	            }, "legend-list");
 	            legendDijit.startup();
-	        } 
-	        
-	        
+	        }
+
+
 	        //console.log("layerInfo matomi sluoksniai: " + layerInfo[0].layer.visibleLayers);
 	        //legend visibility toggle
-	        
+
 	        //console.log(layerBuild.visibleLayers);
         };
-        
+
 	    //check url query theme and run create/control inputs and legend of each theme
 	    if (CONTROL.currentTheme() === "ad"){
 		    showLegendInput(advertsDynLayer, 0);
-	    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){ 
+	    } else if ((CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){
 	    	showLegendInput(layerBuild, 1); // theme - Pastatai
-	    } else if (CONTROL.currentTheme() === "theme-energetics"){ 
-	    	showLegendInput(layerEnergetics, 0); // theme - Pastatai
 	    }
 	 }
-    }); 
-    
+    });
+
     //Hash toggle
     var aTagList = document.getElementsByTagName('a');
 
     for(var i = 0; i < aTagList.length; i++){
       aTagList[i].addEventListener('click', hash, false);
     }
-    
+
     function hash(e){
         if (window.location.hash === e.currentTarget.getAttribute('href')) {
                 window.location.hash = '#closed';
                 e.preventDefault();  // AG for JQuery same as": return false (in this case, prevents event handlers after click event)
-        
+
                 //Deactivate tool #2nd /change it
-                toolsMeasure.deactivate();    
+                toolsMeasure.deactivate();
         }
-        
-    }  
-    
+
+    }
+
     //Date
     var today = new Date();
     var year = today.getFullYear();
     document.getElementById("credits").innerHTML  = year + " m. | VMS interaktyvūs žemėlapiai | <a href='#' id='copyright'>Autorinės teisės</a> | <a href='http://www.vilniausplanas.lt/' target='_blank'>SĮ „Vilniaus planas“</a>";
 
     //Mouse cursor
-	var activeLayers = [featureBuildings, advertsFeatureLayer, featureEnergetics];
+	var activeLayers = [featureBuildings, advertsFeatureLayer];
 	CONTROL.showCursor(activeLayers, arrayUtils);
-    //END Mouse cursor  
-	
+    //END Mouse cursor
+
 	//copyright
 	require(["dijit/Tooltip"], function (Tooltip) {
 		var copyTooltip = new Tooltip({
@@ -1577,7 +1621,8 @@ require([
 		});
 		//console.log(copyTooltip);
 	});
-});;var permitsTheme = function (map) {
+});
+;var permitsTheme = function (map) {
     var cluster;
     
     require([
@@ -2934,9 +2979,9 @@ require([
 			//checking valid url for documents
 			//AG TODO sukurti dokumentu einamuju metu atributo irasa, kiekviena kart ikeliant dokumentus i serveri
 			var urlStack = {
-				ilgalaikisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/IP_" + ntrun + ".pdf",
-				ukinisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/P_" + ntrun + ".pdf",
-				metineVeiklosAtaskaita: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/AT_" + ntrun + ".pdf"
+				ilgalaikisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) - 1) + "/IP_" + ntrun + ".pdf",
+				ukinisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) - 1) + "/P_" + ntrun + ".pdf",
+				metineVeiklosAtaskaita: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) - 1) + "/AT_" + ntrun + ".pdf"
 			};
 
 			//AG checking for broken docs URL 
@@ -3689,11 +3734,18 @@ require([
 				//maxAllowableOffset: calcOffset(),
 				outFields: ["*"]
 			}),
+			specialPolygon = new FeatureLayer("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer/2", {
+				id: "school-special-polygon",
+				//infoTemplate: temp,
+				//mode: FeatureLayer.MODE_ONDEMAND,
+				//maxAllowableOffset: calcOffset(),
+				outFields: ["*"]
+			}),
 			dynamicPoint = new ArcGISDynamicMapServiceLayer("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer", { //dyn layer fo the legend
 				id: "points-dyn"
 			});
 			//suspend layer drawing
-			dynamicPoint.suspend();
+			//dynamicPoint.suspend();
 		
 		setTimeout(function () {
 			var p = document.createElement("p");
@@ -3800,7 +3852,7 @@ require([
 			//geocoders: geocoders,
 			expanded: true,
 			sources: [{
-				locator: new Locator("https://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI/GeocodeServer"),
+				locator: new Locator("https://gis.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI_V1/GeocodeServer"),
 				singleLineFieldName: "Single Line Input", //AG name of 'Single Line Address Field:'
 				outFields: ["*"],
 				enableSuggestions: true, //AG only with 10.3 version
@@ -3904,8 +3956,6 @@ require([
 			dom.byId("schools-filtered-list").innerHTML = ""; //remove data on search if exists	
 			//remove school list dom
 			domClass.remove("schools-list", "active");
-			//console.log("PAIESKOS REZULTATAI:");
-			console.log(e);
 			
 			//remove selection graphic if exists
 			var pointSelect = map.getLayer("Points selection");
@@ -4103,6 +4153,8 @@ require([
 			//query for school points
 			var query = new Query();	
 			//query.objectIds	= ["OBJ_ID"];
+			// TODO 2019 02 05 intergrate solyution for spec schools,
+			// currently adding static queyr selection 
 			query.where = queryStringClause;
 			//query.returnGeometry = true;
 			query.outFields = ["*"];
@@ -4124,6 +4176,9 @@ require([
 			var symbolRuPl = new SimpleMarkerSymbol("circle", 22,
 									new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([220, 20, 60, 0.9]), 2),
 									new Color([255, 255, 255, 1.0]),1);				
+			var symbolSpec = new SimpleMarkerSymbol("circle", 22,
+									new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([122, 122, 0, 0.9]), 2),
+									new Color([167, 167, 0, 1.0]),1);				
 			
 			
 			//select schools by polygon OBJ_ID
@@ -4166,6 +4221,10 @@ require([
 				arrayUtils.forEach(results, function (result) {
 					//console.log(result);
 					var language = result.attributes.KALBA;
+					if (result.attributes.GYV_ID === 26) {
+						// TODO REMOVE, quick demo feature fro special schools
+						language = '26';
+					}
 					//var shortlanguage = language.slice(0, 3); //get only 3 first letters for class name
 					var shortlanguage = ""; 
 					//get max min y and x values of each points
@@ -4195,6 +4254,11 @@ require([
 							points.add(new Graphic(result.geometry, symbolRuPl, result.attributes));
 							//additional language
 							shortlanguage += "len-rus";
+							break;
+						case "26":
+							points.add(new Graphic(result.geometry, symbolSpec, result.attributes));
+							//additional language
+							shortlanguage += "spec";
 							break;
 						default:
 							points.add(new Graphic(result.geometry, symbolDefault, result.attributes));
@@ -4448,7 +4512,7 @@ require([
 		//set renderer and hide layers
 		//featureTeritory.setRenderer(new SimpleRenderer(symbolLayer));
 
-		map.addLayers([featurePoint, dynamicPoint]);
+		map.addLayers([featurePoint, dynamicPoint,]);
 		
 		//show cursor on feature layer
 		showCursor([featurePoint], arrayUtils);	
@@ -4501,6 +4565,9 @@ require([
 					visible.push(input.id);
 					//TEMP push layer id 0 / CHANGE / REMOVE IT
 					visible.push(0);
+					// push special polygon and schools
+					visible.push(2);
+					visible.push(3);
 				}
 
 				//TEMP featureL visibility / CHANGE / REMOVE IT
@@ -4535,9 +4602,9 @@ require([
 			var showLegendInput = function (layerName, layerId) {
 				var items = arrayUtils.map(layerName.layerInfos, function (info, i) {
 					var checkBox;
-					//console.log(info);
+					console.log(info, layerId);
 
-					if (i === layerId) {
+					if (i === layerId[0] || i === layerId[1] || i === layerId[2] ) {
 						checkBox = new CheckBox({
 							class: "layers-labels",
 							checked: info.defaultVisibility ? "checked=checked" : "",
@@ -4574,8 +4641,8 @@ require([
 				//legend
 				var layerInfo = [];
 				arrayUtils.map(evt.layers, function (layer, index) {
-					//console.log(layer.layer.id);
-					if (layer.layer.id === "points-dyn") {
+					console.log(layer.layer.id);
+					if (layer.layer.id === "points-dyn" || layer.layer.id === "points-dyn") {
 						layerInfo.push({
 							layer: layer.layer,
 							title: "Įjungti sluoksniai"
@@ -4584,6 +4651,7 @@ require([
 				});
 
 				//console.log(layerInfo);
+
 
 				legendDijit = new Legend({
 					map: map,
@@ -4594,7 +4662,8 @@ require([
 			};
 
 			//check url query theme and run create/control inputs and legend of each theme
-			showLegendInput(dynamicPoint, 0); // theme - Pastatai
+			showLegendInput(dynamicPoint, [0, 2, 3]); // theme - Pastatai
+
 			
 			//Opacity slider
 			//console.log(horizontalSlider);

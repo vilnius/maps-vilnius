@@ -941,9 +941,9 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			//checking valid url for documents
 			//AG TODO sukurti dokumentu einamuju metu atributo irasa, kiekviena kart ikeliant dokumentus i serveri
 			var urlStack = {
-				ilgalaikisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/IP_" + ntrun + ".pdf",
-				ukinisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/P_" + ntrun + ".pdf",
-				metineVeiklosAtaskaita: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) + 1) + "/AT_" + ntrun + ".pdf"
+				ilgalaikisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) - 1) + "/IP_" + ntrun + ".pdf",
+				ukinisPlanas: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) - 1) + "/P_" + ntrun + ".pdf",
+				metineVeiklosAtaskaita: "https://zemelapiai.vplanas.lt/Statiniai/Adm_Stat/" + (parseInt(einMetai, 10) - 1) + "/AT_" + ntrun + ".pdf"
 			};
 
 			//AG checking for broken docs URL 

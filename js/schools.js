@@ -137,11 +137,18 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				//maxAllowableOffset: calcOffset(),
 				outFields: ["*"]
 			}),
+			specialPolygon = new FeatureLayer("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer/2", {
+				id: "school-special-polygon",
+				//infoTemplate: temp,
+				//mode: FeatureLayer.MODE_ONDEMAND,
+				//maxAllowableOffset: calcOffset(),
+				outFields: ["*"]
+			}),
 			dynamicPoint = new ArcGISDynamicMapServiceLayer("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer", { //dyn layer fo the legend
 				id: "points-dyn"
 			});
 			//suspend layer drawing
-			dynamicPoint.suspend();
+			//dynamicPoint.suspend();
 		
 		setTimeout(function () {
 			var p = document.createElement("p");
@@ -248,7 +255,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			//geocoders: geocoders,
 			expanded: true,
 			sources: [{
-				locator: new Locator("https://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI/GeocodeServer"),
+				locator: new Locator("https://gis.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI_V1/GeocodeServer"),
 				singleLineFieldName: "Single Line Input", //AG name of 'Single Line Address Field:'
 				outFields: ["*"],
 				enableSuggestions: true, //AG only with 10.3 version
@@ -352,8 +359,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			dom.byId("schools-filtered-list").innerHTML = ""; //remove data on search if exists	
 			//remove school list dom
 			domClass.remove("schools-list", "active");
-			//console.log("PAIESKOS REZULTATAI:");
-			console.log(e);
 			
 			//remove selection graphic if exists
 			var pointSelect = map.getLayer("Points selection");
@@ -551,6 +556,8 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			//query for school points
 			var query = new Query();	
 			//query.objectIds	= ["OBJ_ID"];
+			// TODO 2019 02 05 intergrate solyution for spec schools,
+			// currently adding static queyr selection 
 			query.where = queryStringClause;
 			//query.returnGeometry = true;
 			query.outFields = ["*"];
@@ -572,6 +579,9 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			var symbolRuPl = new SimpleMarkerSymbol("circle", 22,
 									new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([220, 20, 60, 0.9]), 2),
 									new Color([255, 255, 255, 1.0]),1);				
+			var symbolSpec = new SimpleMarkerSymbol("circle", 22,
+									new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([122, 122, 0, 0.9]), 2),
+									new Color([167, 167, 0, 1.0]),1);				
 			
 			
 			//select schools by polygon OBJ_ID
@@ -614,6 +624,10 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				arrayUtils.forEach(results, function (result) {
 					//console.log(result);
 					var language = result.attributes.KALBA;
+					if (result.attributes.GYV_ID === 26) {
+						// TODO REMOVE, quick demo feature fro special schools
+						language = '26';
+					}
 					//var shortlanguage = language.slice(0, 3); //get only 3 first letters for class name
 					var shortlanguage = ""; 
 					//get max min y and x values of each points
@@ -643,6 +657,11 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 							points.add(new Graphic(result.geometry, symbolRuPl, result.attributes));
 							//additional language
 							shortlanguage += "len-rus";
+							break;
+						case "26":
+							points.add(new Graphic(result.geometry, symbolSpec, result.attributes));
+							//additional language
+							shortlanguage += "spec";
 							break;
 						default:
 							points.add(new Graphic(result.geometry, symbolDefault, result.attributes));
@@ -896,7 +915,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 		//set renderer and hide layers
 		//featureTeritory.setRenderer(new SimpleRenderer(symbolLayer));
 
-		map.addLayers([featurePoint, dynamicPoint]);
+		map.addLayers([featurePoint, dynamicPoint,]);
 		
 		//show cursor on feature layer
 		showCursor([featurePoint], arrayUtils);	
@@ -949,6 +968,9 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 					visible.push(input.id);
 					//TEMP push layer id 0 / CHANGE / REMOVE IT
 					visible.push(0);
+					// push special polygon and schools
+					visible.push(2);
+					visible.push(3);
 				}
 
 				//TEMP featureL visibility / CHANGE / REMOVE IT
@@ -983,9 +1005,9 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			var showLegendInput = function (layerName, layerId) {
 				var items = arrayUtils.map(layerName.layerInfos, function (info, i) {
 					var checkBox;
-					//console.log(info);
+					console.log(info, layerId);
 
-					if (i === layerId) {
+					if (i === layerId[0] || i === layerId[1] || i === layerId[2] ) {
 						checkBox = new CheckBox({
 							class: "layers-labels",
 							checked: info.defaultVisibility ? "checked=checked" : "",
@@ -1022,8 +1044,8 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				//legend
 				var layerInfo = [];
 				arrayUtils.map(evt.layers, function (layer, index) {
-					//console.log(layer.layer.id);
-					if (layer.layer.id === "points-dyn") {
+					console.log(layer.layer.id);
+					if (layer.layer.id === "points-dyn" || layer.layer.id === "points-dyn") {
 						layerInfo.push({
 							layer: layer.layer,
 							title: "Įjungti sluoksniai"
@@ -1032,6 +1054,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				});
 
 				//console.log(layerInfo);
+
 
 				legendDijit = new Legend({
 					map: map,
@@ -1042,7 +1065,8 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			};
 
 			//check url query theme and run create/control inputs and legend of each theme
-			showLegendInput(dynamicPoint, 0); // theme - Pastatai
+			showLegendInput(dynamicPoint, [0, 2, 3]); // theme - Pastatai
+
 			
 			//Opacity slider
 			//console.log(horizontalSlider);

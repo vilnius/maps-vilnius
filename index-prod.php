@@ -8,24 +8,22 @@
 	<meta name="viewport" content="width=1028, initial-scale=1">
 	<!--2014: Render IE-version as IE10-->
 	<meta http-equiv='X-UA-Compatible' content='IE=EmulateIE10'>
-	<meta name="robots" content="noindex,nofollow">
 	<link rel="shortcut icon" type="image/ico" href="/maps_vilnius/img/favicon.ico">
 	<link rel="stylesheet" href="https://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
 	<link rel="stylesheet" href="https://js.arcgis.com/3.17/esri/css/esri.css">
-	<link rel="stylesheet" href="/maps_vilnius/css/page.css">
+	<link rel="stylesheet" href="/maps_vilnius/css/style.min.css">
 	<link rel="stylesheet" href="/maps_vilnius/webfont/stylesheet.css">
 	<link rel="stylesheet" href="/maps_vilnius/css/font-awesome.min.css">
 	<!-- Photoswipe -->
 	<link rel="stylesheet" href="/maps_vilnius/css/photoswipe.css">
-	<link rel="stylesheet" href="/maps_vilnius/css/default-skin/default-skin.css">
-	<link rel="stylesheet" href="/maps_vilnius/css/outdatedbrowser.css">
-	<script src="/maps_vilnius/js/outdatedbrowser.min.js"></script>
+	<link rel="stylesheet" href="/maps_vilnius/css/default-skin/default-skin.css">	
+	
 	<script src="/maps_vilnius/js/Blob.js"></script>
 	<script src="/maps_vilnius/js/FileSaver.min.js"></script>
 	<script src="../maps_vilnius/js/Chart.js"></script>
 	<script type="text/javascript">
 		var dojoConfig = {
-			isDebug: true,
+			isDebug: false,
 			async: true,
 			locale: 'lt',
 			packages: [{
@@ -35,16 +33,10 @@
 		};
 	</script>
 	<script src="https://js.arcgis.com/3.17/"></script>
-	<script src="/maps_vilnius/js/permits.js"></script>
-	<script src="/maps_vilnius/js/buildings.js"></script>
-	<!-- <script src="/maps_vilnius/js/energetics.js"></script> -->
-	<script src="/maps_vilnius/js/schools.js"></script>
-	<script src="/maps_vilnius/js/configuration.js"></script>
-	<script src="/maps_vilnius/js/main.js"></script>
+	<script src="/maps_vilnius/js/app.min-g86656786j54.js"></script>
 </head>
 
 <body class="claro">
-	<div id="outdated"></div>
 <!--	<img id="loading-gif" src="img/vilnius_load.gif" alt="Luktelkite" />-->
 	<div id="loading-gif">
 		<div class="showbox">
@@ -294,31 +286,6 @@
 		ga('create', 'UA-73336418-1', 'auto');
 		ga('send', 'pageview');
 	</script>
-	<script type="text/javascript">
-		//event listener: DOM ready
-		function addLoadEvent(func) {
-			var oldonload = window.onload;
-			if (typeof window.onload != 'function') {
-				window.onload = func;
-			} else {
-				window.onload = function() {
-					if (oldonload) {
-						oldonload();
-					}
-					func();
-				}
-			}
-		}
-		//call plugin function after DOM ready
-		addLoadEvent(function(){
-			outdatedBrowser({
-				bgColor: '#f25648',
-				color: '#ffffff',
-				lowerThan: 'transform',
-				languagePath: '/maps_vilnius/lang/lt.html'
-			})
-		});	
-	</script>	
 </body>
 
 </html>
