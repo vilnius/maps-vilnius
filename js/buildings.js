@@ -212,7 +212,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			setQuery: function (currentSelect, valdName) {
 				var promise = new Deferred(),
 					graphQuery = new Query(),
-					graphQueryTask = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/4"),
+					graphQueryTask = new QueryTask("https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/5"),
 					self = this;
 				graphQuery.where = "1=1";
 				graphQuery.returnGeometry = false;
@@ -392,7 +392,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 		//NEW 2015 11
 		//QueryTask: namo bendrieji tarifai
-		var buildingAdministrationTask = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1");
+		var buildingAdministrationTask = new QueryTask("https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1");
 		var buildingAdministration = new Query();
 		buildingAdministration.outSpatialReference = {
 			wkid: 3346
@@ -404,7 +404,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 		var queryHeating = new Query();
 		var queryTaskHeating;
 		setTimeout(function () {
-			queryTaskHeating = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/2");
+			queryTaskHeating = new QueryTask("https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/2");
 		}, 150);
 
 
@@ -767,7 +767,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 
 
 				//QueryTask for comparing: namo bendrieji tarifai
-				var buildingAdministrationTaskCompare = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1");
+				var buildingAdministrationTaskCompare = new QueryTask("https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/1");
 				var buildingAdministrationCompare = new Query();
 				buildingAdministrationCompare.outSpatialReference = {
 					wkid: 3346
@@ -1038,7 +1038,7 @@ var buildingsTheme = function (map, featureBuildings, toolsMeasure, featBuilding
 			//Get attachments
 			window.attachmentsObj = {}; //store attachments functions to save files with file.js // TOTO eliminate global object
 			var attachmentsHtml = "";
-			var attachmentTask = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/5");
+			var attachmentTask = new QueryTask("https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Pastatu_administravimas/MapServer/4");
 			var attachmentQuery = new Query();
 			attachmentQuery.outSpatialReference = {
 				wkid: 3346

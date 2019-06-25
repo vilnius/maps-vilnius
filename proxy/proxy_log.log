@@ -37,3 +37,146 @@
  
 09-13-16 11:14:13 | GET detected
 09-13-16 11:14:13 | This proxy does not support empty parameters.
+ 
+03-18-19 10:42:39 | GET detected
+03-18-19 10:42:40 | Proxy could not resolve requested url - https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/0.  Possible solution would be to update 'mustMatch', 'matchAll' or 'url' property in the configuration file.
+ 
+03-18-19 10:44:51 | GET detected
+03-18-19 10:44:52 | Ok to proxy
+03-18-19 10:44:52 | Proxy complete
+ 
+03-18-19 10:48:05 | GET detected
+03-18-19 10:48:05 | Ok to proxy
+03-18-19 10:48:05 | Proxy complete
+ 
+03-18-19 10:49:33 | GET detected
+03-18-19 10:49:33 | Ok to proxy
+03-18-19 10:49:33 | Proxy complete
+ 
+03-18-19 10:52:53 | GET detected
+03-18-19 10:52:53 | Ok to proxy
+03-18-19 10:52:53 | Proxy complete
+ 
+03-18-19 10:54:14 | GET detected
+03-18-19 10:54:14 | Ok to proxy
+03-18-19 10:54:14 | Proxy complete
+ 
+03-18-19 10:58:59 | GET detected
+03-18-19 10:58:59 | Ok to proxy
+03-18-19 10:58:59 | Proxy complete
+ 
+03-18-19 10:59:06 | GET detected
+03-18-19 10:59:06 | Ok to proxy
+03-18-19 10:59:06 | Proxy complete
+ 
+03-18-19 11:11:44 | GET detected
+03-18-19 11:11:44 | Ok to proxy
+03-18-19 11:11:44 | Proxy complete
+ 
+03-18-19 11:13:59 | GET detected
+03-18-19 11:13:59 | Ok to proxy
+03-18-19 11:13:59 | Proxy complete
+ 
+03-18-19 11:18:20 | GET detected
+03-18-19 11:18:20 | Ok to proxy
+03-18-19 11:18:20 | Proxy complete
+ 
+03-18-19 11:25:19 | GET detected
+03-18-19 11:25:19 | Ok to proxy
+03-18-19 11:25:19 | Proxy complete
+ 
+03-18-19 11:25:53 | GET detected
+03-18-19 11:25:54 | Ok to proxy
+03-18-19 11:25:54 | Proxy complete
+ 
+03-18-19 11:26:40 | GET detected
+03-18-19 11:26:40 | Ok to proxy
+03-18-19 11:26:40 | Proxy complete
+ 
+03-18-19 11:28:12 | GET detected
+03-18-19 11:28:12 | Ok to proxy
+03-18-19 11:28:12 | Proxy complete
+ 
+03-18-19 11:29:54 | GET detected
+03-18-19 11:29:54 | Ok to proxy
+03-18-19 11:29:54 | Proxy complete
+ 
+03-18-19 11:31:11 | GET detected
+03-18-19 11:31:11 | Ok to proxy
+03-18-19 11:31:11 | Proxy complete
+ 
+03-18-19 13:03:15 | GET detected
+03-18-19 13:03:15 | Ok to proxy
+03-18-19 13:03:15 | Proxy complete
+ 
+03-18-19 13:05:04 | GET detected
+03-18-19 13:05:04 | Ok to proxy
+03-18-19 13:05:04 | Proxy complete
+ 
+03-18-19 13:09:53 | GET detected
+03-18-19 13:09:55 | Ok to proxy
+03-18-19 13:09:55 | Proxy complete
+ 
+03-18-19 13:10:31 | GET detected
+03-18-19 13:10:31 | Ok to proxy
+03-18-19 13:10:31 | Proxy complete
+ 
+03-18-19 13:34:27 | GET detected
+03-18-19 13:34:27 | Ok to proxy
+03-18-19 13:34:27 | Proxy complete
+ 
+03-18-19 13:35:34 | GET detected
+03-18-19 13:35:34 | Ok to proxy
+03-18-19 13:35:34 | Proxy complete
+ 
+03-18-19 13:35:42 | GET detected
+03-18-19 13:35:42 | Ok to proxy
+03-18-19 13:35:42 | Proxy complete
+ 
+03-18-19 13:36:47 | GET detected
+03-18-19 13:36:47 | Ok to proxy
+03-18-19 13:36:47 | Proxy complete
+ 
+03-18-19 13:37:57 | GET detected
+03-18-19 13:37:57 | Ok to proxy
+03-18-19 13:37:57 | Proxy complete
+ 
+03-18-19 13:38:59 | GET detected
+03-18-19 13:38:59 | Ok to proxy
+03-18-19 13:38:59 | Proxy complete
+ 
+03-18-19 13:39:25 | GET detected
+ 
+ 
+ 
+03-18-19 13:39:25 | Ok to proxy
+03-18-19 13:39:25 | Proxy complete
+03-18-19 13:39:25 | GET detected
+03-18-19 13:39:25 | Ok to proxy
+03-18-19 13:39:25 | Proxy complete
+03-18-19 13:39:25 | GET detected
+03-18-19 13:39:25 | Ok to proxy
+03-18-19 13:39:25 | Proxy complete
+03-18-19 13:39:25 | GET detected
+03-18-19 13:39:25 | Ok to proxy
+03-18-19 13:39:25 | Proxy complete
+ 
+03-18-19 13:43:13 | GET detected
+03-18-19 13:43:13 | Ok to proxy
+03-18-19 13:43:13 | Proxy complete
+ 
+ 
+03-18-19 13:43:48 | GET detected
+03-18-19 13:43:48 | Ok to proxy
+03-18-19 13:43:48 | Proxy complete
+ 
+03-18-19 13:43:48 | GET detected
+ 
+03-18-19 13:43:48 | Ok to proxy
+03-18-19 13:43:48 | Proxy complete
+03-18-19 13:43:48 | GET detected
+03-18-19 13:43:48 | Ok to proxy
+03-18-19 13:43:48 | Proxy complete
+03-18-19 13:43:48 | GET detected
+03-18-19 13:43:48 | Ok to proxy
+03-18-19 13:43:48 | Proxy complete

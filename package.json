@@ -1,12 +1,16 @@
 {
-  "name": "MV-MAPS-VILNIUS",
-  "version": "0.0.2",
+  "name": "mv-maps-vilnius",
+  "version": "0.0.3",
   "author": "Andrius G",
+  "scripts": {
+    "light": "light-server -s . -p 4000 --servePrefix /maps_vilnius/ -o -w \"js/*.js, css/*.css, index.html reload\""
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-cssmin": "^1.0.1",
     "grunt-contrib-jshint": "latest",
-    "grunt-contrib-uglify": "^1.0.1"
+    "grunt-contrib-uglify": "^1.0.1",
+    "light-server": "^2.6.2"
   }
 }

@@ -320,9 +320,9 @@ var MAPCONFIG = {
         }
     },
     staticServices: {
-        basemapUrl: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Baziniai_zemelapiai/Vilnius_basemap_1000/MapServer",
-        ortofotoUrl: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Baziniai_zemelapiai/ORT5LT_2016/MapServer",
-        geometryUrl: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Utilities/Geometry/GeometryServer"
+        basemapUrl: "https://gis.vplanas.lt/arcgis/rest/services/Baziniai_zemelapiai/Vilnius_basemap_LKS_su_rajonu/MapServer",
+        ortofotoUrl: "https://gis.vplanas.lt/arcgis/rest/services/Baziniai_zemelapiai/ORTOFOTO_2017_LKS/MapServer",
+        geometryUrl: "https://gis.vplanas.lt/arcgis/rest/services/Utilities/Geometry/GeometryServer"
     },
     themesServices: {
         buildingTheme: {

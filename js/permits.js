@@ -78,11 +78,12 @@ var permitsTheme = function (map) {
 
     
                 function urlLinksStr(a){
-                    //alert(a);
+                    
                     var adMsgComplete = "";
                     var linksLength = a.length;
 					var adMsg;
-                    if (linksLength > 1 ) {
+
+                    if (linksLength >= 1 && a[0] != "Dokumentų nėra") {
                         for (var i = 0; i < linksLength; i++){
                             adMsg = "<p></i><a href='" + a[i].url + "' target='blank'>" + a[i].icon + "</a></p>";  
                             adMsgComplete += adMsg;
@@ -114,7 +115,7 @@ var permitsTheme = function (map) {
 		
 		            // Add cluster renderer
 		            clusterLayer = new ClusterFeatureLayer({
-		                "url": "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/0",
+		                "url": "https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/0",
 		                "distance": 30,
 		                "id": "clusters",
 		                "labelColor": "#484848",
@@ -163,7 +164,6 @@ var permitsTheme = function (map) {
 					
 					//AG add padding for cluster point click event // BUG FIX FOR CHROME
 					on(clusterLayer, "click", function(e) {
-						//console.log(e);
 						clusterLayer.geometry = e.mapPoint;
 						//add padding to point feature and get featureset attributes 
 						pxWidth = map.extent.getWidth() / map.width;
@@ -177,9 +177,6 @@ var permitsTheme = function (map) {
 						});
 						// use the extent for the query geometry
 						clusterLayer.geometry = qGeom;
-						//console.log("clusterLayer.geometry: ");
-						//console.log(clusterLayer.geometry);						
-						//alert("asdsa");
 					});
 
 						
@@ -203,10 +200,7 @@ var permitsTheme = function (map) {
                         //AG get different symbols with newlys created VALID ID = GALIOJA on popup selection change
                         var process =  popupState(selFeature);	   
                         process.then(function(a){
-                                             
-							//alert(results);
-							//console.log("REDAS");
-							//console.log(a);
+                                            
                     	});
                     }
                     }, 50);
@@ -219,14 +213,13 @@ var permitsTheme = function (map) {
                     var queryAdURL = new Query();
                     //queryAdURL.where = "1=1";
                     queryAdURL.returnGeometry = false;
-                    queryAdURL.outFields = ["ID", "VLN_REKLAMOS_ID", "CONTENTTYPE", "TITLE "];                  
-                    queryAdURL.where = "VLN_REKLAMOS_ID = '" + id + "'";
+                    queryAdURL.outFields = ["ID", "CONTENTTYPE", "TITLE "];                  
+                    queryAdURL.where = "ID = '" + id + "'";
                     //AG check if querytask service instance number is equal or more then actual entries, in this case service instance > 12K
                     var queryTaskAdURL;
-                    queryTaskAdURL = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/1");
+                    queryTaskAdURL = new QueryTask("https://gis.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Reklamos_registro_leidimai/MapServer/1");
                     
-                    promise.resolve({query: queryAdURL, task: queryTaskAdURL});
-    
+					promise.resolve({query: queryAdURL, task: queryTaskAdURL});    
                     //promise.resolve(queryTaskAdURL.execute(queryAdURL, queryURLresults));
                     
                     return promise.promise;
@@ -239,17 +232,12 @@ var permitsTheme = function (map) {
 
                 		urLinksArray.length = 0; //AG reset urLinksArray
 
-                		window.clearTimeout(timer);
-
-                		//console.log("REZULATATAI");
-                		// console.log(results);
-                		// console.log("END REZULATATAI");           
+                		window.clearTimeout(timer);       
                 		var urlBase = "http://www.vilnius.lt/isorei/isorinereklama/files/";
                 		var resultsFeaturesA = results.features;
-                		//AG check if results has features
 						
+						//AG check if results has features
 						var runUrl;
-						
                 		if (resultsFeaturesA.length !== 0) {
 							
 							var runUrlInner = function () {
@@ -264,10 +252,11 @@ var permitsTheme = function (map) {
                 			for (var i = 0; i < resultsFeaturesA.length; i++) {
                 				var urlDocStyle = results.features[i].attributes.CONTENTTYPE;
 
-                				var urlId = parseInt(results.features[i].attributes.VLN_REKLAMOS_ID, 10);
+                				var urlId = parseInt(results.features[i].attributes.ID, 10);
                 				var urlEnd = results.features[i].attributes.TITLE;
-                				var urLinks = urlBase + urlId + "_" + urlEnd;
-
+                				// var urLinks = urlBase + urlId + "_" + urlEnd;
+								var urLinks = urlEnd;
+								
                 				var urlObj = {
                 					url: urLinks,
                 					icon: docStyle(urlDocStyle)
@@ -339,8 +328,6 @@ var permitsTheme = function (map) {
                     process.then(function(queryObject){
                         setTimeout(function() {
                         queryObject.task.execute(queryObject.query, queryURLresults);         
-                        //console.log("DEFAS");
-                       //console.log(queryObject);
                         promise.resolve(queryObject);
                         }, 100);
                     });
@@ -355,8 +342,7 @@ var permitsTheme = function (map) {
                             hasClass = domClass.contains("default-popup", "valid-ad") ? domClass.remove("default-popup", "valid-ad") : domClass.add("default-popup", "invalid-ad"); 
                             domClass.add("default-popup", "invalid-ad");  
                         }             
-                   // console.log("features set");
-                   // console.log(selected);
+
                     } 
  
                     return promise.promise;                   
@@ -409,7 +395,7 @@ var permitsTheme = function (map) {
 		
         return cluster;
         
-    });
-    
+	});
+	    
     return cluster;
 };

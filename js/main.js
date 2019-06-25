@@ -30,7 +30,6 @@ require([
 	"dojo/i18n!esri/nls/jsapi",
     "esri/map",
 	"esri/dijit/HorizontalSlider",
-    "dojo/_base/connect",
     "esri/toolbars/navigation",
     "esri/config",
     "dojo/on",
@@ -41,34 +40,24 @@ require([
     "dojo/_base/array",
     "dojo/parser", /* http://dojotoolkit.org/reference-guide/1.10/dojo/parser.html */
     "esri/dijit/Popup",
-    "esri/dijit/PopupTemplate",
     "esri/InfoTemplate",
     "esri/layers/FeatureLayer",
     /*START Grid */
-    "dojo/_base/declare",
-    "dojo/promise/all", "dojo/Deferred",
-    "dgrid/OnDemandGrid",
-    "dgrid/Selection",
-    "dojo/store/Memory",
+    "dojo/promise/all",
     "dijit/form/CheckBox",
     "dijit/registry",
-    "esri/tasks/query",
-    "esri/tasks/QueryTask",
     /*END Grid */
-    "esri/request",
     "dojo/dom",
     "dojo/dom-construct",
     "dojo/dom-class",
-    "esri/renderers/ClassBreaksRenderer", "esri/symbols/PictureMarkerSymbol",
+    "esri/symbols/PictureMarkerSymbol",
     //Measure
     "esri/dijit/Measurement", "esri/units",
     "esri/dijit/Search", "esri/tasks/locator",
     "esri/symbols/SimpleFillSymbol", "esri/symbols/SimpleMarkerSymbol",  "esri/renderers/SimpleRenderer", "esri/symbols/SimpleLineSymbol", "esri/Color", "esri/geometry/Extent",
 	"esri/tasks/GeometryService",
     //cluster
-	"app/clusterfeaturelayer", "esri/graphic", "esri/graphicsUtils", "dojo/dom-style", "dojo/_base/fx", "dojo/fx/easing",
     "esri/dijit/Scalebar",
-    "esri/layers/LayerInfo",
 	"esri/tasks/IdentifyTask",
     "esri/tasks/IdentifyParameters",
 	"dijit/layout/ContentPane",
@@ -79,7 +68,6 @@ require([
 	bundle,
     Map,
 	HorizontalSlider,
-    connect,
     Navigation,
     esriConfig,
     on,
@@ -90,35 +78,22 @@ require([
     arrayUtils,
     parser,
     Popup,
-    PopupTemplate,
     InfoTemplate,
     FeatureLayer,
     /*START Grid */
-    declare,
-    all, Deferred,
-    Grid,
-    Selection,
-    Memory,
+    all,
     CheckBox,
     registry,
-    Query,
-    QueryTask,
-    //Query,
-    /*END Grid */
-    esriRequest,
     dom,
     domConstruct,
     domClass,
     //SimpleFillSymbol,
-    ClassBreaksRenderer, PictureMarkerSymbol,
+    PictureMarkerSymbol,
     //Measure
     Measurement, Units,
     Search, Locator, SimpleFillSymbol, SimpleMarkerSymbol, SimpleRenderer, SimpleLineSymbol, Color, Extent,
 	GeometryService,
-    //cluster
-    ClusterFeatureLayer, Graphic, graphicsUtils, domStyle, fx, easing,
     Scalebar,
-    LayerInfo,
 	IdentifyTask, IdentifyParameters, ContentPane
 ) {
 	var visible = [];
@@ -823,7 +798,8 @@ require([
 
     esriConfig.defaults.io.proxyUrl = "proxy/proxy.php";
     esriConfig.defaults.io.corsEnabledServers.push("https://zemelapiai.vplanas.lt"); //https://developers.arcgis.com/javascript/jshelp/inside_defaults.html
-
+	esriConfig.defaults.io.corsEnabledServers.push("https://gis.vplanas.lt");
+	
     //Dependencies from Config file
     //Basemaps / tiled services
     var baseUrl = MAPCONFIG.staticServices.basemapUrl,
@@ -941,7 +917,7 @@ require([
 
     //Search START
 	var geocoders = [{
-		url: "https://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI_V1/GeocodeServer",
+		url: "https://gis.vplanas.lt/arcgis/rest/services/Lokatoriai/ADRESAI_V1/GeocodeServer",
 		name: "Vilniaus adresai"
 	}];
 
@@ -949,7 +925,7 @@ require([
 		//arcgisGeocoder: false,
 		//geocoders: geocoders,
 		sources: [{
-			locator: new Locator("https://zemelapiai.vplanas.lt/arcgis/rest/services/Lokatoriai/PAIESKA_COMPOSITE/GeocodeServer"),
+			locator: new Locator("https://gis.vplanas.lt/arcgis/rest/services/Lokatoriai/PAIESKA_COMPOSITE/GeocodeServer"),
 			singleLineFieldName: "SingleLine", //AG name of 'Single Line Address Field:'
 			outFields: ["*"],
 			enableSuggestions: true, //AG only with 10.3 version
@@ -977,8 +953,6 @@ require([
         }   */
     }, "search");
     geocoder.startup();
-
-	//console.log(geocoder);
 
 	on(geocoder, 'select-result', function () {
 		setTimeout(function() {
@@ -1034,13 +1008,12 @@ require([
 	}
     //End Opacity slider
 
-	//console.log(CONTROL.currentTheme("theme"));
-
+	var permitsCluster;
     // Add custom themes
 	switch (CONTROL.currentTheme("theme")) {
 		case "ad": //add permits theme
-			var permitsCluster = permitsTheme(map);
 			map.on("layer-add-result", function(e) {
+				permitsCluster = permitsTheme(map);	
 			});
 			break; //add buildings theme
 		//case "theme-buildings" || "": //if theme building or null or empty
@@ -1129,7 +1102,8 @@ require([
 
                         if (CONTROL.currentTheme() === "ad"){ //sukurt masyva ir pushint pagal tema
                         	permitsCluster.show();
-                        }
+						}
+						
                     } else {
                         // TEMP hide featureL
                         featureBuildings.hide();
@@ -1165,14 +1139,12 @@ require([
 
     //legend
     map.on("layers-add-result", function (evt) {
-		//console.log("EVENTAS");
-		//console.log(evt);
+
 	 if ((CONTROL.currentTheme() === "ad") || (CONTROL.currentTheme() === "theme-buildings") || (CONTROL.currentTheme() === null) || (CONTROL.currentTheme() === "")){
 	    //create / control inputs and legend of each theme
 	  	var showLegendInput = function(layerName, layerId) {
 	        var items = arrayUtils.map(layerName.layerInfos, function (info, i) {
 				var checkBox;
-	       		//console.log(info);
 	       		//TEMP
 	       		//Pastatai: input for second Layer
 	       		//Reklama: input for first layer
@@ -1195,8 +1167,7 @@ require([
 	       		if (info.defaultVisibility) {
 	       			visible.push(info.id);
 	       		}
-	       		//console.log(visible);
-	       		//senas metodas
+				//senas metodas
 	       		//return "<div class='layers-labels'><input type='checkbox' value='" + (layer.visibleLayers[i]) + "' class='list_item'" + (info.defaultVisibility ? "checked=checked" : "") + "' id='" + info.id + "'' /><label for='" + info.id + "'>" + info.name + "</label></div>";
 	       		//convert to dom
 	       		inputsList = checkBox.domNode;
@@ -1222,7 +1193,6 @@ require([
 	          return {layer: layer.layer, title: "Įjungti sluoksniai"};
 	    });
 
-	        //console.log(evt);
 	        //if (layerInfo.length > 0) {
 	        if (layerInfo.length < 2) { //TEMP do not show legend for base layers
 	            legendDijit = new Legend({
@@ -1231,12 +1201,6 @@ require([
 	            }, "legend-list");
 	            legendDijit.startup();
 	        }
-
-
-	        //console.log("layerInfo matomi sluoksniai: " + layerInfo[0].layer.visibleLayers);
-	        //legend visibility toggle
-
-	        //console.log(layerBuild.visibleLayers);
         };
 
 	    //check url query theme and run create/control inputs and legend of each theme
@@ -1284,6 +1248,5 @@ require([
 			position: ["above"],
 			label: "© SĮ Vilniaus planas <br>© Vilniaus miesto savivaldybė<br>ORT5LT © Nacionalinė žemės tarnyba prie ŽŪM<br>© Valstybinė saugomų teritorijų tarnyba prie Aplinkos ministerijos<br>© Policijos departamentas prie Vidaus reikalų ministerijos"
 		});
-		//console.log(copyTooltip);
 	});
 });

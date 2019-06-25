@@ -118,18 +118,11 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 		var symbolSelectionPolygon = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([193, 39, 45, 0]), 3), new Color([47, 47, 47, 0.6]));
 		var pxWidth = map.extent.getWidth() / map.width; //get main extent of the map for points extent padding
 
-		var content = "<p class='bord'>${VARDAS}<br><span>Mokyklos pavadinimas</span></p>" + "<p class='bord'>${ADRESAS}<br><span>Adresas</span></p>" + "<p class='bord'>${KALBA}<br><span>Kalba</span></p>" + "<p class='school-type' class='bord'>${TIPAST}<br><span>Mokyklos tipas</span></p>";
+		var content = "<p class='bord'>${VARDAS}<br><span>Mokyklos pavadinimas</span></p>" + "<p class='bord'>${ADRESAS}<br><span>Adresas</span></p>" + "<p class='bord'>${KALBA}<br><span>Kalba</span></p>";
 		var title = "Ugdymo įstaigos duomenys";
 		var temp = new InfoTemplate(title, content);
-		var featureUrlTeritory = "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer/1",
-			featureUrlPoint = "https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer/0",
-			//currently not using polygon feature layer, we/re using polygon feature url instead
-/*			featureTeritory = new FeatureLayer(featureUrlTeritory, {
-				id: "school-feature-teritory",
-				mode: FeatureLayer.MODE_ONDEMAND,
-				//maxAllowableOffset: calcOffset(),
-				outFields: ["*"]
-			}),*/
+		var featureUrlTeritory = "https://services1.arcgis.com/usA3lHW20rGU6glp/arcgis/rest/services/Mokyklos/FeatureServer/1",
+			featureUrlPoint = "https://services1.arcgis.com/usA3lHW20rGU6glp/arcgis/rest/services/Mokyklos/FeatureServer/0",
 			featurePoint = new FeatureLayer(featureUrlPoint, {
 				id: "school-feature-point",
 				infoTemplate: temp,
@@ -137,18 +130,14 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				//maxAllowableOffset: calcOffset(),
 				outFields: ["*"]
 			}),
-			specialPolygon = new FeatureLayer("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer/2", {
+			specialPolygon = new FeatureLayer("https://services1.arcgis.com/usA3lHW20rGU6glp/arcgis/rest/services/Mokyklos/FeatureServer/2", {
 				id: "school-special-polygon",
+				opacity: 0.9,
 				//infoTemplate: temp,
 				//mode: FeatureLayer.MODE_ONDEMAND,
 				//maxAllowableOffset: calcOffset(),
 				outFields: ["*"]
-			}),
-			dynamicPoint = new ArcGISDynamicMapServiceLayer("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer", { //dyn layer fo the legend
-				id: "points-dyn"
 			});
-			//suspend layer drawing
-			//dynamicPoint.suspend();
 		
 		setTimeout(function () {
 			var p = document.createElement("p");
@@ -288,8 +277,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 		//selection query for feature points, graphic points and side list, we're using this infowindow selection instead of infoTemplate to rid of dublicate popups
 		function runSelectionQuery(query) {
 			var deferred = featurePoint.selectFeatures(query, FeatureLayer.SELECTION_NEW, function (results) {
-				//console.log(results[0].geometry);
-				//console.log(results);
 				var path = results[0].attributes;
 				var address = path.ADRESAS;
 				var lang = path.KALBA;
@@ -303,12 +290,9 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				//select points
 				pointsSelection(results[0].geometry, results[0].attributes);
 
-				//console.log(featurePoint.infoTemplate);
-
 				//map.infoWindow.setTitle("Ugdymo įstaigos duomenys");
 				tempResults.setContent(content);
 				map.infoWindow.show(results[0].geometry);
-				//console.log(featurePoint.infoTemplate);
 				
 				//center selected school point
 				map.centerAt(results[0].geometry); //AG center & zoom
@@ -331,10 +315,10 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				map.addLayer(pointSelected);
 			}, 100);
 			//show tooltip
-			addTooltip(pointSelected);
+			//addTooltip(pointSelected);
 		}
 		
-		var schoolsTask = new QueryTask("https://zemelapiai.vplanas.lt/arcgis/rest/services/Interaktyvus_zemelapis/Mokyklos/MapServer/1");
+		var schoolsTask = new QueryTask("https://services1.arcgis.com/usA3lHW20rGU6glp/arcgis/rest/services/Mokyklos/FeatureServer/1");
 		//query for school teritories
 		var schoolsQuery = new Query();
 		schoolsQuery.outSpatialReference = {
@@ -398,7 +382,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			removeSelection();
 			//clear current selection on new search event
 			//featurePoint.clearSelection();
-			//console.log(geocoder);
 			//featurePoint.show();
 			dom.byId("schools-info").innerHTML = ""; //remove data on search if exists	
 			
@@ -450,10 +433,8 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				polygonSelect = {};
 			}
 		}	
-		//console.log(geocoder);
 		
 		function executeSchoolsQueryTask(e) {	
-			//console.log(getFilterValue("language-filter"));
 			var queryStr; //final query str
 			var languageValue = getFilterValue("language-filter");
 			var yearValue = getFilterValue("year-filter");
@@ -462,9 +443,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			var queryYearStr = getQueryYear(yearGroup);
 			
 			queryStr = getFinalQueryStr(languageValue, queryLangStr, yearValue, queryYearStr);
-			
-			//console.log(yearGroup);
-			
+						
 			//AG in order to show selected layer on point extent, add padding to min max values of x,y coordinates 
 			schoolsQuery.geometry = e.result.feature.geometry;
 			schoolsQuery.where  = queryStr;
@@ -477,14 +456,11 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			if (((languageValue.length == 1) && (languageValue[0] === 0)) && ((yearGroup.length == 1) && (yearGroup[0] === 0))) {
 				return "1=1";
 			} else if ((languageValue[0] !== 0) && (yearGroup[0] !== 0)) {	
-				//console.log("(" + queryLangStr + ") AND ("  + queryYearStr + ")");
 				return "(" + queryLangStr + ") AND ("  + queryYearStr + ")";
 			} else {
 				if ((languageValue[0] === 0) && (yearGroup[0] !== 0)) {
-					//console.log(queryYearStr);
 					return queryYearStr;
 				} else if (((languageValue[0] !== 0) && (yearGroup[0] === 0))) {
-					//console.log(queryLangStr);
 					return queryLangStr;
 				}
 			}
@@ -538,7 +514,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 		}
 		
 		function showResults(results) {
-			//console.log(results);
 			var queryStringClause = "", // string for query.where statement
 				i = 0;
 			//add query clause by schools polygons' OBJ_ID field
@@ -552,7 +527,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				}
 			}
 			
-			//console.log(queryStringClause);
 			//query for school points
 			var query = new Query();	
 			//query.objectIds	= ["OBJ_ID"];
@@ -580,8 +554,8 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 									new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([220, 20, 60, 0.9]), 2),
 									new Color([255, 255, 255, 1.0]),1);				
 			var symbolSpec = new SimpleMarkerSymbol("circle", 22,
-									new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([122, 122, 0, 0.9]), 2),
-									new Color([167, 167, 0, 1.0]),1);				
+									new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([132, 28, 109, 0.9]), 2),
+									new Color([255, 115, 224, 1.0]),1);				
 			
 			
 			//select schools by polygon OBJ_ID
@@ -591,8 +565,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 					map.removeLayer(points);
 					points = {};
 				}
-				//console.log("TASKU REZULTATAI");
-				//console.log(results);
 
 				points = new GraphicsLayer(); //create new school points graphics layer
 				points.id = "Mokyklos";
@@ -614,22 +586,32 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				//add schools list to school-list dom
 				var schoolsListStr = "";
 				var filteredList = document.getElementById("schools-filtered-list");
-				function schoolsList (name, lang) {
+
+				function schoolsList (name, lang, langCode) {
 					var schoolName = name.attributes.VARDAS;
 					if (schoolName) {
-						schoolsListStr += '<li class="' + lang + '"><button id="' + name.attributes.OBJ_ID + " " + name.attributes.OBJECTID + '" class="animate">' + schoolName + '</button></li>' ;
+						schoolsListStr += '<li class="' + lang + '"><button id="' + name.attributes.OBJ_ID + " " + name.attributes.OBJECTID + " "  +  langCode + '" class="animate">' + schoolName + '</button></li>' ;
 					}
-				}				
+				}
 
-				arrayUtils.forEach(results, function (result) {
-					//console.log(result);
-					var language = result.attributes.KALBA;
+				function showResultNumber(schoolCount) {
+					//show results number in search content
+					var dataDom = dom.byId("schools-data");
+					dataDom.innerHTML = "<p class='address'>" + addressResult + "<br><span>Rastas adresas</span></p>"  + "<p class='school-count'><span class='school-no'>" + schoolCount + "</span> <br><span>Pagal rastą adresą priskirtas mokyklų skaičius</span></p>";
+					//end show results number in search content 
+				}
+				
+				function setSchoolsListItem(result, language) {
 					if (result.attributes.GYV_ID === 26) {
 						// TODO REMOVE, quick demo feature fro special schools
 						language = '26';
 					}
 					//var shortlanguage = language.slice(0, 3); //get only 3 first letters for class name
 					var shortlanguage = ""; 
+
+					var languageValue = getFilterValue("language-filter");
+
+					var langCode; 
 					//get max min y and x values of each points
 					xValues.push(result.geometry.x);
 					yValues.push(result.geometry.y);
@@ -639,38 +621,97 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 						case "lietuvių":
 							points.add(new Graphic(result.geometry, symbolLt, result.attributes));
 							shortlanguage += "lie";
+							langCode = 1;
 							break;
 						case "rusų":
 							points.add(new Graphic(result.geometry, symbolRu, result.attributes));
 							shortlanguage += "rus";
+							langCode = 2;
 							break;
 						case "lenkų":
 							points.add(new Graphic(result.geometry, symbolPl, result.attributes));
 							shortlanguage += "len";
+							langCode = 3;
 							break;
 						case "rusų lenkų":
 							points.add(new Graphic(result.geometry, symbolRuPl, result.attributes));
 							//additional language
 							shortlanguage += "rus-len";
+	
+							// if 'Lenku k.' selected
+							if (languageValue && languageValue.includes(3) && languageValue.includes(4)) {
+								langCode = 4;
+							} else {
+								langCode = 5;
+							}
+
 							break;
 						case "lenkų rusų":
 							points.add(new Graphic(result.geometry, symbolRuPl, result.attributes));
 							//additional language
 							shortlanguage += "len-rus";
+							langCode = 4;
 							break;
 						case "26":
 							points.add(new Graphic(result.geometry, symbolSpec, result.attributes));
 							//additional language
 							shortlanguage += "spec";
+							langCode = 1;
 							break;
 						default:
 							points.add(new Graphic(result.geometry, symbolDefault, result.attributes));
+							// exception Vilniaus Pranciškaus Skorinos gym
+							langCode = 6;
 							break;
 					}
 					
 					//add schools list to str
-					//console.log(results);
-					schoolsList(result, shortlanguage);
+					schoolsList(result, shortlanguage, langCode);
+				}
+
+				var hasExeptionSchool = false;
+				arrayUtils.forEach(results, function (result) {
+					// add special exeption
+					var exeptOBJ_ID = 49;
+					if (result.attributes.OBJ_ID === exeptOBJ_ID) {
+						hasExeptionSchool = true;
+					}
+
+				});
+
+				arrayUtils.forEach(results, function (result) {
+					var language = result.attributes.KALBA;
+
+					// add special exeption
+					var exeptOBJ_ID = 49;
+					var yearValue = getFilterValue("year-filter");
+					var languageValue = getFilterValue("language-filter");
+					if ((languageValue.includes(2) && languageValue.includes(5)) && (yearValue === 5 || yearValue === 6)) {
+						if (result.attributes.OBJ_ID === exeptOBJ_ID) {
+							setSchoolsListItem(result, language);
+							showResultNumber(schoolCount - 1);
+						} else {
+							if (!hasExeptionSchool) {
+								setSchoolsListItem(result, language);
+								showResultNumber(schoolCount);
+							}
+
+						}
+			
+					} else if ((languageValue.includes(2) && languageValue.includes(5)) && (yearValue === 7 || yearValue === 8)) {
+						if (result.attributes.OBJ_ID !== exeptOBJ_ID) {
+							setSchoolsListItem(result, language);
+							if (!hasExeptionSchool) {
+								showResultNumber(schoolCount);
+							} else {
+								showResultNumber(schoolCount - 1);
+							}
+						}
+					} else {
+						setSchoolsListItem(result, language);
+						showResultNumber(schoolCount);
+					}
+
 				});
 				
 				//place schools list to dom
@@ -695,9 +736,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 					return Math.min.apply(null, numArray);
 				}
 
-				//console.log(xValues);
-				//console.log(Math.min(...xValues));
-				//console.log(Math.max(...xValues));
 
 				//var zoomLevel = map.getMaxZoom() - 5;
 
@@ -723,7 +761,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 
 				//show cursor on feature layer
 				showCursor([points], arrayUtils);
-				//console.log(points);
 
 				//add info on points click
 				on(points, "click", function (e) {
@@ -733,7 +770,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				function showInfoWindow(e) {
 					//preventfeaturepoint bubbling
 					e.stopPropagation();
-					//console.log(e);
 					var path = e.graphic.attributes;
 
 					//add class
@@ -753,13 +789,15 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 					removeFocusClass();
 					
 					//select points
-					pointsSelection(e.graphic.geometry, e.graphic.attributes);				
+					pointsSelection(e.graphic.geometry, e.graphic.attributes);	
 					
 					//get polygons by OBJ_ID attribute
-					getSchoolPolygon( e.graphic.attributes.OBJ_ID);
+					// getSchoolPolygon(e.graphic.attributes.OBJ_ID, e.graphic.attributes.KALBOS_ID);
 					
 					//add class
-					domClass.add(dom, "focus");					
+					if (dom) {
+						domClass.add(dom, "focus");					
+					}
 				}
 				
 				//read schools list buttons and show infowindow
@@ -769,15 +807,15 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				var buttonList = lisTags.getElementsByTagName("button");
 				
 				arrayUtils.forEach(buttonList, function (button, i) {
-					//console.log(button);
 					button.addEventListener("click", initiateInfoWindow, true);
 				});
 				
 				function initiateInfoWindow(e) {
-					//console.log(e);
 					var query = new Query();
 					var objId = e.target.id;
 					var srcElementIDArr = objId.split(" ");
+					var schoolID = srcElementIDArr[0];
+					var schoolLang = srcElementIDArr[2];
 					
 					//remove focus class on each buttons
 					removeFocusClass();
@@ -789,7 +827,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 					runSelectionQuery(query); //run button selection query			
 					
 					//get polygons by OBJ_ID attribute , which is first array
-					getSchoolPolygon(srcElementIDArr[0]);
+					getSchoolPolygon(schoolID, schoolLang);
 					
 					//add class
 					 domClass.add(e.target, "focus");
@@ -803,17 +841,18 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				}
 				
 				//get query, check if school year is selected
-				function getSchoolPolygon(id) {
+				function getSchoolPolygon(id, lang) {
 					var polygonQuery = new Query();
 					var yearValue = getFilterValue("year-filter");
 					var yearGroup = getYearGroupAttr(yearValue);
 					var queryYearStr = getQueryYear(yearGroup);
+					var langValue = getFilterValue("language-filter");
 					
 					//select polygon by common /static field OBJ_ID
 					if (yearValue === "none") {
-						polygonQuery.where = "OBJ_ID=" + id;
+						polygonQuery.where ="OBJ_ID=" + id + " AND KALBA=" + lang;
 					} else {
-						polygonQuery.where = "OBJ_ID=" + id + " AND (" + queryYearStr + ")";
+						polygonQuery.where = "OBJ_ID=" + id + " AND KALBA=" + lang + " AND (" + queryYearStr + ")";
 					}
 					
 					polygonQuery.outSpatialReference = {
@@ -821,14 +860,15 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 					};
 					polygonQuery.returnGeometry = true;
 					polygonQuery.outFields = ["*"];		
+
 					schoolsTask.execute(polygonQuery, runSchoolPolygonQuery); //run query to execute drawing polgyon border					
 				}
 				
 				function runSchoolPolygonQuery(results) {
-					//featurePoint.selectFeatures(query, FeatureLayer.SELECTION_NEW, function (results) {
-					//console.log(results);
+
 					
-					if (results.features.length === 1) {
+					// if data src is correct there should be only 1 feature
+					if (results.features.length > 0 && results.features.length === 1) {
 						polygonSelection(results.features[0].geometry);
 					} else {
 						//geomtery array from each result
@@ -837,7 +877,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 						});
 						//select polygon
 						//run union method and unite every egeomtery service
-						//console.log(geometriesAr);
 						geometryService.union(geometriesAr, function (finalGeometry) {
 							polygonSelection(finalGeometry);
 						});
@@ -869,6 +908,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			var tooltip;
 
 			on(layer, "mouse-move", function (evt) {
+				evt.stopPropagation();
 				var path = evt.graphic.attributes;
 				var name = path.VARDAS;
 				//destroy widget on every move
@@ -897,7 +937,9 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				});
 			});
 
-			on(layer, "mouse-out", function () {
+			on(layer, "mouse-out", function (e) {
+				e.stopPropagation();
+				e.preventDefault();
 				if (typeof tooltip !== "undefined") {} {
 					tooltip.destroy();
 				}
@@ -915,7 +957,8 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 		//set renderer and hide layers
 		//featureTeritory.setRenderer(new SimpleRenderer(symbolLayer));
 
-		map.addLayers([featurePoint, dynamicPoint,]);
+		//map.addLayers([featurePoint, dynamicPoint,]);
+		map.addLayers([specialPolygon, featurePoint]);
 		
 		//show cursor on feature layer
 		showCursor([featurePoint], arrayUtils);	
@@ -928,7 +971,6 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 		
 		//add faturepoints selection Graphic
 		function featurepointsSelection(e) {
-			//console.log(e);	
 			//remove selection graphic if exists
 			var pointSelect = map.getLayer("Points selection");
 			var featurepointSelect = map.getLayer("Feature points selection");
@@ -953,7 +995,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			}, 100);
 			
 			//show tooltip 
-			addTooltip(featurepointSelected);
+			//addTooltip(featurepointSelected);
 		}	
 		
 		//legend
@@ -965,8 +1007,7 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			arrayUtils.forEach(inputs, function (input) {
 				if (input.checked) {
 					//visible.push(input.id);
-					visible.push(input.id);
-					//TEMP push layer id 0 / CHANGE / REMOVE IT
+					//visible.push(input.id);
 					visible.push(0);
 					// push special polygon and schools
 					visible.push(2);
@@ -976,10 +1017,10 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 				//TEMP featureL visibility / CHANGE / REMOVE IT
 				if (inputs[0].checked) {
 					featurePoint.show();
-					dynamicPoint.show();
+					specialPolygon.show();
 				} else {
 					featurePoint.hide();
-					dynamicPoint.hide();
+					specialPolygon.hide();
 				}
 				//End TEMP featureL visibility, CHANGE / REMOVE IT        
 
@@ -988,26 +1029,17 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			if (visible.length === 0) {
 				visible.push(-1);
 			}
-			dynamicPoint.setVisibleLayers(visible);
-
-			// if layer is switched off, refresh legend and show only visible layers
-			//refresh building theme or advertise theme
-			var currentTheme = {
-				layer: dynamicPoint
-			};
-			legendDijit.refresh([currentTheme]); //show refreshed legend only from current Theme     
+			//dynamicPoint.setVisibleLayers(visible);
 		}
 
 		map.on("layers-add-result", function (evt) {
-			//console.log("EVENTAS");
-			//console.log(evt);   
+
 			//create / control inputs and legend of each theme
 			var showLegendInput = function (layerName, layerId) {
-				var items = arrayUtils.map(layerName.layerInfos, function (info, i) {
+				var items = arrayUtils.map(layerName, function (info, i) {
 					var checkBox;
-					console.log(info, layerId);
 
-					if (i === layerId[0] || i === layerId[1] || i === layerId[2] ) {
+					if (i === layerId[0]) {
 						checkBox = new CheckBox({
 							class: "layers-labels",
 							checked: info.defaultVisibility ? "checked=checked" : "",
@@ -1015,18 +1047,20 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 						});
 					} else {
 						if (info.defaultVisibility) {
-							//visible.push(info.id);
+							visible.concat([0,2,3]);
 						}
 						return;
 					}
 					//End TEMP
 					if (info.defaultVisibility) {
-						visible.push(info.id);
+						//visible.push(info.id);
+						visible.concat([0,2,3]);
 					}
 					//convert to dom
 					inputsList = checkBox.domNode;
 					//label
-					label = domConstruct.toDom("<label for='" + info.id + "'>" + info.name + "</label>");
+					//label = domConstruct.toDom("<label for='" + info.id + "'>" + info.name + "</label>");
+					label = domConstruct.toDom("<label for='" + info.id + "'>" + 'Mokyklos' + "</label>");
 					inputsList.appendChild(label);
 					//workaround, TEMP return string
 					tmp = document.createElement("div");
@@ -1038,22 +1072,20 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 
 				var ll = dom.byId("layer-list");
 				ll.innerHTML = items.join(' ');
-				dynamicPoint.setVisibleLayers(visible);
 				on(ll, "click", updateLayerVisibility);
 
 				//legend
 				var layerInfo = [];
 				arrayUtils.map(evt.layers, function (layer, index) {
-					console.log(layer.layer.id);
-					if (layer.layer.id === "points-dyn" || layer.layer.id === "points-dyn") {
+					if (layer.layer.id === "school-feature-point" || layer.layer.id === "school-special-schools"  || layer.layer.id === "school-special-polygon") {
 						layerInfo.push({
 							layer: layer.layer,
-							title: "Įjungti sluoksniai"
+							title: layer.layer.name
 						});
 					}
 				});
 
-				//console.log(layerInfo);
+				layerInfo.sort(function (a, b) { return b.layer.layerId - a.layer.layerId; });
 
 
 				legendDijit = new Legend({
@@ -1065,11 +1097,9 @@ var schoolsTheme = function (map, MAPCONFIG, toolsMeasure, showCursor, horizonta
 			};
 
 			//check url query theme and run create/control inputs and legend of each theme
-			showLegendInput(dynamicPoint, [0, 2, 3]); // theme - Pastatai
-
+			showLegendInput([specialPolygon, featurePoint], [0, 2, 3]); // theme - Pastatai
 			
 			//Opacity slider
-			//console.log(horizontalSlider);
 			horizontalSlider.onChange = function(value) {
 				featurePoint.setOpacity(value / 100);	
 			};

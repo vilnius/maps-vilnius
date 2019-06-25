@@ -2666,6 +2666,15 @@ p.build-p:first-child {
 	font-weight: normal;
 }
 
+.schools-theme #legend-list .esriLegendServiceLabel {
+    color: #242424;
+    font-size: 14px;
+    line-height: 24px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: normal;
+}
+
 #theme.sub-menu {
 	background-color: #53565D;
 	width: 442px;
@@ -4048,7 +4057,7 @@ dijitSelect .dijitButtonContents {
     border-radius: 2px;	
 }
 #schools-filtered-list .spec button {
-    border-color: #7a7a00;
+    border-color: #ff73e0;
 }
 #schools-filtered-list .lie button {
 	border-color: #4ab55a;
